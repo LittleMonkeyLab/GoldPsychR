@@ -1,0 +1,117 @@
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Personality & The Big Five"
+format: html
+---
+
+## Overview
+
+In this lab, you'll learn to analyse Big Five personality data in R. Work through each part in order, watching the embedded demos and practicing with the interactive code cells.
+
+::: {.callout-tip}
+## Recommended Setup
+Keep this page open in one browser tab and RStudio Server in another. That's all you need!
+:::
+
+## The Data Story
+
+We've collected personality data from a training study:
+
+- **160 participants** completed personality questionnaires
+- Half received a **training intervention**, half were **controls**
+- Measured **before** (pre) and **after** (post) the intervention
+
+**Our research question**: Did the training affect personality scores?
+
+---
+
+## Lab Parts
+
+Work through each part in order:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Part 1: What is R?
+- RStudio orientation
+- Variables and vectors
+- Basic functions
+
+[**Start Part 1**](part1.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### Part 2: Loading Data
+- Reading CSV files
+- Exploring data structure
+- Understanding data types
+
+[**Start Part 2**](part2.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Part 3: Reverse Scoring
+- Identifying reverse-scored items
+- Calculating reverse scores
+- Creating total scores
+
+[**Start Part 3**](part3.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### Part 4: Descriptives & Plots
+- Group summaries with dplyr
+- Boxplots with ggplot2
+- Interpreting visualisations
+
+[**Start Part 4**](part4.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Part 5: APA Write-Up
+- Reporting M, SD, n
+- Describing group differences
+- Professional formatting
+
+[**Start Part 5**](part5.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### Extra Practice
+Apply your skills to a new dataset.
+
+[**Follow-On Exercise**](../../followon/lab1-followon.qmd){.btn .btn-secondary}
+:::
+
+::::
+
+---
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Navigate RStudio and understand its four panes
+- Load CSV data into R using `read_csv()`
+- Reverse-score negatively worded questionnaire items
+- Calculate descriptive statistics by group using `dplyr`
+- Create boxplots using `ggplot2`
+- Write an APA-style results paragraph
+
+---
+
+## Need Help?
+
+::: {.callout-note}
+- **During the lab**: Ask your instructor or demonstrators
+- **Reference**: Check the [R Toolbox](../../toolbox/index.qmd) for code examples
+- **Errors**: See the [Troubleshooting Guide](../../toolbox/troubleshooting.qmd)
+:::

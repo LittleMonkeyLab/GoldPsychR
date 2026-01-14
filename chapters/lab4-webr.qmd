@@ -1,0 +1,151 @@
+---
+title: "Lab 4 WebR Chapter: Linear Models & Correlation"
+author: "Gordon Wright"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+filters:
+  - webr
+webr:
+  packages: ['dplyr', 'ggplot2']
+  autoload-packages: false
+  show-startup-message: false
+---
+
+```{r, echo = FALSE, results='asis'}
+library(webexercises)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+This interactive chapter covers correlation and linear regression.
+
+---
+
+## Section 1: Correlation
+
+::: {.callout-tip .activity}
+## Activity
+
+Test the relationship between two variables.
+
+```{webr-r}
+# Sample data
+x <- c(22, 25, 28, 31, 34, 37, 40, 43, 46, 49)
+y <- c(45, 52, 48, 61, 58, 65, 62, 71, 68, 75)
+
+# Correlation test
+cor.test(x, y)
+```
+:::
+
+### Concept Check
+
+What does r = 0.85 indicate?
+
+`r mcq(c("Weak negative relationship", "No relationship", answer = "Strong positive relationship", "Perfect correlation"))`
+
+---
+
+## Section 2: Visualising Correlations
+
+::: {.callout-tip .activity}
+## Activity
+
+Create a scatterplot with regression line.
+
+```{webr-r}
+library(ggplot2)
+
+data <- data.frame(x = x, y = y)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal() +
+  labs(title = "Relationship between X and Y")
+```
+:::
+
+---
+
+## Section 3: Simple Linear Regression
+
+::: {.callout-tip .activity}
+## Activity
+
+Build a regression model.
+
+```{webr-r}
+# Fit linear model
+model <- lm(y ~ x)
+summary(model)
+```
+:::
+
+::: {.callout-note}
+## Interpreting Output
+
+- **Estimate**: The slope (change in Y for 1-unit change in X)
+- **R-squared**: Proportion of variance explained
+- **p-value**: Statistical significance of the predictor
+:::
+
+---
+
+## Section 4: Multiple Regression
+
+::: {.callout-tip .activity}
+## Activity
+
+Add multiple predictors.
+
+```{webr-r}
+# Create data with multiple predictors
+data <- data.frame(
+  outcome = c(45, 52, 48, 61, 58, 65, 62, 71, 68, 75),
+  pred1 = c(22, 25, 28, 31, 34, 37, 40, 43, 46, 49),
+  pred2 = c(3, 4, 3, 5, 4, 5, 4, 6, 5, 6)
+)
+
+# Multiple regression
+model <- lm(outcome ~ pred1 + pred2, data = data)
+summary(model)
+```
+:::
+
+---
+
+## Section 5: Model Diagnostics
+
+::: {.callout-tip .activity}
+## Activity
+
+Check model assumptions with diagnostic plots.
+
+```{webr-r}
+# Simple diagnostic: residuals vs fitted
+model <- lm(y ~ x)
+plot(model, which = 1)
+```
+:::
+
+---
+
+## Summary
+
+You have learned to:
+
+1. ✅ Run correlation analyses
+2. ✅ Visualise relationships
+3. ✅ Build regression models
+4. ✅ Interpret model output
+5. ✅ Check assumptions
+
+---
+
+## Course Complete!
+
+Congratulations on completing all 4 weeks of GoldPsychR!

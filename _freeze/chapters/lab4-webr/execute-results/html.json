@@ -1,0 +1,15 @@
+{
+  "hash": "c7b33a3963a8f4f930248c21e68b9bf2",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Lab 4 WebR Chapter: Linear Models & Correlation\"\nauthor: \"Gordon Wright\"\nformat:\n  html:\n    toc: true\n    toc-depth: 2\nfilters:\n  - webr\nwebr:\n  packages: ['dplyr', 'ggplot2']\n  autoload-packages: false\n  show-startup-message: false\n---\n\n\n\n## Introduction\n\nThis interactive chapter covers correlation and linear regression.\n\n---\n\n## Section 1: Correlation\n\n::: {.callout-tip .activity}\n## Activity\n\nTest the relationship between two variables.\n\n```{webr-r}\n# Sample data\nx <- c(22, 25, 28, 31, 34, 37, 40, 43, 46, 49)\ny <- c(45, 52, 48, 61, 58, 65, 62, 71, 68, 75)\n\n# Correlation test\ncor.test(x, y)\n```\n:::\n\n### Concept Check\n\nWhat does r = 0.85 indicate?\n\n<select class='webex-select'><option value='blank'></option><option value=''>Weak negative relationship</option><option value=''>No relationship</option><option value='answer'>Strong positive relationship</option><option value=''>Perfect correlation</option></select>\n\n---\n\n## Section 2: Visualising Correlations\n\n::: {.callout-tip .activity}\n## Activity\n\nCreate a scatterplot with regression line.\n\n```{webr-r}\nlibrary(ggplot2)\n\ndata <- data.frame(x = x, y = y)\n\nggplot(data, aes(x = x, y = y)) +\n  geom_point(size = 3) +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  theme_minimal() +\n  labs(title = \"Relationship between X and Y\")\n```\n:::\n\n---\n\n## Section 3: Simple Linear Regression\n\n::: {.callout-tip .activity}\n## Activity\n\nBuild a regression model.\n\n```{webr-r}\n# Fit linear model\nmodel <- lm(y ~ x)\nsummary(model)\n```\n:::\n\n::: {.callout-note}\n## Interpreting Output\n\n- **Estimate**: The slope (change in Y for 1-unit change in X)\n- **R-squared**: Proportion of variance explained\n- **p-value**: Statistical significance of the predictor\n:::\n\n---\n\n## Section 4: Multiple Regression\n\n::: {.callout-tip .activity}\n## Activity\n\nAdd multiple predictors.\n\n```{webr-r}\n# Create data with multiple predictors\ndata <- data.frame(\n  outcome = c(45, 52, 48, 61, 58, 65, 62, 71, 68, 75),\n  pred1 = c(22, 25, 28, 31, 34, 37, 40, 43, 46, 49),\n  pred2 = c(3, 4, 3, 5, 4, 5, 4, 6, 5, 6)\n)\n\n# Multiple regression\nmodel <- lm(outcome ~ pred1 + pred2, data = data)\nsummary(model)\n```\n:::\n\n---\n\n## Section 5: Model Diagnostics\n\n::: {.callout-tip .activity}\n## Activity\n\nCheck model assumptions with diagnostic plots.\n\n```{webr-r}\n# Simple diagnostic: residuals vs fitted\nmodel <- lm(y ~ x)\nplot(model, which = 1)\n```\n:::\n\n---\n\n## Summary\n\nYou have learned to:\n\n1. ✅ Run correlation analyses\n2. ✅ Visualise relationships\n3. ✅ Build regression models\n4. ✅ Interpret model output\n5. ✅ Check assumptions\n\n---\n\n## Course Complete!\n\nCongratulations on completing all 4 weeks of GoldPsychR!\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

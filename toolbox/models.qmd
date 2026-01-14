@@ -1,0 +1,32 @@
+---
+title: "Models"
+---
+
+## Linear Models
+
+### Simple regression
+
+```r
+model <- lm(score ~ age, data = data)
+summary(model)
+```
+
+### Multiple regression
+
+```r
+model <- lm(score ~ age + condition + gender, data = data)
+summary(model)
+```
+
+### Checking assumptions
+
+```r
+plot(model)
+```
+
+### Effect sizes
+
+```r
+library(effectsize)
+eta_squared(model)
+```

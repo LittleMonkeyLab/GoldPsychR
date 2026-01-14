@@ -1,0 +1,117 @@
+---
+title: "Lab 2: Comparing Groups"
+author: "Your Name"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+---
+
+## 1. Load Packages
+
+```{r}
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+---
+
+## 2. Load and Inspect Data
+
+```{r}
+# TODO: Load your dataset
+# data <- read_csv("your_data.csv")
+
+# Check group sizes
+# data |> count(group)
+```
+
+---
+
+## 3. Descriptive Statistics by Group
+
+```{r}
+# TODO: Compute descriptives for each group
+# data |>
+#   group_by(group) |>
+#   summarise(
+#     mean = mean(score, na.rm = TRUE),
+#     sd = sd(score, na.rm = TRUE),
+#     n = n()
+#   )
+```
+
+---
+
+## 4. Independent Samples t-test
+
+```{r}
+# TODO: Run independent samples t-test
+# t.test(score ~ group, data = data)
+```
+
+### Effect Size (Cohen's d)
+
+```{r}
+# TODO: Calculate Cohen's d
+# group1 <- data |> filter(group == "A") |> pull(score)
+# group2 <- data |> filter(group == "B") |> pull(score)
+#
+# mean_diff <- mean(group2) - mean(group1)
+# pooled_sd <- sqrt((sd(group1)^2 + sd(group2)^2) / 2)
+# cohens_d <- mean_diff / pooled_sd
+# cohens_d
+```
+
+---
+
+## 5. Paired Samples t-test (if applicable)
+
+```{r}
+# TODO: Run paired t-test (for repeated measures)
+# t.test(data$pre, data$post, paired = TRUE)
+```
+
+---
+
+## 6. Visualisation
+
+```{r}
+# TODO: Create comparison plot
+# ggplot(data, aes(x = group, y = score, fill = group)) +
+#   geom_boxplot() +
+#   geom_jitter(width = 0.1, alpha = 0.5) +
+#   theme_minimal() +
+#   labs(title = "Comparison of Groups")
+```
+
+---
+
+## 7. APA Write-Up
+
+[Write your results in APA format. Example:]
+
+> An independent samples t-test revealed a significant difference between the control group (*M* = ___, *SD* = ___) and treatment group (*M* = ___, *SD* = ___), *t*(___) = ___, *p* = ___, *d* = ___.
+
+---
+
+## 8. Reflection
+
+1. Was the difference statistically significant?
+
+   [Your answer]
+
+2. Was the effect size small, medium, or large?
+
+   [Your answer]
+
+3. What does this mean practically?
+
+   [Your answer]

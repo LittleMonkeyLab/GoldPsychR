@@ -1,0 +1,484 @@
+---
+title: "Animated Code in Revealjs"
+subtitle: "Progressive reveals, auto-animate & annotations"
+author: "GoldPsychR"
+format:
+  revealjs:
+    theme: default
+    code-line-numbers: true
+    code-annotations: hover
+    highlight-style: github
+    transition: slide
+    slide-number: true
+    preview-links: auto
+execute:
+  echo: true
+  eval: false
+---
+
+## Progressive Line Highlighting {.smaller}
+
+Use `code-line-numbers` with `|` to highlight lines progressively.
+
+Press → to step through:
+
+```{r}
+#| code-line-numbers: "|1-2|4|5-7|8"
+library(tidyverse)
+library(palmerpenguins)
+
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  group_by(species) |>
+  summarise(mean_bill = mean(bill_length_mm)) |>
+  arrange(desc(mean_bill))
+```
+
+---
+
+## How It Works
+
+The syntax `code-line-numbers: "|1-2|4|5-7|8"` means:
+
+1. First: show all code (no highlight)
+2. Then: highlight lines 1-2
+3. Then: highlight line 4
+4. Then: highlight lines 5-7
+5. Finally: highlight line 8
+
+---
+
+## Code Annotations (Hover) {.smaller}
+
+Hover over the circled numbers to see explanations:
+
+```{r}
+penguins |>                                      # <1>
+  filter(!is.na(bill_length_mm)) |>              # <2>
+  group_by(species) |>                           # <3>
+  summarise(mean_bill = mean(bill_length_mm))    # <4>
+```
+
+1. Start with the penguins dataset
+2. Remove rows with missing bill lengths
+3. Group the data by species
+4. Calculate the mean bill length for each group
+
+---
+
+## Annotations + Progressive Highlight {.smaller}
+
+Combine annotations with line highlighting:
+
+```{r}
+#| code-line-numbers: "|1|2|3-5"
+ggplot(penguins, aes(x = species, y = bill_length_mm)) +
+  geom_boxplot(fill = "steelblue") +             # <1>
+  theme_minimal() +                              # <2>
+  labs(                                          # <3>
+    title = "Bill Length by Species"             # <3>
+  )
+```
+
+1. Create boxplots with a nice fill colour
+2. Apply a clean, minimal theme
+3. Add informative labels
+
+---
+
+## Build Up Code Step-by-Step {auto-animate="true"}
+
+Start with the basics:
+
+```r
+library(tidyverse)
+```
+
+## Build Up Code Step-by-Step {auto-animate="true"}
+
+Add the data:
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins
+```
+
+## Build Up Code Step-by-Step {auto-animate="true"}
+
+Add filtering:
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins |>
+  filter(!is.na(bill_length_mm))
+```
+
+## Build Up Code Step-by-Step {auto-animate="true"}
+
+Add grouping:
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  group_by(species)
+```
+
+## Build Up Code Step-by-Step {auto-animate="true"}
+
+Complete the pipeline:
+
+```r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  group_by(species) |>
+  summarise(mean_bill = mean(bill_length_mm))
+```
+
+---
+
+## Annotated dplyr Pipeline {.smaller}
+
+A complete annotated example:
+
+```{r}
+data_summary <- penguins |>                      # <1>
+  filter(!is.na(body_mass_g)) |>                 # <2>
+  group_by(species, sex) |>                      # <3>
+  summarise(                                     # <4>
+    mean_mass = mean(body_mass_g),               # <4>
+    sd_mass = sd(body_mass_g),                   # <4>
+    n = n(),                                     # <4>
+    .groups = "drop"                             # <5>
+  )
+```
+
+1. Take penguins and assign the result to `data_summary`
+2. Remove rows where body mass is missing
+3. Group by both species and sex
+4. Calculate summary statistics for each group
+5. Drop the grouping structure when done
+
+---
+
+## Annotated ggplot2 {.smaller}
+
+Breaking down a plot:
+
+```{r}
+ggplot(penguins,                                 # <1>
+       aes(x = bill_length_mm,                   # <2>
+           y = bill_depth_mm,                    # <2>
+           colour = species)) +                  # <2>
+  geom_point(alpha = 0.7) +                      # <3>
+  geom_smooth(method = "lm", se = FALSE) +       # <4>
+  theme_minimal() +                              # <5>
+  labs(title = "Bill Dimensions by Species")     # <6>
+```
+
+1. Start ggplot with the penguins data
+2. Map aesthetics: x, y, and colour
+3. Add points with some transparency
+4. Add linear regression lines (no confidence band)
+5. Use a clean theme
+6. Add a descriptive title
+
+---
+
+## Fragment Reveals {.smaller}
+
+Reveal code blocks one at a time:
+
+::: {.fragment}
+**Step 1: Load packages**
+```r
+library(ggplot2)
+```
+:::
+
+::: {.fragment}
+**Step 2: Create base plot**
+```r
+ggplot(data, aes(x = group, y = score))
+```
+:::
+
+::: {.fragment}
+**Step 3: Add geometry**
+```r
+ggplot(data, aes(x = group, y = score)) +
+  geom_boxplot()
+```
+:::
+
+---
+
+## Fragment with Fade {.smaller}
+
+::: {.fragment .fade-in}
+```r
+# First this appears
+x <- 1:10
+```
+:::
+
+::: {.fragment .fade-in}
+```r
+# Then this
+y <- x^2
+```
+:::
+
+::: {.fragment .fade-in}
+```r
+# Finally this
+plot(x, y)
+```
+:::
+
+---
+
+## Highlight Then Fade {.smaller}
+
+Use `.fade-in-then-semi-out` to focus attention:
+
+::: {.fragment .fade-in-then-semi-out}
+```r
+# Load the data
+data <- read_csv("experiment.csv")
+```
+:::
+
+::: {.fragment .fade-in-then-semi-out}
+```r
+# Clean it
+data_clean <- data |> drop_na()
+```
+:::
+
+::: {.fragment .fade-in}
+```r
+# Analyse it
+model <- lm(score ~ condition, data = data_clean)
+```
+:::
+
+---
+
+## Side-by-Side Comparison {auto-animate="true"}
+
+:::: {.columns}
+::: {.column width="50%"}
+**Base R**
+```r
+mean(data$score)
+```
+:::
+
+::: {.column width="50%"}
+**Tidyverse**
+```r
+data |>
+  summarise(m = mean(score))
+```
+:::
+::::
+
+## Side-by-Side Comparison {auto-animate="true"}
+
+:::: {.columns}
+::: {.column width="50%"}
+**Base R**
+```r
+mean(data$score)
+sd(data$score)
+length(data$score)
+```
+:::
+
+::: {.column width="50%"}
+**Tidyverse**
+```r
+data |>
+  summarise(
+    m = mean(score),
+    s = sd(score),
+    n = n()
+  )
+```
+:::
+::::
+
+---
+
+## Annotated Comparison {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+**Base R approach**
+```{r}
+aggregate(                    # <1>
+  score ~ group,              # <2>
+  data = mydata,              # <3>
+  FUN = mean                  # <4>
+)
+```
+
+1. Base R function
+2. Formula: outcome ~ grouping
+3. Specify the data
+4. Function to apply
+:::
+
+::: {.column width="50%"}
+**Tidyverse approach**
+```{r}
+mydata |>                     # <1>
+  group_by(group) |>          # <2>
+  summarise(                  # <3>
+    mean = mean(score)        # <4>
+  )
+```
+
+1. Start with data
+2. Group by factor
+3. Summarise each group
+4. Calculate the mean
+:::
+::::
+
+---
+
+## Highlighting Specific Parts {.smaller}
+
+Draw attention to key syntax:
+
+```{r}
+#| code-line-numbers: "3"
+penguins |>
+  group_by(species) |>
+  summarise(mean = mean(bill_length_mm, na.rm = TRUE)) |>
+  arrange(desc(mean))
+```
+
+The `na.rm = TRUE` argument is essential!
+
+---
+
+## Multiple Highlight Groups {.smaller}
+
+Show related lines together:
+
+```{r}
+#| code-line-numbers: "|1,5|2-4"
+ggplot(penguins, aes(x = species, y = bill_length_mm)) +
+  geom_boxplot(fill = "steelblue") +
+  theme_minimal() +
+  labs(title = "Bill Length by Species") +
+  coord_flip()
+```
+
+- Lines 1 & 5: Structure (ggplot + coord)
+- Lines 2-4: Aesthetics (geom, theme, labels)
+
+---
+
+## Code with Output Animation {.smaller}
+
+Show code, then reveal output:
+
+```{r}
+#| echo: true
+#| eval: false
+penguins |> count(species)
+```
+
+::: {.fragment}
+**Output:**
+```
+# A tibble: 3 × 2
+  species       n
+  <fct>     <int>
+1 Adelie      152
+2 Chinstrap    68
+3 Gentoo      124
+```
+:::
+
+---
+
+## Typewriter Effect {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+::: {data-id="code"}
+```r
+ggplot(data)
+```
+:::
+
+## Typewriter Effect {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+::: {data-id="code"}
+```r
+ggplot(data, aes(x, y))
+```
+:::
+
+## Typewriter Effect {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+::: {data-id="code"}
+```r
+ggplot(data, aes(x, y)) +
+  geom_point()
+```
+:::
+
+## Typewriter Effect {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+::: {data-id="code"}
+```r
+ggplot(data, aes(x, y)) +
+  geom_point() +
+  theme_minimal()
+```
+:::
+
+---
+
+## Quick Reference
+
+| Effect | Syntax |
+|--------|--------|
+| Annotations (hover) | `code-annotations: hover` + `# <1>` |
+| Progressive highlight | `code-line-numbers: "\|1\|2-3\|4"` |
+| Auto-animate slides | `{auto-animate="true"}` in header |
+| Fragment reveal | `::: {.fragment}` |
+| Fade in then out | `.fragment .fade-in-then-semi-out` |
+| Smooth easing | `auto-animate-easing="ease-in-out"` |
+| Match elements | `data-id="name"` |
+
+---
+
+## Tips for Teaching
+
+1. **Use annotations** - students see what each line does
+2. **Don't reveal too much at once** - one concept per step
+3. **Highlight key lines** - draw attention to important syntax
+4. **Build up complexity** - start simple, add layers
+5. **Combine techniques** - annotations + highlighting works well
+
+---
+
+## The End
+
+These techniques help students follow along without getting overwhelmed by walls of code.
+
+[Back to demos](../demos/)

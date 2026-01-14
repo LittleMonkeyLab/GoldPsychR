@@ -1,0 +1,651 @@
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Personality & The Big Five"
+author: "Gordon Wright"
+date: "2026"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    code-line-numbers: false
+    code-annotations: hover
+    highlight-style: github
+    width: 1280
+    height: 720
+    logo: ../assets/images/GoldLogo.png
+    footer: "GoldPsychR - 4-Week Intensive"
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['dplyr', 'ggplot2']
+  show-startup-message: false
+---
+
+# Welcome to Lab 1 {.center background-color="#1a1a2e"}
+
+## The Data Story
+
+Over the next **4 weeks**, we'll work through a complete research workflow:
+
+::: {.incremental}
+- **Week 1**: Describe and visualise your data
+- **Week 2**: Compare groups with t-tests
+- **Week 3**: Compare multiple groups with ANOVA
+- **Week 4**: Explore relationships with correlation & regression
+:::
+
+::: {.fragment}
+We'll use the same dataset throughout, plus **similar datasets** for extra practice.
+:::
+
+## Today's Dataset
+
+We've collected **Big Five personality data** from a training study:
+
+- 160 participants completed personality questionnaires
+- Half received a training intervention, half were controls
+- Measured before (pre) and after (post) the intervention
+
+**Our question**: Did the training affect personality scores?
+
+## Today's Goals
+
+::: {.incremental}
+1. Get comfortable with RStudio
+2. Load and inspect our data
+3. Reverse-score questionnaire items
+4. Calculate descriptive statistics
+5. Create a simple visualisation
+6. Write up results in APA style
+:::
+
+## How This Lab Works
+
+We'll work through **5 Parts**, cycling between:
+
+1. **Watch** - Instructor demonstration (these slides)
+2. **Try** - WebR practice in your browser
+3. **Apply** - Exercise in RStudio
+
+::: {.fragment}
+Each cycle reinforces the same skill before moving on!
+:::
+
+## Today's Schedule
+
+| Time | Activity |
+|------|----------|
+| 0:00-0:10 | Part 1: What is R? + RStudio Tour |
+| 0:10-0:20 | **Practice: WebR basics** |
+| 0:20-0:35 | Part 2: Loading Data |
+| 0:35-0:50 | **Practice: Data loading** |
+| 0:50-1:05 | Part 3: Reverse Scoring |
+| 1:05-1:20 | **Practice: Scoring** |
+| 1:20-1:40 | Part 4: Descriptives & Visualisation |
+| 1:40-1:55 | **Practice: Analysis + Write-Up** |
+| 1:55-2:00 | Wrap-up |
+
+# Part 1: What is R? {.center background-color="#2d3436"}
+
+## What is R?
+
+**R** is a programming language designed for statistics and data analysis.
+
+::: {.incremental}
+- **Free** and **open source** - anyone can use it
+- Created by statisticians, for statisticians
+- Thousands of packages for specialised analyses
+- The standard in psychology, biology, and social sciences
+- Produces publication-ready figures and tables
+:::
+
+## Why R (not SPSS)?
+
+| R | SPSS |
+|---|------|
+| Free forever | Expensive licence |
+| Code is reproducible | Point-and-click is hard to repeat |
+| Cutting-edge methods | Lags behind |
+| Used in academia & industry | Mainly academia |
+| Shareable scripts | Hard to share workflows |
+
+::: {.fragment}
+**Learning R is an investment in your future career.**
+:::
+
+## RStudio: Your R Workspace
+
+**RStudio** is an application that makes R easier to use.
+
+Think of it like this:
+
+- **R** = the engine
+- **RStudio** = the car dashboard
+
+You'll work in RStudio, but R does the actual computing.
+
+## The Four Panes
+
+:::: {.columns}
+::: {.column width="50%"}
+**Top-Left: Source**
+
+- Where you write scripts
+- Save your work here
+
+**Bottom-Left: Console**
+
+- Where code runs
+- Immediate feedback
+:::
+::: {.column width="50%"}
+**Top-Right: Environment**
+
+- Your data and objects
+- Watch it update!
+
+**Bottom-Right: Files/Plots/Help**
+
+- Navigate files
+- View outputs
+:::
+::::
+
+## RStudio in Action
+
+![RStudio IDE with four panes](../labs/images/rstudio.png){fig-align="center" width="80%"}
+
+## WebR: R in Your Browser
+
+Today you'll also use **WebR** - a version of R that runs directly in your web browser.
+
+::: {.callout-tip}
+## Why WebR?
+
+- No installation needed
+- Instant feedback while learning
+- Same R code as desktop RStudio
+:::
+
+::: {.fragment}
+The code cells in this presentation and the WebR Practice chapter are **live** - you can run and edit them!
+:::
+
+## Your First Code
+
+Try clicking **Run** on this code cell:
+
+```{webr-r}
+1 + 1
+```
+
+::: {.fragment}
+R returned the answer! The `[1]` just means "first result".
+:::
+
+## Creating Variables
+
+We store values using the **assignment operator** `<-`
+
+```{webr-r}
+x <- 5
+y <- 2
+x + y
+```
+
+::: {.fragment}
+In RStudio, watch the **Environment pane** update when you create variables!
+:::
+
+## Vectors: Multiple Values
+
+A **vector** is a collection of values. Create them with `c()`:
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5)
+scores
+```
+
+## Basic Functions
+
+R has built-in functions for statistics:
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5)
+mean(scores)
+sd(scores)
+length(scores)
+```
+
+## Common Error: Object Not Found
+
+```{r}
+#| echo: true
+#| eval: false
+
+z + 1
+```
+
+```
+Error: object 'z' not found
+```
+
+::: {.fragment .fade-up}
+**Fix:** Create the object first!
+
+```{webr-r}
+z <- 10
+z + 1
+```
+:::
+
+# Practice Time! {.center background-color="#27ae60"}
+
+## Part 1: Practice
+
+Open the **WebR Practice** chapter and complete:
+
+- **Section 1: Getting Started with R**
+  - Basic Arithmetic
+  - Creating Variables
+  - Vectors
+
+::: {.callout-tip}
+## What to do
+
+1. Run each code cell
+2. Try modifying the code
+3. Answer the self-check questions
+:::
+
+{{< countdown "10:00" >}}
+
+# Part 2: Loading Data {.center background-color="#2d3436"}
+
+## The Personality Dataset
+
+Our study collected data on:
+
+- **160 participants**
+- **5 personality items** (p1-p5) on a 1-5 scale
+- **Group**: control vs training
+- **Time**: pre vs post intervention
+
+Items p4 and p5 are negatively worded (we'll deal with that later!).
+
+## Loading a CSV File
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-annotations: hover
+
+library(readr)
+data <- read_csv("personality_lab.csv")
+```
+
+1. Load the `readr` package
+2. Read the CSV and store as `data`
+
+::: {.callout-warning}
+## Working Directory
+Make sure your CSV is in the right folder, or use the full file path.
+:::
+
+## Let's Load It Live
+
+```{webr-r}
+#| context: setup
+#| autorun: true
+
+# Simulate the personality dataset
+set.seed(42)
+n <- 160
+
+data <- data.frame(
+  id = 1:n,
+  group = rep(c("control", "training"), each = n/2),
+  time = rep(rep(c("pre", "post"), each = n/4), 2),
+  p1 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
+  p2 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.15, 0.35, 0.25, 0.15)),
+  p3 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
+  p4 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.25, 0.3, 0.2, 0.1)),
+  p5 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.2, 0.35, 0.2, 0.1))
+)
+
+# Add training effect
+training_post <- data$group == "training" & data$time == "post"
+data$p1[training_post] <- pmin(5, data$p1[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+data$p2[training_post] <- pmin(5, data$p2[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+data$p3[training_post] <- pmin(5, data$p3[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+```
+
+```{webr-r}
+# View the first 6 rows
+head(data)
+```
+
+## Inspecting Your Data
+
+```{webr-r}
+# Check dimensions: rows x columns
+dim(data)
+```
+
+```{webr-r}
+# See column names
+names(data)
+```
+
+## Common Error: Function Not Found
+
+```{r}
+#| echo: true
+#| eval: false
+
+read_csv("personality_lab.csv")
+```
+
+```
+Error: could not find function "read_csv"
+```
+
+::: {.fragment .fade-up}
+**Fix:** Load the package first!
+
+```{r}
+#| echo: true
+#| eval: false
+
+library(readr)
+read_csv("personality_lab.csv")
+```
+:::
+
+# Practice Time! {.center background-color="#27ae60"}
+
+## Part 2: Practice
+
+**WebR Practice:**
+
+- Section 2: Loading and Inspecting Data
+
+**RStudio Exercise:**
+
+- Section 1: Load and Inspect Data
+- Complete Exercise 1.1
+
+::: {.callout-tip}
+## What to do
+
+1. In WebR: Run `head()`, `str()`, `names()`
+2. In RStudio: Load the real CSV file
+3. Answer the exercise questions
+:::
+
+{{< countdown "15:00" >}}
+
+# Part 3: Reverse Scoring {.center background-color="#2d3436"}
+
+## Why Reverse Score?
+
+Some questionnaire items are **negatively worded**:
+
+- "I rarely feel anxious" (reversed)
+- "I often feel anxious" (normal)
+
+If someone is anxious, they'd score **low** on the first but **high** on the second.
+
+::: {.fragment}
+To create a valid total score, we must **reverse** the negatively-worded items.
+:::
+
+## The Formula
+
+For a 1-5 Likert scale:
+
+$$\text{reversed} = 6 - \text{original}$$
+
+| Original | Reversed |
+|----------|----------|
+| 1 | 5 |
+| 2 | 4 |
+| 3 | 3 |
+| 4 | 2 |
+| 5 | 1 |
+
+## Reverse Scoring in R
+
+```{webr-r}
+# Reverse-score p4 and p5
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Check it worked
+head(data[, c("p4", "rev_p4", "p5", "rev_p5")])
+```
+
+## Creating the Total Score
+
+```{webr-r}
+# Sum all items using REVERSED versions for p4 and p5
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+
+# View result
+head(data[, c("id", "group", "time", "pers_score")])
+```
+
+::: {.callout-important}
+## Critical Check
+Use the **reversed** versions (rev_p4, rev_p5), not the originals!
+:::
+
+## Common Error: Wrong Items in Sum
+
+```{r}
+#| echo: true
+#| eval: false
+
+# WRONG - using unreversed items!
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$p4 + data$p5
+```
+
+::: {.fragment .fade-up}
+**Fix:** Always use reversed versions:
+
+```{r}
+#| echo: true
+#| eval: false
+
+# CORRECT
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+```
+:::
+
+# Practice Time! {.center background-color="#27ae60"}
+
+## Part 3: Practice
+
+**WebR Practice:**
+
+- Section 3: Reverse Scoring
+
+**RStudio Exercise:**
+
+- Section 2: Reverse Scoring
+- Complete Exercise 2.1
+
+::: {.callout-tip}
+## What to do
+
+1. Apply the formula: `6 - original`
+2. Create reversed items for p4 and p5
+3. Sum all items (using reversed versions!)
+4. Verify your reversal worked
+:::
+
+{{< countdown "15:00" >}}
+
+# Part 4: Analysis {.center background-color="#2d3436"}
+
+## Overall Descriptives
+
+```{webr-r}
+# Calculate overall statistics
+mean(data$pers_score, na.rm = TRUE)
+sd(data$pers_score, na.rm = TRUE)
+length(data$pers_score)
+```
+
+::: {.callout-important}
+## Key Point: na.rm = TRUE
+
+Always include `na.rm = TRUE` to ignore missing values. Without it, a single `NA` makes your result `NA`!
+:::
+
+## Grouped Summaries with dplyr
+
+```{webr-r}
+library(dplyr)
+
+data |>
+  group_by(group, time) |>
+  summarise(
+    mean = mean(pers_score, na.rm = TRUE),
+    sd = sd(pers_score, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+```
+
+## Visualisation: Boxplot
+
+```{webr-r}
+#| fig-width: 10
+#| fig-height: 5
+
+library(ggplot2)
+
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Personality Scores by Group and Time",
+    x = "Group",
+    y = "Personality Score",
+    fill = "Time"
+  )
+```
+
+## Understanding the Plot
+
+:::: {.columns}
+::: {.column width="50%"}
+**What to look for:**
+
+- Centre (median line)
+- Spread (box height = IQR)
+- Outliers (points beyond whiskers)
+- Group differences
+:::
+::: {.column width="50%"}
+**Questions to ask:**
+
+- Do groups differ at baseline?
+- Is there change over time?
+- Which group changed more?
+:::
+::::
+
+## Common Error: Forgetting na.rm
+
+```{r}
+#| echo: true
+#| eval: false
+
+mean(data$pers_score)
+```
+
+If any value is `NA`, the result is `NA`!
+
+::: {.fragment .fade-up}
+**Fix:** Always include `na.rm = TRUE`:
+
+```{r}
+#| echo: true
+#| eval: false
+
+mean(data$pers_score, na.rm = TRUE)
+```
+:::
+
+# Part 5: APA Write-Up {.center background-color="#2d3436"}
+
+## Template
+
+> Participants reported moderate levels of [TRAIT] overall (M = ___, SD = ___). At baseline, the control group (M = ___, SD = ___, n = ___) and training group (M = ___, SD = ___, n = ___) were similar. Following the intervention, the control group showed [minimal change / a decrease / an increase] (M = ___, SD = ___), whereas the training group showed [change description] (M = ___, SD = ___).
+
+## Example Write-Up
+
+> Participants reported moderate levels of personality overall (M = 15.42, SD = 2.31). At baseline, the control group (M = 15.10, SD = 2.25, n = 40) and training group (M = 15.33, SD = 2.18, n = 40) were similar. Following the intervention, the control group showed minimal change (M = 15.28, SD = 2.41), whereas the training group showed an increase (M = 16.95, SD = 2.15).
+
+# Final Practice {.center background-color="#27ae60"}
+
+## Part 4-5: Practice
+
+**WebR Practice:**
+
+- Section 4: Descriptive Statistics
+- Section 5: Visualisation
+- Section 6: APA Write-Up
+
+**RStudio Exercise:**
+
+- Section 3-4: Descriptives & Visualisation
+- Section 5-6: APA Write-Up & Reflection
+
+{{< countdown "15:00" >}}
+
+# Summary {.center background-color="#1a1a2e"}
+
+## Today's Key Skills
+
+::: {.incremental}
+1. Understand what R and RStudio are
+2. Navigate RStudio's four panes
+3. Create variables and vectors
+4. Load data with `read_csv()`
+5. Reverse-score items correctly
+6. Calculate grouped descriptives with `dplyr`
+7. Create boxplots with `ggplot2`
+8. Write APA-style descriptions
+:::
+
+## Common Errors Recap
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| Object not found | Variable doesn't exist | Create it first |
+| Function not found | Package not loaded | Use `library()` |
+| Result is NA | Missing values | Add `na.rm = TRUE` |
+| Wrong total score | Used unreversed items | Use `rev_` versions |
+
+## Next Steps
+
+1. **Finish** the scaffolded exercise in RStudio
+2. **Render** to HTML and check your output
+3. **Submit** your completed lab report
+4. **Try** the follow-on exercise with new data
+
+::: {.callout-tip}
+## Remember
+Errors are information, not failure. Every error teaches you something!
+:::
+
+# Questions? {.center background-color="#1a1a2e"}

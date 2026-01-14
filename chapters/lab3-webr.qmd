@@ -1,0 +1,332 @@
+---
+title: "Lab 3: ANOVA"
+subtitle: "Interactive Practice with WebR"
+author: "Gordon Wright"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+filters:
+  - webr
+webr:
+  packages: ['dplyr', 'ggplot2']
+  show-startup-message: false
+---
+
+```{r}
+#| echo: false
+#| message: false
+library(webexercises)
+```
+
+# Welcome
+
+This interactive chapter lets you practice ANOVA directly in your browser.
+
+::: {.callout-tip}
+## How to Use This Page
+
+1. Read the explanations carefully
+2. Run the code cells by clicking the **Run** button
+3. Modify code and experiment
+4. Complete the self-check questions
+:::
+
+```{webr-r}
+#| context: setup
+#| autorun: true
+
+# Simulate experimental data with 3 groups
+set.seed(42)
+n <- 90
+
+therapy_data <- data.frame(
+  participant = 1:n,
+  therapy = rep(c("CBT", "medication", "control"), each = n/3),
+  anxiety = c(
+    rnorm(n/3, mean = 12, sd = 4),
+    rnorm(n/3, mean = 15, sd = 4),
+    rnorm(n/3, mean = 18, sd = 4)
+  )
+)
+
+# Factorial data (2x2)
+factorial_data <- data.frame(
+  participant = 1:80,
+  therapy = rep(c("CBT", "control"), each = 40),
+  duration = rep(rep(c("short", "long"), each = 20), 2),
+  improvement = c(
+    rnorm(20, mean = 8, sd = 3),   # CBT short
+    rnorm(20, mean = 14, sd = 3),  # CBT long
+    rnorm(20, mean = 4, sd = 3),   # control short
+    rnorm(20, mean = 5, sd = 3)    # control long
+  )
+)
+```
+
+# When to Use ANOVA
+
+## t-test vs ANOVA
+
+- **t-test**: Compare **2** groups
+- **ANOVA**: Compare **3+** groups
+
+Why not just run multiple t-tests?
+
+::: {.callout-warning}
+## Multiple Comparisons Problem
+
+Running many t-tests inflates your Type I error rate. ANOVA controls this!
+:::
+
+::: {.callout-note}
+## Self-Check
+
+When should you use ANOVA instead of a t-test?
+
+`r mcq(c("Always", "When comparing 2 groups", answer = "When comparing 3 or more groups"))`
+:::
+
+# One-Way ANOVA
+
+## The Data
+
+```{webr-r}
+#| autorun: true
+
+# View the therapy data
+head(therapy_data)
+
+# Check group sizes
+table(therapy_data$therapy)
+```
+
+## Running One-Way ANOVA
+
+```{webr-r}
+# Fit the ANOVA model
+model <- aov(anxiety ~ therapy, data = therapy_data)
+
+# View results
+summary(model)
+```
+
+## Understanding the Output
+
+Key values:
+
+- **F value**: Ratio of between-group to within-group variance
+- **Pr(>F)**: p-value for the F-test
+- **Df**: Degrees of freedom (between groups, within groups)
+
+::: {.callout-note}
+## Self-Check
+
+A significant ANOVA tells us:
+
+`r mcq(c("Which groups differ", answer = "At least one group differs from the others", "All groups are different"))`
+:::
+
+# Post-Hoc Tests
+
+## Why Post-Hoc Tests?
+
+ANOVA tells us IF groups differ, but not WHICH groups differ.
+
+## Tukey's HSD
+
+```{webr-r}
+# Run Tukey's Honest Significant Difference
+TukeyHSD(model)
+```
+
+## Interpreting Post-Hoc Results
+
+Look for:
+
+- **diff**: Difference between means
+- **p adj**: Adjusted p-value
+- Confidence intervals that don't include 0
+
+::: {.callout-note}
+## Self-Check
+
+What does "HSD" stand for in Tukey's HSD?
+
+`r mcq(c("High Standard Deviation", answer = "Honest Significant Difference", "Hypothesis Statistical Difference"))`
+:::
+
+# Effect Sizes
+
+## Eta-Squared (η²)
+
+```{webr-r}
+# Calculate eta-squared manually
+ss_between <- sum(model$effects^2)
+ss_total <- sum((therapy_data$anxiety - mean(therapy_data$anxiety))^2)
+
+# Get from summary
+model_summary <- summary(model)
+ss_therapy <- model_summary[[1]]["therapy", "Sum Sq"]
+ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
+
+eta_sq <- ss_therapy / (ss_therapy + ss_residual)
+cat("Eta-squared:", round(eta_sq, 3))
+```
+
+## Interpreting Effect Sizes
+
+| η² value | Interpretation |
+|----------|----------------|
+| 0.01 | Small |
+| 0.06 | Medium |
+| 0.14 | Large |
+
+::: {.callout-note}
+## Self-Check
+
+An eta-squared of 0.10 would be considered:
+
+`r mcq(c("Small", answer = "Medium", "Large"))`
+:::
+
+# Visualisation
+
+## Boxplot by Group
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+library(ggplot2)
+
+ggplot(therapy_data, aes(x = therapy, y = anxiety, fill = therapy)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Anxiety Scores by Therapy Type",
+       x = "Therapy", y = "Anxiety Score")
+```
+
+## Bar Chart with Error Bars
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+# Calculate means and SEs
+summary_data <- therapy_data |>
+  group_by(therapy) |>
+  summarise(
+    mean = mean(anxiety),
+    se = sd(anxiety) / sqrt(n())
+  )
+
+ggplot(summary_data, aes(x = therapy, y = mean, fill = therapy)) +
+  geom_col(alpha = 0.7) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Mean Anxiety by Therapy",
+       x = "Therapy", y = "Mean Anxiety Score")
+```
+
+# Two-Way ANOVA
+
+## Factorial Designs
+
+When you have two independent variables:
+
+```{webr-r}
+#| autorun: true
+
+# View factorial data
+head(factorial_data)
+```
+
+## Running Two-Way ANOVA
+
+```{webr-r}
+# Fit factorial ANOVA
+factorial_model <- aov(improvement ~ therapy * duration, data = factorial_data)
+
+summary(factorial_model)
+```
+
+## Interpreting Results
+
+The output shows:
+
+- Main effect of therapy
+- Main effect of duration
+- **Interaction** (therapy:duration)
+
+::: {.callout-note}
+## Self-Check
+
+What does a significant interaction mean?
+
+`r mcq(c("Both main effects are significant", answer = "The effect of one IV depends on the level of the other", "There is no effect"))`
+:::
+
+## Visualising Interactions
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(factorial_data, aes(x = duration, y = improvement,
+                            colour = therapy, group = therapy)) +
+  stat_summary(fun = mean, geom = "line", size = 1) +
+  stat_summary(fun = mean, geom = "point", size = 3) +
+  theme_minimal() +
+  labs(title = "Interaction: Therapy x Duration",
+       x = "Duration", y = "Improvement")
+```
+
+# APA Reporting
+
+## One-Way ANOVA
+
+> A one-way ANOVA revealed a significant effect of therapy type on anxiety scores, *F*(2, 87) = [F-value], *p* < .001, η² = [effect size].
+
+## With Post-Hoc
+
+> Post-hoc comparisons using Tukey's HSD indicated that CBT (M = [mean], SD = [sd]) resulted in significantly lower anxiety than control (M = [mean], SD = [sd]), p < .05.
+
+# Knowledge Check
+
+::: {.webex-check .webex-box}
+
+**1. What test should follow a significant ANOVA?**
+
+`r mcq(c("Another ANOVA", answer = "Post-hoc tests", "Correlation"))`
+
+**2. True or False: ANOVA can only compare exactly 3 groups.**
+
+`r torf(FALSE)`
+
+**3. What is the effect size measure for ANOVA?**
+
+`r fitb("eta-squared", ignore_case = TRUE)`
+
+:::
+
+# Summary
+
+::: {.callout-tip}
+## Key Skills Practised
+
+1. Running one-way ANOVA
+2. Conducting post-hoc comparisons
+3. Calculating effect sizes
+4. Running two-way ANOVA
+5. Interpreting interactions
+:::
+
+## Next Steps
+
+1. Download the **exercise** (.qmd file)
+2. Complete the analysis in RStudio
+3. Try the **follow-on exercise** for extra practice

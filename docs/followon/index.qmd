@@ -1,0 +1,55 @@
+---
+title: "Follow-On Exercises"
+subtitle: "Transfer Practice for Independent Learning"
+---
+
+# What Are Follow-On Exercises?
+
+Follow-on exercises are **transfer learning** opportunities designed to help you consolidate your R skills. Each follow-on:
+
+- Uses a **different dataset** from the main lab
+- Covers the **same skills** but with less scaffolding
+- Encourages **independent problem-solving**
+- Includes **solutions** you can check after attempting
+
+::: {.callout-tip}
+## Why Transfer Practice Matters
+
+Research shows that applying skills to new contexts strengthens learning. By working with different data, you'll:
+
+- Build confidence in your abilities
+- Develop transferable skills
+- Identify gaps in your understanding
+- Prepare for independent research
+:::
+
+# Available Follow-Ons
+
+| Lab | Topic | Skills Practised |
+|-----|-------|------------------|
+| [Lab 1](lab1-followon.qmd) | Wellbeing Study | Reverse scoring, descriptives, boxplots |
+| [Lab 2](lab2-followon.qmd) | Sleep & Performance | Data wrangling, filtering, visualisation |
+| [Lab 3](lab3-followon.qmd) | Anxiety Treatment | t-tests, effect sizes, interpretation |
+| [Lab 4](lab4-followon.qmd) | Study Habits | Correlation, regression, prediction |
+
+# How to Use These Exercises
+
+1. **Complete the main lab first** - Ensure you understand the core material
+2. **Attempt independently** - Don't look at solutions until you've tried
+3. **Check your work** - Compare your approach to the provided solutions
+4. **Reflect** - What was challenging? What did you learn?
+
+::: {.callout-note}
+## Submission
+
+Follow-on exercises are **optional practice** and do not need to be submitted. However, completing them will significantly boost your confidence and skills.
+:::
+
+# Getting Help
+
+If you're stuck:
+
+1. Review the corresponding **WebR practice chapter**
+2. Check the **R Toolbox** for code reference
+3. Ask in the **lab session** or on the discussion forum
+4. Look at the solutions (but try first!)

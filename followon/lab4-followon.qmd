@@ -1,0 +1,336 @@
+---
+title: "Lab 4 Follow-On: Transfer Practice"
+subtitle: "Correlation & Regression with New Data"
+author: "YOUR NAME HERE"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)  # For tidy model output
+```
+
+# Introduction
+
+This follow-on exercise uses a **study habits** dataset to help you consolidate your Lab 4 correlation and regression skills.
+
+::: {.callout-note}
+## Dataset: Study Habits Survey
+
+Researchers surveyed students about their study habits and academic outcomes.
+
+- **Participants**: 150 undergraduate students
+- **Variables**:
+  - `study_hours`: Weekly study time (hours)
+  - `attendance`: Lecture attendance (%)
+  - `sleep_quality`: Self-rated (1-10)
+  - `motivation`: Self-rated (1-10)
+  - `gpa`: Grade point average (0-4)
+:::
+
+```{r}
+#| label: simulate-data
+#| echo: false
+
+# Simulate study habits data
+set.seed(2026)
+n <- 150
+
+study <- data.frame(
+  student_id = 1:n,
+  study_hours = round(rnorm(n, mean = 12, sd = 5), 1),
+  attendance = round(rnorm(n, mean = 75, sd = 15)),
+  sleep_quality = sample(1:10, n, replace = TRUE, prob = c(0.02, 0.03, 0.05, 0.1, 0.15, 0.2, 0.2, 0.15, 0.07, 0.03)),
+  motivation = sample(1:10, n, replace = TRUE, prob = c(0.02, 0.03, 0.05, 0.1, 0.15, 0.2, 0.2, 0.15, 0.07, 0.03))
+)
+
+# Create GPA with realistic correlations
+study$gpa <- 2.0 +
+  study$study_hours * 0.05 +
+  study$attendance * 0.01 +
+  study$sleep_quality * 0.05 +
+  study$motivation * 0.08 +
+  rnorm(n, 0, 0.3)
+
+study$gpa <- pmin(4.0, pmax(0, round(study$gpa, 2)))
+study$attendance <- pmin(100, pmax(0, study$attendance))
+study$study_hours <- pmax(0, study$study_hours)
+
+write_csv(study, "../data/study_habits.csv")
+```
+
+# Task 1: Load and Explore
+
+```{r}
+#| label: load-data
+
+study <- read_csv("../data/study_habits.csv", show_col_types = FALSE)
+```
+
+```{r}
+#| label: explore
+
+# YOUR CODE: View summary statistics
+
+
+# YOUR CODE: Check for any unusual values
+
+```
+
+# Task 2: Correlation Analysis
+
+## Single Correlation
+
+Test the correlation between study hours and GPA:
+
+```{r}
+#| label: single-cor
+
+# YOUR CODE: Run cor.test for study_hours and gpa
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the correlation coefficient (r)? ___
+2. Is it statistically significant? ___
+3. How would you describe this relationship? ___
+:::
+
+## Correlation Matrix
+
+Create a correlation matrix for all numeric variables:
+
+```{r}
+#| label: cor-matrix
+
+# YOUR CODE: Create a correlation matrix
+# Hint: cor(study[, c("study_hours", "attendance", "sleep_quality", "motivation", "gpa")])
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. Which variable has the strongest correlation with GPA? ___
+2. Are any predictor variables highly correlated with each other? ___
+:::
+
+# Task 3: Visualise Relationships
+
+## Scatter Plots
+
+```{r}
+#| label: scatter1
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a scatter plot of study_hours vs gpa
+# Include a regression line
+
+
+```
+
+```{r}
+#| label: scatter2
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a scatter plot of motivation vs gpa
+
+
+```
+
+## Correlation Heatmap (optional)
+
+```{r}
+#| label: heatmap
+#| fig-width: 8
+#| fig-height: 6
+
+# Create correlation matrix
+cor_matrix <- cor(study[, c("study_hours", "attendance", "sleep_quality", "motivation", "gpa")])
+
+# YOUR CODE: Visualise the correlation matrix
+# Hint: You can use ggplot with geom_tile or the corrplot package
+
+
+```
+
+# Task 4: Simple Regression
+
+Predict GPA from study hours:
+
+```{r}
+#| label: simple-reg
+
+# YOUR CODE: Fit a simple linear regression model
+
+
+# YOUR CODE: View the model summary
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the intercept? ___
+2. What is the slope for study_hours? ___
+3. What is R-squared? ___
+4. For each additional hour of study, how much does GPA increase? ___
+:::
+
+# Task 5: Multiple Regression
+
+Predict GPA from multiple predictors:
+
+```{r}
+#| label: multiple-reg
+
+# YOUR CODE: Fit a model with study_hours, attendance, and motivation
+
+
+# YOUR CODE: View the summary
+
+
+```
+
+Compare to the simple model:
+
+```{r}
+#| label: compare-models
+
+# YOUR CODE: How much did R-squared improve?
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. Which predictors are significant (p < .05)? ___
+2. What is R-squared for the multiple regression? ___
+3. Which predictor has the largest effect? ___
+:::
+
+# Task 6: Model Diagnostics
+
+Check assumptions:
+
+```{r}
+#| label: diagnostics
+#| fig-width: 8
+#| fig-height: 6
+
+# YOUR CODE: Create diagnostic plots
+# Hint: plot(model) produces 4 diagnostic plots
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. Do the residuals appear normally distributed? ___
+2. Is there evidence of heteroscedasticity? ___
+:::
+
+# Task 7: Prediction
+
+Use your model to make predictions:
+
+```{r}
+#| label: predict
+
+# Create a new student
+new_student <- data.frame(
+  study_hours = 15,
+  attendance = 80,
+  motivation = 7
+)
+
+# YOUR CODE: Predict GPA for this student
+
+
+```
+
+# Task 8: APA Write-Up
+
+Write an APA-style results paragraph including:
+
+- Correlation between study hours and GPA
+- Simple regression results
+- Multiple regression results
+- Model comparison
+
+**YOUR WRITE-UP:**
+
+[Write your paragraph here]
+
+# Solutions
+
+::: {.callout-caution collapse="true"}
+## Click to reveal solutions (try first!)
+
+### Task 2: Correlation
+```r
+cor.test(study$study_hours, study$gpa)
+
+# Correlation matrix
+cor(study[, c("study_hours", "attendance", "sleep_quality", "motivation", "gpa")])
+```
+
+### Task 3: Scatter plot
+```r
+ggplot(study, aes(x = study_hours, y = gpa)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal() +
+  labs(title = "Study Hours vs GPA",
+       x = "Weekly Study Hours", y = "GPA")
+```
+
+### Task 4: Simple regression
+```r
+model_simple <- lm(gpa ~ study_hours, data = study)
+summary(model_simple)
+```
+
+### Task 5: Multiple regression
+```r
+model_multi <- lm(gpa ~ study_hours + attendance + motivation, data = study)
+summary(model_multi)
+```
+
+### Task 7: Prediction
+```r
+predict(model_multi, newdata = new_student, interval = "confidence")
+```
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+sessionInfo()
+```

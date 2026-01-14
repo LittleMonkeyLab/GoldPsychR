@@ -1,0 +1,14 @@
+---
+title: "R Toolbox"
+---
+
+Quick reference guides for common R tasks in psychology research.
+
+- [Setup](setup.qmd) - Installing and configuring R
+- [Import](import.qmd) - Loading data into R
+- [Wrangle](wrangle.qmd) - Cleaning and transforming data
+- [Plots](plots.qmd) - Data visualisation
+- [Tests](tests.qmd) - Statistical tests
+- [Models](models.qmd) - Regression and linear models
+- [Reporting](reporting.qmd) - APA-style output
+- [Troubleshooting](troubleshooting.qmd) - Common errors and fixes

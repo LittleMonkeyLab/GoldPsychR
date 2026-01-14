@@ -1,0 +1,31 @@
+---
+title: "Reporting"
+---
+
+## APA-Style Output
+
+### Using the report package
+
+```r
+library(report)
+
+model <- lm(score ~ condition, data = data)
+report(model)
+```
+
+### Formatting numbers
+
+```r
+# Round to 2 decimal places
+round(0.12345, 2)
+
+# Format p-values
+format.pval(0.0001, digits = 3)
+```
+
+### Tables with kable
+
+```r
+library(knitr)
+kable(summary_table, digits = 2)
+```

@@ -1,0 +1,361 @@
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Personality & The Big Five"
+author: "YOUR NAME HERE"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+# Introduction
+
+In this lab, you will analyse Big Five personality data to practice:
+
+- Loading and inspecting data
+- Reverse-scoring questionnaire items
+- Calculating descriptive statistics
+- Creating visualisations
+- Writing APA-style results
+
+::: {.callout-important}
+## Before You Start
+
+1. Replace "YOUR NAME HERE" in the YAML header with your name
+2. Run each code chunk and complete the exercises
+3. Render to HTML when finished
+
+The data will be downloaded automatically from GitHub when you run the first code chunk.
+:::
+
+::: {.callout-note}
+## Cycling with Slides
+
+This exercise is designed to be completed **alongside** the Lab 1 slides:
+
+| Slides Part | Exercise Section |
+|--------------|------------------|
+| Part 2: Loading Data | Section 1: Load and Inspect Data |
+| Part 3: Reverse Scoring | Section 2: Reverse Scoring |
+| Part 4: Analysis | Sections 3-4: Descriptives & Visualisation |
+| Part 5: Write-Up | Sections 5-6: APA Write-Up & Reflection |
+:::
+
+# Load and Inspect Data
+
+::: {.callout-note}
+## Slides Part 2
+Complete this section during **Part 2: Loading Data** practice time.
+:::
+
+## Load the Dataset
+
+```{r}
+#| label: load-data
+
+# Load the personality data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Inspect the Data
+
+```{r}
+#| label: inspect-head
+
+# View the first 6 rows
+head(data)
+```
+
+```{r}
+#| label: inspect-structure
+
+# Check the structure
+str(data)
+```
+
+```{r}
+#| label: inspect-dimensions
+
+# Check dimensions
+dim(data)
+```
+
+::: {.callout-note}
+## Exercise 1.1
+
+Answer the following questions based on your inspection:
+
+1. How many participants are in the dataset? **[YOUR ANSWER]**
+2. How many variables are there? **[YOUR ANSWER]**
+3. What are the two levels of the `group` variable? **[YOUR ANSWER]**
+:::
+
+# Reverse Scoring
+
+::: {.callout-note}
+## Slides Part 3
+Complete this section during **Part 3: Reverse Scoring** practice time.
+:::
+
+## Understanding the Items
+
+Items `p4` and `p5` are negatively worded and need to be reverse-scored before creating a total score.
+
+For a 1-5 Likert scale, we use the formula: `reversed = 6 - original`
+
+## Create Reversed Items
+
+```{r}
+#| label: reverse-score
+#| code-annotations: below
+
+# Reverse-score items p4 and p5
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Verify the reversal worked correctly
+head(data[, c("p4", "rev_p4", "p5", "rev_p5")])
+```
+
+1. Apply the reverse formula to p4
+2. Apply the reverse formula to p5
+
+::: {.callout-note}
+## Exercise 2.1
+
+Look at the output above. For the first participant:
+
+- Original p4 score: **[YOUR ANSWER]**
+- Reversed p4 score: **[YOUR ANSWER]**
+- Do they sum to 6? **[YOUR ANSWER]**
+:::
+
+## Create Total Score
+
+```{r}
+#| label: total-score
+#| code-annotations: below
+
+# Create personality total score
+# Sum all items, using REVERSED versions for p4 and p5
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+
+# View the new column
+head(data[, c("group", "time", "pers_score")])
+```
+
+1. Sum items p1, p2, p3 plus the reversed p4 and p5
+
+# Descriptive Statistics
+
+::: {.callout-note}
+## Slides Part 4 (Part 1)
+Complete this section during **Part 4: Analysis** practice time.
+:::
+
+## Overall Descriptives
+
+```{r}
+#| label: overall-descriptives
+
+# Calculate overall mean, SD, and n
+mean_overall <- mean(data$pers_score, na.rm = TRUE)
+sd_overall <- sd(data$pers_score, na.rm = TRUE)
+n_overall <- length(data$pers_score)
+
+# Display results
+cat("Overall Statistics:\n")
+cat("M =", round(mean_overall, 2), "\n")
+cat("SD =", round(sd_overall, 2), "\n")
+cat("n =", n_overall, "\n")
+```
+
+## Descriptives by Group and Time
+
+```{r}
+#| label: grouped-descriptives
+#| code-annotations: below
+
+# Calculate descriptives by group and time
+data_summary <- data |>
+  group_by(group, time) |>
+  summarise(
+    mean = mean(pers_score, na.rm = TRUE),
+    sd = sd(pers_score, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+
+# Display the summary table
+data_summary
+```
+
+1. Pipe data forward
+2. Group by both factors
+3. Calculate mean, SD, and n for each group
+4. Remove grouping structure
+
+```{r}
+#| label: formatted-table
+
+# Create a nicely formatted table
+knitr::kable(data_summary,
+             digits = 2,
+             caption = "Descriptive Statistics by Group and Time",
+             col.names = c("Group", "Time", "Mean", "SD", "n"))
+```
+
+::: {.callout-note}
+## Exercise 3.1
+
+Use the summary table to answer:
+
+1. Which group-time combination has the highest mean? **[YOUR ANSWER]**
+2. Which group-time combination has the lowest mean? **[YOUR ANSWER]**
+3. Are the sample sizes equal across groups? **[YOUR ANSWER]**
+:::
+
+# Visualisation
+
+::: {.callout-note}
+## Slides Part 4 (Part 2)
+Complete this section during **Part 4: Analysis** practice time.
+:::
+
+## Boxplot by Group and Time
+
+```{r}
+#| label: boxplot
+#| fig-width: 8
+#| fig-height: 5
+#| code-annotations: below
+
+# Create a boxplot
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Personality Scores by Group and Time",
+    x = "Group",
+    y = "Personality Score",
+    fill = "Time"
+  )
+```
+
+1. Set up plot with aesthetics
+2. Add boxplot geometry
+3. Apply minimal theme
+4. Add informative labels
+
+::: {.callout-note}
+## Exercise 4.1
+
+Describe what you see in the boxplot:
+
+1. Do the groups appear similar at baseline (pre)? **[YOUR ANSWER]**
+2. Which group shows more change from pre to post? **[YOUR ANSWER]**
+3. Are there any outliers visible? **[YOUR ANSWER]**
+:::
+
+## Your Custom Visualisation
+
+Create your own visualisation below. You might try:
+
+- A histogram of the total scores
+- Separate boxplots for each time point
+- A bar chart of means with error bars
+
+```{r}
+#| label: custom-plot
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE HERE
+# Create your own visualisation
+
+
+```
+
+# APA Write-Up
+
+::: {.callout-note}
+## Slides Part 5
+Complete this section during **Part 5: Write-Up** practice time.
+:::
+
+## Write Your Results
+
+Using the summary statistics from Section 3, write an APA-style paragraph describing the descriptive statistics.
+
+::: {.callout-tip}
+## Template
+
+Participants reported [description] levels of personality overall (M = ___, SD = ___). At baseline, the control group (M = ___, SD = ___, n = ___) and training group (M = ___, SD = ___, n = ___) were [similar/different]. Following the intervention, the control group showed [description of change] (M = ___, SD = ___), whereas the training group showed [description of change] (M = ___, SD = ___). These descriptive patterns suggest [your interpretation].
+:::
+
+**YOUR WRITE-UP HERE:**
+
+[Write your APA-style paragraph here, filling in the statistics from your analysis]
+
+# Reflection
+
+::: {.callout-note}
+## Exercise 6.1
+
+Answer these reflection questions:
+
+1. **What was the most challenging part of this lab?**
+
+[YOUR ANSWER]
+
+2. **What would you do differently next time?**
+
+[YOUR ANSWER]
+
+3. **What questions do you still have?**
+
+[YOUR ANSWER]
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+
+# Record your R environment for reproducibility
+sessionInfo()
+```
+
+---
+
+::: {.callout-important}
+## Submission Checklist
+
+Before submitting, ensure you have:
+
+- [ ] Replaced "YOUR NAME HERE" with your name
+- [ ] Completed all exercises
+- [ ] Written the APA results paragraph
+- [ ] Created a custom visualisation
+- [ ] Answered the reflection questions
+- [ ] Rendered to HTML successfully
+:::

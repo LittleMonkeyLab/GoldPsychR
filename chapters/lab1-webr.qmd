@@ -1,0 +1,490 @@
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Interactive Practice with WebR"
+author: "Gordon Wright"
+date: "2026"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+
+filters:
+  - webr
+webr:
+  packages: ['dplyr', 'ggplot2']
+  show-startup-message: false
+---
+
+```{r}
+#| echo: false
+#| message: false
+library(webexercises)
+```
+
+# Welcome
+
+This interactive chapter lets you practice R skills directly in your browser. **No installation required** - all code runs using WebR.
+
+::: {.callout-tip}
+## How to Use This Page
+
+1. Read the explanations carefully
+2. Run the code cells by clicking the **Run** button
+3. Modify code and experiment - you can't break anything!
+4. Complete the self-check questions to test your understanding
+:::
+
+::: {.callout-note}
+## Cycling with Slides
+
+This chapter is designed to be used **alongside** the Lab 1 slides:
+
+| Slides Part | WebR Section |
+|--------------|--------------|
+| Part 1: RStudio Basics | Section 1: Getting Started |
+| Part 2: Loading Data | Section 2: Loading Data |
+| Part 3: Reverse Scoring | Section 3: Reverse Scoring |
+| Part 4: Analysis | Sections 4-5: Descriptives & Visualisation |
+| Part 5: Write-Up | Section 6: APA Write-Up |
+:::
+
+```{webr-r}
+#| context: setup
+#| autorun: true
+
+# Simulate personality dataset
+set.seed(42)
+n <- 160
+
+data <- data.frame(
+  id = 1:n,
+  group = rep(c("control", "training"), each = n/2),
+  time = rep(rep(c("pre", "post"), each = n/4), 2),
+  p1 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
+  p2 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.15, 0.35, 0.25, 0.15)),
+  p3 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
+  p4 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.25, 0.3, 0.2, 0.1)),
+  p5 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.2, 0.35, 0.2, 0.1))
+)
+
+# Add training effect for post-training group
+training_post <- data$group == "training" & data$time == "post"
+data$p1[training_post] <- pmin(5, data$p1[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+data$p2[training_post] <- pmin(5, data$p2[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+data$p3[training_post] <- pmin(5, data$p3[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+```
+
+# Getting Started with R {#sec-getting-started}
+
+::: {.callout-note}
+## Slides Part 1
+Complete this section after watching **Part 1: RStudio Basics** in the slides.
+:::
+
+## Basic Arithmetic
+
+R can work as a powerful calculator. Run the code below to see:
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+
+1 + 1
+10 / 2
+3 ^ 2
+```
+
+## Creating Variables
+
+We store values using the **assignment operator** `<-`
+
+```{webr-r}
+x <- 5
+y <- 2
+x + y
+```
+
+::: {.callout-note}
+## Self-Check
+`r mcq(c("<- means 'equals'", answer = "<- means 'assign a value to a name'", "<- is a comment"))`
+:::
+
+## Vectors
+
+A **vector** is a collection of values. We create them with `c()`:
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5)
+scores
+```
+
+Try calculating the mean of `scores`:
+
+```{webr-r}
+# Calculate the mean of the scores vector
+mean(scores)
+```
+
+## Practice: Your Turn
+
+Try creating your own vector and calculating statistics:
+
+```{webr-r}
+# Create a vector called 'my_scores' with 5 numbers of your choice
+# Then calculate the mean and sd
+
+my_scores <- c(___, ___, ___, ___, ___)
+mean(my_scores)
+sd(my_scores)
+```
+
+# Loading and Inspecting Data {#sec-loading-data}
+
+::: {.callout-note}
+## Slides Part 2
+Complete this section after watching **Part 2: Loading Data** in the slides.
+:::
+
+## The Personality Dataset
+
+We have data from 160 participants who completed a Big Five personality questionnaire. The data includes:
+
+- `id`: Participant identifier
+- `group`: Control or training condition
+- `time`: Pre or post intervention
+- `p1` to `p5`: Five personality items (1-5 scale)
+
+## Viewing the Data
+
+Let's look at the first few rows:
+
+```{webr-r}
+#| autorun: true
+
+head(data)
+```
+
+::: {.callout-note}
+## Self-Check
+
+How many columns are in this dataset?
+
+`r fitb(8)`
+:::
+
+## Exploring Structure
+
+```{webr-r}
+# Check dimensions
+dim(data)
+```
+
+```{webr-r}
+# View column names
+names(data)
+```
+
+```{webr-r}
+# Examine structure
+str(data)
+```
+
+::: {.callout-note}
+## Self-Check
+
+How many participants (rows) are in this dataset?
+
+`r fitb(160)`
+:::
+
+## Practice: Explore Further
+
+Try using `summary()` to get an overview of the data:
+
+```{webr-r}
+# Get a summary of the data
+summary(data)
+```
+
+# Reverse Scoring {#sec-reverse-scoring}
+
+::: {.callout-note}
+## Slides Part 3
+Complete this section after watching **Part 3: Reverse Scoring** in the slides.
+:::
+
+## Why Reverse Score?
+
+Items p4 and p5 are **negatively worded**. Before creating a total score, we must reverse them.
+
+For a 1-5 scale, the formula is: `reversed = 6 - original`
+
+::: {.callout-note}
+## Self-Check
+
+On a 1-5 Likert scale, what number do we subtract from to reverse the scores?
+
+`r fitb(6)`
+:::
+
+## Apply Reverse Scoring
+
+Complete the code to create reversed versions of p4 and p5:
+
+```{webr-r}
+# Reverse-score items p4 and p5
+
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Check: original and reversed should be mirror opposites
+head(data[, c("p4", "rev_p4", "p5", "rev_p5")])
+```
+
+## Create Total Score
+
+Now sum all items (using reversed versions for p4 and p5):
+
+```{webr-r}
+# Create personality total score
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+
+# View the new column
+head(data[, c("id", "pers_score")])
+```
+
+::: {.callout-warning}
+## Common Mistake
+
+A common error is using the **original** items (p4, p5) instead of the **reversed** versions (rev_p4, rev_p5) in your sum. Always double-check!
+:::
+
+::: {.callout-note}
+## Self-Check
+
+Which items should be **reversed** before summing?
+
+`r mcq(c("p1 and p2", "p2 and p3", answer = "p4 and p5", "All items"))`
+:::
+
+# Descriptive Statistics {#sec-descriptives}
+
+::: {.callout-note}
+## Slides Part 4 (Part 1)
+Complete this section after watching **Part 4: Analysis** in the slides.
+:::
+
+## Overall Summary
+
+Calculate the mean, standard deviation, and sample size for the total score:
+
+```{webr-r}
+# Overall descriptive statistics
+mean(data$pers_score, na.rm = TRUE)
+sd(data$pers_score, na.rm = TRUE)
+length(data$pers_score)
+```
+
+::: {.callout-important}
+## Key Point: na.rm = TRUE
+
+Always include `na.rm = TRUE` when calculating statistics. This tells R to ignore missing values. Without it, a single `NA` will make your result `NA`!
+:::
+
+::: {.callout-note}
+## Self-Check
+
+What does `na.rm = TRUE` do?
+
+`r mcq(c("Removes all rows from the data", answer = "Ignores missing values in the calculation", "Replaces missing values with zero"))`
+:::
+
+## Grouped Summaries with dplyr
+
+The `dplyr` package makes it easy to calculate statistics by group:
+
+```{webr-r}
+library(dplyr)
+
+data_summary <- data |>
+  group_by(group, time) |>
+  summarise(
+    mean = mean(pers_score, na.rm = TRUE),
+    sd = sd(pers_score, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+
+data_summary
+```
+
+::: {.callout-note}
+## Self-Check
+
+What is the other grouping variable besides `group`?
+
+`r fitb("time", ignore_case = TRUE)`
+:::
+
+## Understanding the Output
+
+Look at the summary table above. Try to answer:
+
+```{webr-r}
+# Which group-time combination has the highest mean?
+# Hint: Look at the 'mean' column in data_summary
+
+# You can sort the summary to make it clearer:
+data_summary |>
+  arrange(desc(mean))
+```
+
+# Visualisation {#sec-visualisation}
+
+::: {.callout-note}
+## Slides Part 4 (Part 2)
+Complete this section as part of **Part 4: Analysis** practice.
+:::
+
+## Creating a Boxplot
+
+Let's visualise the distributions with a boxplot:
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+library(ggplot2)
+
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Personality Scores by Group and Time",
+    x = "Group",
+    y = "Personality Score",
+    fill = "Time"
+  )
+```
+
+::: {.callout-note}
+## Self-Check
+
+In the code above, what aesthetic (aes) determines the colour of the boxes?
+
+`r mcq(c("x", "y", answer = "fill", "alpha"))`
+:::
+
+## Customise Your Plot
+
+Try modifying the plot. Change the title or colours:
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+# Modify this plot - try changing:
+# - The title
+# - The colours (use scale_fill_manual)
+# - The theme (try theme_classic() or theme_bw())
+
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("pre" = "#E8E8E8", "post" = "#4A90A4")) +
+  theme_minimal() +
+  labs(
+    title = "Your Custom Title Here",
+    x = "Group",
+    y = "Personality Score",
+    fill = "Time"
+  )
+```
+
+# APA Write-Up {#sec-apa-writeup}
+
+::: {.callout-note}
+## Slides Part 5
+Complete this section after watching **Part 5: Write-Up** in the slides.
+:::
+
+## Describing Your Results
+
+Use your summary statistics to complete an APA-style paragraph.
+
+```{webr-r}
+# Display the summary again for reference
+data_summary
+```
+
+::: {.callout-tip collapse="true"}
+## Example Write-Up
+
+Participants reported moderate levels of personality overall (M = 15.42, SD = 2.31). At baseline (pre), the control group (M = 15.10, SD = 2.25, n = 40) and training group (M = 15.33, SD = 2.18, n = 40) were similar. Following the intervention (post), the control group showed minimal change (M = 15.28, SD = 2.41, n = 40), whereas the training group showed an increase (M = 16.95, SD = 2.15, n = 40). These descriptive patterns suggest a potential training effect.
+:::
+
+# Knowledge Check {#sec-knowledge-check}
+
+Test your understanding with these final questions:
+
+::: {.webex-check .webex-box}
+
+**1. What function loads a CSV file from the `readr` package?**
+
+`r mcq(c("load_csv()", answer = "read_csv()", "import_csv()", "open_csv()"))`
+
+**2. True or False: The pipe operator `|>` passes data to the next function.**
+
+`r torf(TRUE)`
+
+**3. Which dplyr function calculates summary statistics?**
+
+`r mcq(c("group_by()", "filter()", answer = "summarise()", "mutate()"))`
+
+**4. What package do we use for creating plots?**
+
+`r fitb("ggplot2", ignore_case = TRUE)`
+
+:::
+
+# Summary
+
+::: {.callout-tip}
+## Key Skills Practised
+
+1. Creating variables and vectors
+2. Loading and inspecting data
+3. Reverse-scoring questionnaire items
+4. Calculating descriptive statistics
+5. Creating grouped summaries with dplyr
+6. Building visualisations with ggplot2
+:::
+
+## Section-Cycle Reference
+
+| Section | Slides Part | Exercise Section |
+|---------|--------------|------------------|
+| 1. Getting Started | Part 1 | — |
+| 2. Loading Data | Part 2 | Section 1 |
+| 3. Reverse Scoring | Part 3 | Section 2 |
+| 4. Descriptives | Part 4 | Section 3 |
+| 5. Visualisation | Part 4 | Section 4 |
+| 6. APA Write-Up | Part 5 | Section 5 |
+
+## Next Steps
+
+1. Download the **scaffolded exercise** (.qmd file)
+2. Open it in RStudio on your computer
+3. Complete the exercises using the real dataset
+4. Render to HTML and submit
+
+::: {.callout-note}
+## Need Help?
+
+- Review the **R Toolbox** for code reference
+- Try the **follow-on exercise** for extra practice
+- Ask questions in the lab session
+:::

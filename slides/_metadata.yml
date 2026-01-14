@@ -1,0 +1,13 @@
+ format:
+  revealjs: 
+    logo: assets/images/GoldLogo.png 
+    scrollable: true
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    code-line-numbers: false
+    code-annotations: below
+    highlight-style: github
+    width: 1280
+    height: 720

@@ -1,0 +1,277 @@
+/*-- scss:defaults --*/
+
+// Goldsmiths brand colours
+$gold-red: #9B1B30;
+$gold-dark: #1a1a1a;
+$gold-grey: #6c757d;
+$gold-light: #f8f9fa;
+
+// Custom callout colours
+$purple: #61589C;
+$teal: #008080;
+$orange: #E78021;
+
+// Theme colours
+$primary: $gold-red;
+$secondary: $gold-grey;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+
+// Typography
+$font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-monospace: "Fira Code", "Source Code Pro", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+$headings-font-family: "Source Sans Pro", sans-serif;
+$headings-font-weight: 600;
+
+// Code blocks
+$code-bg: #f6f8fa;
+$code-color: $gold-dark;
+
+/*-- scss:rules --*/
+
+// Hero banner
+.hero-banner {
+  background: linear-gradient(135deg, $gold-red 0%, darken($gold-red, 15%) 100%);
+  color: white;
+  padding: 3rem 2rem;
+  margin: -1rem -1rem 2rem -1rem;
+  text-align: center;
+  border-radius: 0 0 1rem 1rem;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+}
+
+// Navigation
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+// Content styling
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+// Code chunks
+pre.sourceCode {
+  border-radius: 0.5rem;
+  border: 1px solid #e1e4e8;
+
+  code {
+    font-size: 0.9rem;
+  }
+}
+
+// WebR interactive chunks
+.webr-container {
+  border: 2px solid $gold-red;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+
+  .webr-editor {
+    border-bottom: 1px solid #e1e4e8;
+  }
+
+  button {
+    background-color: $gold-red;
+    color: white;
+
+    &:hover {
+      background-color: darken($gold-red, 10%);
+    }
+  }
+}
+
+// Callouts
+.callout {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+
+  &.callout-tip {
+    border-left-color: $success;
+  }
+
+  &.callout-note {
+    border-left-color: $info;
+  }
+
+  &.callout-warning {
+    border-left-color: $warning;
+  }
+
+  &.callout-important {
+    border-left-color: $danger;
+  }
+}
+
+// Custom Activity callout
+.callout.activity {
+  border-left-color: $purple !important;
+
+  .callout-header {
+    background-color: rgba(97, 88, 156, 0.25) !important;
+  }
+
+  .callout-title-container {
+    text-indent: -9999px;
+    line-height: 0;
+
+    &::after {
+      content: "Activity";
+      text-indent: 0;
+      display: block;
+      line-height: 1.5em;
+      font-weight: 600;
+      color: $purple;
+    }
+  }
+}
+
+// Custom Try This callout
+.callout.try {
+  border-left-color: $teal !important;
+
+  .callout-header {
+    background-color: rgba(0, 128, 128, 0.15) !important;
+  }
+
+  .callout-title-container {
+    text-indent: -9999px;
+    line-height: 0;
+
+    &::after {
+      content: "Try This";
+      text-indent: 0;
+      display: block;
+      line-height: 1.5em;
+      font-weight: 600;
+      color: $teal;
+    }
+  }
+}
+
+// Custom Challenge callout
+.callout.challenge {
+  border-left-color: $orange !important;
+
+  .callout-header {
+    background-color: rgba(231, 128, 33, 0.15) !important;
+  }
+
+  .callout-title-container {
+    text-indent: -9999px;
+    line-height: 0;
+
+    &::after {
+      content: "Challenge";
+      text-indent: 0;
+      display: block;
+      line-height: 1.5em;
+      font-weight: 600;
+      color: darken($orange, 10%);
+    }
+  }
+}
+
+// Tables
+table {
+  width: 100%;
+  margin: 1rem 0;
+
+  th {
+    background-color: $gold-light;
+    font-weight: 600;
+  }
+
+  td, th {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.02);
+  }
+}
+
+// Grid cards
+.grid .g-col-4 {
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  h3 a {
+    color: $gold-red;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Footer
+.page-footer {
+  background-color: $gold-dark;
+  color: white;
+  padding: 1.5rem;
+  margin-top: 3rem;
+
+  a {
+    color: lighten($gold-red, 30%);
+  }
+}
+
+// Links that open in new tabs
+a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+a[target="_blank"]:hover::after {
+  opacity: 1;
+}
+
+// Iframe styling for slides
+iframe {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .hero-banner {
+    padding: 2rem 1rem;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .grid .g-col-4 {
+    margin-bottom: 1rem;
+  }
+
+  iframe {
+    height: 400px !important;
+  }
+}

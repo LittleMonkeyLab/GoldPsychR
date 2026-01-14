@@ -1,0 +1,26 @@
+---
+title: "Import"
+---
+
+## Reading Data
+
+### CSV files
+
+```r
+library(readr)
+data <- read_csv("data.csv")
+```
+
+### Excel files
+
+```r
+library(readxl)
+data <- read_excel("data.xlsx")
+```
+
+### SPSS files
+
+```r
+library(haven)
+data <- read_sav("data.sav")
+```

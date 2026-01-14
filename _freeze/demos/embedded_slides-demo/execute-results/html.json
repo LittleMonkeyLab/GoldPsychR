@@ -1,0 +1,15 @@
+{
+  "hash": "1cb2958c82b35eaccb110519162cffec",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Embedded Slides\"\nformat: html\n---\n\nEmbedding of local slides from another directory relative to /site\n\n<div style=\"position: relative; padding-top: 56.25%; height: 0; overflow: hidden;\">\n  <iframe src=\"../lectures/lecture01.html\" \n          style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;\"\n          allowfullscreen\n          loading=\"lazy\">\n  </iframe>\n</div>\n\n<details>\n  <summary>Solution</summary>\n\nAnd this is just some content.\n</details>\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Here is some text\n```\n:::\n\n  \n</details>\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

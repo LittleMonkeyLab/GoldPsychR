@@ -1,0 +1,141 @@
+---
+title: "Lab 2: Comparing Groups"
+subtitle: "Independent & Paired t-tests"
+format:
+  revealjs:
+    theme: default
+    logo: ../assets/images/GoldLogo.png
+    footer: "GoldPsychR - 4-Week Intensive"
+    slide-number: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Lab 2 Preview {.center}
+
+**Week 2: Comparing Groups (t-tests)**
+
+---
+
+## Today's Lab Overview
+
+**Duration:** 2 hours
+
+**Dataset:** Experimental Data (n=120)
+
+**What we'll do:**
+
+- Independent samples t-test
+- Paired samples t-test
+- Effect sizes (Cohen's d)
+- Reporting results in APA format
+
+---
+
+## Part 1: Independent Samples t-test
+
+**Time:** 30 minutes
+
+Compare two independent groups:
+
+```r
+t.test(score ~ group, data = mydata)
+```
+
+**When to use:** Different participants in each condition
+
+---
+
+## Independent t-test: The Code
+
+```r
+# Run the test
+result <- t.test(score ~ condition, data = experiment)
+
+# View results
+result
+```
+
+Key output:
+- t-statistic
+- degrees of freedom
+- p-value
+- confidence interval
+
+---
+
+## Part 2: Paired Samples t-test
+
+**Time:** 30 minutes
+
+Compare repeated measures:
+
+```r
+t.test(pre_score, post_score, paired = TRUE)
+```
+
+**When to use:** Same participants measured twice
+
+---
+
+## Paired t-test: The Code
+
+```r
+# With two separate columns
+t.test(data$pre, data$post, paired = TRUE)
+
+# Or with long format data
+t.test(score ~ time, data = long_data, paired = TRUE)
+```
+
+---
+
+## Part 3: Effect Sizes
+
+**Time:** 30 minutes
+
+Calculate and interpret Cohen's d:
+
+```r
+library(effectsize)
+cohens_d(score ~ group, data = mydata)
+```
+
+| d value | Interpretation |
+|---------|----------------|
+| 0.2 | Small |
+| 0.5 | Medium |
+| 0.8 | Large |
+
+---
+
+## Part 4: APA Reporting
+
+**Time:** 30 minutes
+
+Write up results correctly:
+
+> There was a significant difference between groups, *t*(58) = 2.45, *p* = .017, *d* = 0.64, 95% CI [0.12, 1.16].
+
+Include:
+- Test statistic and df
+- Exact p-value
+- Effect size with CI
+
+---
+
+## Key Takeaways
+
+Today you learned to:
+
+- Run independent samples t-tests
+- Run paired samples t-tests
+- Calculate and interpret effect sizes
+- Report results in APA format
+
+---
+
+## Questions? {.center}
+
+Ask your instructor or check with your lab partner!

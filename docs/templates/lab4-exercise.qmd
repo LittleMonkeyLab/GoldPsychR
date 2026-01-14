@@ -1,0 +1,130 @@
+---
+title: "Lab 4: Linear Models & Correlation"
+author: "Your Name"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+---
+
+## 1. Load Packages
+
+```{r}
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+---
+
+## 2. Load and Inspect Data
+
+```{r}
+# TODO: Load your dataset
+# data <- read_csv("your_data.csv")
+
+# Check structure
+# str(data)
+```
+
+---
+
+## 3. Correlation Analysis
+
+### 3a. Correlation test
+
+```{r}
+# TODO: Test correlation between two variables
+# cor.test(data$var1, data$var2)
+```
+
+### 3b. Scatterplot
+
+```{r}
+# TODO: Visualise the relationship
+# ggplot(data, aes(x = var1, y = var2)) +
+#   geom_point() +
+#   geom_smooth(method = "lm", se = TRUE) +
+#   theme_minimal() +
+#   labs(title = "Relationship between X and Y")
+```
+
+---
+
+## 4. Simple Linear Regression
+
+```{r}
+# TODO: Build regression model
+# model <- lm(outcome ~ predictor, data = data)
+# summary(model)
+```
+
+### Interpretation
+
+- **Intercept**: [Interpret]
+- **Slope**: [Interpret]
+- **R-squared**: [Interpret]
+- **p-value**: [Interpret]
+
+---
+
+## 5. Multiple Regression
+
+```{r}
+# TODO: Add multiple predictors
+# model2 <- lm(outcome ~ pred1 + pred2 + pred3, data = data)
+# summary(model2)
+```
+
+---
+
+## 6. Model Diagnostics
+
+```{r}
+# TODO: Check assumptions
+# par(mfrow = c(2, 2))
+# plot(model)
+```
+
+### Assumptions checklist
+
+- [ ] Linearity
+- [ ] Normality of residuals
+- [ ] Homoscedasticity
+- [ ] Independence
+
+---
+
+## 7. APA Write-Up
+
+[Write your results in APA format. Example:]
+
+> A simple linear regression was conducted to predict [outcome] from [predictor]. The model was statistically significant, *F*(1, ___) = ___, *p* < .001, *R*² = ___. [Predictor] significantly predicted [outcome], *b* = ___, *t*(___) = ___, *p* = ___.
+
+---
+
+## 8. Reflection
+
+1. How strong was the relationship?
+
+   [Your answer]
+
+2. How much variance did your model explain?
+
+   [Your answer]
+
+3. Were all assumptions met?
+
+   [Your answer]
+
+---
+
+## Congratulations!
+
+You've completed all 4 labs of the GoldPsychR intensive programme!

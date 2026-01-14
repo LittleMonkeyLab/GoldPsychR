@@ -1,0 +1,46 @@
+---
+title: "Troubleshooting"
+---
+
+## Common Errors
+
+### Object not found
+
+```
+Error: object 'x' not found
+```
+
+Check spelling and make sure the object exists in your environment.
+
+### Could not find function
+
+```
+Error: could not find function "read_csv"
+```
+
+Load the required package first: `library(readr)`
+
+### Unexpected symbol
+
+```
+Error: unexpected symbol in "..."
+```
+
+Check for missing commas, brackets, or quotes.
+
+### NA values
+
+```r
+# Remove NA values
+data |> drop_na()
+
+# Ignore NA in calculations
+mean(x, na.rm = TRUE)
+```
+
+## Getting Help
+
+```r
+?function_name
+help(package = "tidyverse")
+```

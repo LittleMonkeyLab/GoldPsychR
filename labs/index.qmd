@@ -1,0 +1,33 @@
+---
+title: "Lab Materials"
+---
+
+# Weekly Labs
+
+Each week's lab includes multiple resources. Use them in order during lab sessions:
+
+| Week | Topic | Materials |
+|:----:|-------|-----------|
+| 1 | Descriptive Statistics | [Lab Overview](lab01.qmd) |
+| 2 | Comparing Groups (t-tests) | [Lab Overview](lab02.qmd) |
+| 3 | ANOVA | [Lab Overview](lab03.qmd) |
+| 4 | Correlation & Regression | [Lab Overview](lab04.qmd) |
+
+# Learning Pathway
+
+For each lab, follow this sequence:
+
+1. **Slides** - Watch the instructor demo (opens in new tab)
+2. **WebR Practice** - Try it yourself in the browser
+3. **Exercise** - Apply skills in RStudio and submit
+4. **Follow-On** - Extra practice with different data
+
+::: {.callout-tip}
+## Tip: Multi-Tab Workflow
+
+For the best experience, open three browser tabs:
+
+1. Slides (for following the demo)
+2. WebR Practice (for trying code)
+3. RStudio Server (for the exercise)
+:::

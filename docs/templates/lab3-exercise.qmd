@@ -1,0 +1,132 @@
+---
+title: "Lab 3: ANOVA"
+author: "Your Name"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+---
+
+## 1. Load Packages
+
+```{r}
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+---
+
+## 2. Load and Inspect Data
+
+```{r}
+# TODO: Load your dataset
+# data <- read_csv("your_data.csv")
+
+# Check group sizes
+# data |> count(condition)
+```
+
+---
+
+## 3. Descriptive Statistics by Group
+
+```{r}
+# TODO: Compute descriptives for each group
+# data |>
+#   group_by(condition) |>
+#   summarise(
+#     mean = mean(score, na.rm = TRUE),
+#     sd = sd(score, na.rm = TRUE),
+#     n = n()
+#   )
+```
+
+---
+
+## 4. One-Way ANOVA
+
+```{r}
+# TODO: Fit the ANOVA model
+# model <- aov(score ~ condition, data = data)
+
+# View results
+# summary(model)
+```
+
+---
+
+## 5. Post-Hoc Tests
+
+```{r}
+# TODO: Run Tukey's HSD (if ANOVA is significant)
+# TukeyHSD(model)
+```
+
+---
+
+## 6. Effect Size (Eta-Squared)
+
+```{r}
+# TODO: Calculate eta-squared
+# model_summary <- summary(model)
+# ss_between <- model_summary[[1]]["condition", "Sum Sq"]
+# ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
+# eta_sq <- ss_between / (ss_between + ss_residual)
+# eta_sq
+```
+
+---
+
+## 7. Visualisation
+
+```{r}
+# TODO: Create boxplot by group
+# ggplot(data, aes(x = condition, y = score, fill = condition)) +
+#   geom_boxplot(alpha = 0.7) +
+#   geom_jitter(width = 0.1, alpha = 0.5) +
+#   theme_minimal() +
+#   labs(title = "Scores by Condition")
+```
+
+---
+
+## 8. Two-Way ANOVA (if applicable)
+
+```{r}
+# TODO: Fit factorial ANOVA (if you have two factors)
+# model2 <- aov(score ~ factor_a * factor_b, data = data)
+# summary(model2)
+```
+
+---
+
+## 9. APA Write-Up
+
+[Write your results in APA format. Example:]
+
+> A one-way ANOVA revealed a significant effect of condition on scores, *F*(2, 97) = ___, *p* = ___, η² = ___.
+
+> Post-hoc comparisons using Tukey's HSD indicated that...
+
+---
+
+## 10. Reflection
+
+1. Was the overall ANOVA significant?
+
+   [Your answer]
+
+2. Which groups differed from each other (based on post-hoc tests)?
+
+   [Your answer]
+
+3. How would you interpret the effect size?
+
+   [Your answer]

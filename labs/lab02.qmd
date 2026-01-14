@@ -1,0 +1,52 @@
+---
+title: "Lab 2: Comparing Groups"
+subtitle: "Independent & Paired t-tests"
+---
+
+# Overview
+
+In this lab, you'll learn to compare two groups using t-tests. We'll test whether there are significant differences between conditions and calculate effect sizes.
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Run independent samples t-tests
+- Run paired samples t-tests
+- Calculate and interpret Cohen's d
+- Create comparison visualisations
+- Write APA-style results
+
+# Lab Resources
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Open each resource in a separate browser tab so you can switch between them easily.
+:::
+
+## Part 1: Instructor Demo
+
+[**Open Slides**](../slides/lab2-slides.qmd){.btn .btn-primary target="_blank"}
+
+## Part 2: Browser Practice
+
+[**Open WebR Practice**](../chapters/lab2-webr.qmd){.btn .btn-success}
+
+## Part 3: RStudio Exercise
+
+[**Download Exercise**](../templates/lab2-exercise.qmd){.btn .btn-warning}
+
+## Extra Practice
+
+[**Follow-On Exercise**](../followon/lab2-followon.qmd){.btn .btn-secondary}
+
+# Key Concepts
+
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | Independent t-test | `t.test(score ~ group)` |
+| 2 | Paired t-test | `t.test(pre, post, paired = TRUE)` |
+| 3 | Effect Size | Cohen's d calculation |
+| 4 | Visualisation | Boxplots by group |
+| 5 | APA Reporting | t, df, p, d |

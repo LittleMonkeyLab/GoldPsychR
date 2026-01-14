@@ -1,0 +1,110 @@
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Personality & The Big Five"
+---
+
+# Overview
+
+In this lab, you'll learn to analyse Big Five personality data in R. We'll work through loading data, scoring questionnaires, calculating descriptives, creating visualisations, and writing up results.
+
+## The Data Story
+
+We've collected personality data from a training study:
+
+- **160 participants** completed personality questionnaires
+- Half received a **training intervention**, half were **controls**
+- Measured **before** (pre) and **after** (post) the intervention
+
+**Our research question**: Did the training affect personality scores?
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Navigate RStudio and understand its four panes
+- Load CSV data into R using `read_csv()`
+- Reverse-score negatively worded questionnaire items
+- Calculate descriptive statistics by group using `dplyr`
+- Create boxplots using `ggplot2`
+- Write an APA-style results paragraph
+
+# Lab Resources
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Use the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.
+:::
+
+## Integrated Lab Experience (Recommended)
+
+Work through embedded slides and interactive practice on each page:
+
+[**Start Lab 1**](../chapters/lab1/index.qmd){.btn .btn-success .btn-lg}
+
+---
+
+## Alternative Resources
+
+Or access individual resources separately:
+
+### Instructor Slides
+
+[**Open Full Slides**](../slides/lab1-slides.qmd){.btn .btn-primary target="_blank"}
+
+### Browser Practice
+
+[**Open WebR Practice**](../chapters/lab1-webr.qmd){.btn .btn-outline-success}
+
+### RStudio Exercise
+
+[**Download Exercise**](../templates/lab1-exercise.qmd){.btn .btn-warning}
+
+### Extra Practice
+
+[**Follow-On Exercise**](../followon/lab1-followon.qmd){.btn .btn-secondary}
+
+# Schedule
+
+| Time | Activity |
+|------|----------|
+| 0:00-0:10 | Part 1: What is R? + RStudio Tour |
+| 0:10-0:20 | **Practice: WebR basics** |
+| 0:20-0:35 | Part 2: Loading Data |
+| 0:35-0:50 | **Practice: Data loading** |
+| 0:50-1:05 | Part 3: Reverse Scoring |
+| 1:05-1:20 | **Practice: Scoring** |
+| 1:20-1:40 | Part 4: Descriptives & Visualisation |
+| 1:40-1:55 | **Practice: Analysis + Write-Up** |
+| 1:55-2:00 | Wrap-up |
+
+# Key Concepts
+
+## The Five Parts
+
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | RStudio Tour | Variables, vectors, functions |
+| 2 | Loading Data | `read_csv()`, `head()`, `str()` |
+| 3 | Reverse Scoring | Formula: `6 - original` |
+| 4 | Descriptives & Plots | `group_by()`, `summarise()`, `ggplot()` |
+| 5 | APA Write-Up | Reporting M, SD, n |
+
+## Common Errors
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| Object not found | Variable doesn't exist | Create it first |
+| Function not found | Package not loaded | Use `library()` |
+| Result is NA | Missing values | Add `na.rm = TRUE` |
+| Wrong total score | Used unreversed items | Use `rev_` versions |
+
+# Help
+
+::: {.callout-note}
+## Need Help?
+
+- **During the lab**: Ask your instructor or demonstrators
+- **Reference**: Check the [R Toolbox](../toolbox/index.qmd) for code examples
+- **Errors**: See the [Troubleshooting Guide](../toolbox/troubleshooting.qmd)
+:::

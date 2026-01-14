@@ -1,0 +1,233 @@
+---
+title: "Part 4: Descriptives & Plots"
+subtitle: "Lab 1: Descriptive Statistics"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    width: 1050
+    height: 700
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 1, Part 4"
+    embed-resources: false
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr', 'dplyr', 'ggplot2']
+  show-startup-message: false
+---
+
+## Descriptive Statistics
+
+**The Big Three:**
+
+- **Mean** (M) - the average
+- **Standard Deviation** (SD) - the spread
+- **Sample Size** (n) - how many participants
+
+---
+
+## Basic Functions
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5, 4, 3, 5, 4, 4)
+
+mean(scores)    # Average
+sd(scores)      # Spread
+length(scores)  # Count
+```
+
+---
+
+## The NA Problem
+
+Missing values cause trouble:
+
+```{webr-r}
+scores_with_na <- c(4, 5, NA, 2, 5)
+
+mean(scores_with_na)  # Returns NA!
+```
+
+**Fix:** Add `na.rm = TRUE`
+
+```{webr-r}
+scores_with_na <- c(4, 5, NA, 2, 5)
+
+mean(scores_with_na, na.rm = TRUE)  # Works!
+```
+
+---
+
+## Grouped Summaries with dplyr
+
+We want statistics **by group**. Enter `dplyr`:
+
+```{webr-r}
+library(dplyr)
+
+# The pipe |> passes data forward
+# group_by() splits by categories
+# summarise() calculates stats
+```
+
+---
+
+## The Pipe: |>
+
+The pipe takes output from the left and feeds it to the right:
+
+```{webr-r}
+library(readr)
+library(dplyr)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+data |>
+  head(3)  # Same as head(data, 3)
+```
+
+---
+
+## Group By + Summarise
+
+```{webr-r}
+library(readr)
+library(dplyr)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+data |>
+  group_by(group) |>
+  summarise(
+    mean = mean(pers_score),
+    sd = sd(pers_score),
+    n = n()
+  )
+```
+
+---
+
+## Two Grouping Variables
+
+```{webr-r}
+library(readr)
+library(dplyr)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+data |>
+  group_by(group, time) |>
+  summarise(
+    mean = mean(pers_score),
+    sd = sd(pers_score),
+    n = n(),
+    .groups = "drop"
+  )
+```
+
+---
+
+## Visualisation with ggplot2
+
+**Grammar of Graphics:**
+
+1. **Data** - what to plot
+2. **Aesthetics** - how to map variables
+3. **Geometry** - what shapes to use
+
+---
+
+## Basic Boxplot
+
+```{webr-r}
+library(readr)
+library(ggplot2)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+ggplot(data, aes(x = group, y = pers_score)) +
+  geom_boxplot()
+```
+
+---
+
+## Adding Colour by Time
+
+```{webr-r}
+library(readr)
+library(ggplot2)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot()
+```
+
+---
+
+## Making it Pretty
+
+```{webr-r}
+library(readr)
+library(ggplot2)
+
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Personality by Group and Time",
+       x = "Group", y = "Score", fill = "Time")
+```
+
+---
+
+## Summary: Part 4
+
+You learned:
+
+- `mean()`, `sd()`, `length()` for basic stats
+- The pipe `|>` to chain operations
+- `group_by() |> summarise()` for grouped stats
+- `ggplot()` + `geom_boxplot()` for visualisation
+
+---
+
+## Now Practice!
+
+Scroll down to create your own summaries and plots.
+
+{{< countdown "15:00" >}}
+
+::: {.callout-tip}
+## Tips
+- Always use `na.rm = TRUE` with real data
+- Try changing `fill = time` to `fill = group`
+- Experiment with `theme_classic()` or `theme_bw()`
+:::

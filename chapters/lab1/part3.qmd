@@ -1,0 +1,186 @@
+---
+title: "Part 3: Reverse Scoring"
+subtitle: "Lab 1: Descriptive Statistics"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part3-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to see how reverse scoring works
+2. **Verify** the reversal by checking original + reversed = 6
+3. **Copy to RStudio** and try with your own data
+:::
+
+### Load the Data First
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Data loaded! Items p4 and p5 need reversing.")
+```
+
+### Look at Original Values
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# See the original p4 values
+head(data$p4, 10)
+```
+
+### Apply the Reverse Formula
+
+For a 1-5 scale: `reversed = 6 - original`
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# Reverse score p4
+data$rev_p4 <- 6 - data$p4
+
+# Compare original and reversed
+head(data[, c("p4", "rev_p4")])
+```
+
+::: {.callout-note}
+## Challenge
+What would the formula be for a 1-7 scale? Try it!
+:::
+
+### Verify the Reversal
+
+Original + reversed should always equal 6:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+data$rev_p4 <- 6 - data$p4
+
+# Check: should all be 6
+head(data$p4 + data$rev_p4)
+```
+
+### Reverse Both Items
+
+Now reverse p5 as well:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# Reverse both items
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Check p5
+head(data[, c("p5", "rev_p5")])
+```
+
+### Create Total Score
+
+Sum all items using the **reversed** versions:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Create personality total score
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+
+# View result
+head(data[, c("id", "group", "time", "pers_score")])
+```
+
+---
+
+## Self-Assessment
+
+Check your understanding before moving on.
+
+::: {.webex-check .webex-box}
+
+**1. Why do we reverse-score some questionnaire items?**
+
+`r mcq(c("To make the data look better", answer = "Because some items are negatively worded", "To reduce the sample size", "To increase variability"))`
+
+**2. For a 1-5 scale, the reverse scoring formula is: `r fitb("6")` - original**
+
+**3. If the original score is 2 on a 1-5 scale, the reversed score is `r fitb("4")`**
+
+**4. True or False: When creating a total score, you should use the original (unreversed) items.**
+
+`r torf(FALSE)`
+
+**5. To verify reverse scoring worked, original + reversed should equal:**
+
+`r mcq(c("0", "5", answer = "6 (for 1-5 scale)", "10"))`
+
+:::
+
+---
+
+## Download Exercise
+
+Continue practicing in RStudio:
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../../templates/lab1-exercise.qmd",
+  output_name = "lab1-exercise",
+  button_label = "Download Exercise (.qmd)",
+  button_type = "warning",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 2](part2.qmd){.btn .btn-secondary}
+
+[Continue to Part 4: Descriptives & Plots →](part4.qmd){.btn .btn-primary}
+:::

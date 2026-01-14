@@ -1,0 +1,169 @@
+---
+title: "Lab 3: ANOVA"
+subtitle: "Analysis of Variance"
+format:
+  revealjs:
+    theme: default
+    logo: ../assets/images/GoldLogo.png
+    footer: "GoldPsychR - 4-Week Intensive"
+    slide-number: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Lab 3 Preview {.center}
+
+**Week 3: ANOVA**
+
+---
+
+## Today's Lab Overview
+
+**Duration:** 2 hours
+
+**Dataset:** Experimental Data (n=150)
+
+**What we'll do:**
+
+- One-way ANOVA
+- Post-hoc comparisons
+- Effect sizes (eta-squared)
+- Two-way ANOVA (factorial designs)
+
+---
+
+## When to Use ANOVA
+
+**t-test:** Compare 2 groups
+
+**ANOVA:** Compare 3+ groups
+
+Why not multiple t-tests?
+- Inflates Type I error rate
+- ANOVA controls family-wise error
+
+---
+
+## Part 1: One-Way ANOVA
+
+**Time:** 30 minutes
+
+Compare three or more groups:
+
+```r
+# Fit the model
+model <- aov(score ~ condition, data = mydata)
+
+# View results
+summary(model)
+```
+
+---
+
+## Reading ANOVA Output
+
+```
+            Df Sum Sq Mean Sq F value  Pr(>F)
+condition    2   1250   625.0   12.5  0.0001 ***
+Residuals   97   4850    50.0
+```
+
+Key values:
+- F-statistic
+- p-value
+- Degrees of freedom
+
+---
+
+## Part 2: Post-Hoc Tests
+
+**Time:** 30 minutes
+
+Which groups differ?
+
+```r
+# Tukey's HSD
+TukeyHSD(model)
+
+# Or pairwise t-tests with correction
+pairwise.t.test(data$score, data$condition,
+                p.adjust.method = "bonferroni")
+```
+
+---
+
+## Part 3: Effect Sizes
+
+**Time:** 30 minutes
+
+Calculate eta-squared:
+
+```r
+library(effectsize)
+eta_squared(model)
+```
+
+| η² value | Interpretation |
+|----------|----------------|
+| 0.01 | Small |
+| 0.06 | Medium |
+| 0.14 | Large |
+
+---
+
+## Part 4: Two-Way ANOVA
+
+**Time:** 30 minutes
+
+Factorial designs with two IVs:
+
+```r
+model <- aov(score ~ factor_a * factor_b, data = mydata)
+summary(model)
+```
+
+Tests:
+- Main effect of A
+- Main effect of B
+- A × B interaction
+
+---
+
+## Interpreting Interactions
+
+When the effect of one IV depends on the level of another:
+
+```r
+# Visualise the interaction
+interaction.plot(data$factor_a, data$factor_b, data$score)
+
+# Or with ggplot2
+ggplot(data, aes(x = factor_a, y = score, colour = factor_b)) +
+  stat_summary(fun = mean, geom = "line", aes(group = factor_b))
+```
+
+---
+
+## APA Reporting
+
+> A one-way ANOVA revealed a significant effect of condition on scores, *F*(2, 97) = 12.50, *p* < .001, η² = .21.
+
+> Post-hoc comparisons using Tukey's HSD indicated that...
+
+---
+
+## Key Takeaways
+
+Today you learned to:
+
+- Run one-way ANOVA
+- Conduct post-hoc comparisons
+- Calculate and interpret effect sizes
+- Run and interpret two-way ANOVA
+
+---
+
+## Questions? {.center}
+
+Ask your instructor or check with your lab partner!

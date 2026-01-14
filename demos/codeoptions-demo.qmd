@@ -1,0 +1,332 @@
+---
+title: "Code Display Options"
+subtitle: "A comprehensive guide to Quarto code chunk options"
+format:
+  html: default
+# code-annotations: default
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(palmerpenguins)
+```
+
+# Display Options
+
+## Code Folding
+
+Collapsible code blocks let readers focus on output first, then explore code if curious.
+
+### Folded (default closed)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+penguins |>
+  group_by(species) |>
+
+  summarise(mean_bill = mean(bill_length_mm, na.rm = TRUE))
+```
+
+### Folded but open by default
+
+```{r}
+#| code-fold: show
+#| code-summary: "Hide the code"
+
+penguins |>
+  count(species, island)
+```
+
+## Line Numbers
+
+Useful for referencing specific lines in explanations.
+
+```{r}
+#| code-line-numbers: true
+#| eval: false
+
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_bill = mean(bill_length_mm),
+    sd_bill = sd(bill_length_mm)
+  )
+```
+
+## Code Overflow
+
+### Scroll (default)
+
+Long lines get a horizontal scrollbar:
+
+```{r}
+#| code-overflow: scroll
+#| eval: false
+
+penguins |> mutate(description = paste("This penguin is a", species, "from", island, "with bill length", bill_length_mm, "mm and bill depth", bill_depth_mm, "mm"))
+```
+
+### Wrap
+
+Long lines wrap to fit:
+
+```{r}
+#| code-overflow: wrap
+#| eval: false
+
+penguins |> mutate(description = paste("This penguin is a", species, "from", island, "with bill length", bill_length_mm, "mm and bill depth", bill_depth_mm, "mm"))
+```
+
+---
+
+# Execution Options
+
+## Show code, hide output
+
+```{r}
+#| output: false
+
+result <- penguins |>
+  group_by(species) |>
+  summarise(n = n())
+
+# This runs but output is hidden
+```
+
+## Hide code, show output
+
+```{r}
+#| echo: false
+
+penguins |>
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) +
+  geom_point(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Bill dimensions by species")
+```
+
+## Show neither (invisible processing)
+
+```{r}
+#| include: false
+
+# This chunk runs but nothing appears in output
+secret_data <- penguins |> filter(species == "Adelie")
+```
+
+The chunk above created `secret_data` with `r nrow(secret_data)` rows, but you didn't see it happen.
+
+## Show code only (no execution)
+
+```{r}
+#| eval: false
+
+# This code is displayed but never runs
+penguins |>
+  filter(species == "Chinstrap") |>
+  arrange(desc(body_mass_g))
+```
+
+---
+
+# Code Annotations
+
+Three annotation styles are available. Set globally in YAML or per-chunk.
+
+## Hover and select annotations (dont survive to pdf so ignored here)
+
+The most useful widespread is default (below):
+
+```{r}
+#| eval: false
+# See code explanationss below:
+
+penguins |>                                      # <1>
+  filter(!is.na(bill_length_mm)) |>              # <2>
+  group_by(species) |>                           # <3>
+  summarise(mean_bill = mean(bill_length_mm))    # <4>
+```
+
+1. Start with the penguins dataset
+2. Remove rows with missing bill lengths
+3. Group the data by species
+4. Calculate the mean bill length for each group
+
+## Below annotations with multiline
+
+```{r}
+#| eval: false
+#| code-annotations: below
+# Hover over the numbers to see explanations:
+penguins |>                                      # <1>
+  mutate(                                        # <2>
+    bill_ratio = bill_depth_mm / bill_length_mm  # <2>
+  ) |>
+  select(species, bill_ratio)                    # <3>
+```
+
+1. Start with penguins
+2. Create a new column for bill ratio
+3. Select only the columns we need
+
+---
+
+# Highlighting & Emphasis
+
+## Highlight specific lines
+
+```{r}
+#| eval: false
+#| source-line-numbers: "2,4-5"
+
+penguins |>
+  filter(species == "Gentoo") |>
+  group_by(island) |>
+  summarise(
+    mean_mass = mean(body_mass_g, na.rm = TRUE)
+  )
+```
+
+## Code with filename
+
+```{r}
+#| eval: false
+#| filename: "analysis.R"
+
+# Load and prepare data
+library(tidyverse)
+library(palmerpenguins)
+
+penguins_clean <- penguins |>
+  drop_na()
+```
+
+---
+
+# Tabsets for Multiple Views
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+
+ggplot(penguins, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Body mass by species")
+```
+
+## Annotated
+
+```{r}
+#| eval: false
+
+ggplot(penguins, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +             # <1>
+  theme_minimal() +            # <2>
+  labs(title = "Body mass by species")  # <3>
+```
+
+1. Boxplot shows median, quartiles, and outliers
+2. Clean, minimal theme
+3. Add a descriptive title
+
+## Output
+
+```{r}
+#| echo: false
+
+ggplot(penguins, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Body mass by species") +
+  theme(legend.position = "none")
+```
+
+## Code + Output
+
+```{r}
+ggplot(penguins, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Body mass by species") +
+  theme(legend.position = "none")
+```
+:::
+
+---
+
+# Progressive Reveal (for teaching)
+
+Build up code step-by-step using separate chunks:
+
+### Step 1: Load and inspect
+
+```{r}
+glimpse(penguins)
+```
+
+### Step 2: Filter the data
+
+```{r}
+penguins_filtered <- penguins |>
+  filter(!is.na(body_mass_g))
+
+nrow(penguins_filtered)
+```
+
+### Step 3: Summarise
+
+```{r}
+penguins_filtered |>
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_mass = mean(body_mass_g),
+    sd_mass = sd(body_mass_g)
+  )
+```
+
+### Step 4: Visualise
+
+```{r}
+penguins_filtered |>
+  ggplot(aes(x = species, y = body_mass_g, fill = species)) +
+  geom_violin() +
+  geom_boxplot(width = 0.2, fill = "white") +
+  theme_minimal() +
+  labs(
+    title = "Body mass distribution by species",
+    y = "Body mass (g)",
+    x = NULL
+  ) +
+  theme(legend.position = "none")
+```
+
+---
+
+# Quick Reference
+
+| Option | Values | Effect |
+|--------|--------|--------|
+| `echo` | `true`/`false` | Show/hide code |
+| `eval` | `true`/`false` | Run/skip code |
+| `output` | `true`/`false`/`asis` | Show/hide output |
+| `include` | `true`/`false` | Include anything at all |
+| `code-fold` | `true`/`false`/`show` | Collapsible code |
+| `code-summary` | `"text"` | Fold button label |
+| `code-line-numbers` | `true`/`false` | Line numbers |
+| `code-overflow` | `scroll`/`wrap` | Long line handling |
+| `code-annotations` | `hover`/`below`/`select` | Annotation style |
+| `filename` | `"name.R"` | Show filename header |
+| `warning` | `true`/`false` | Show warnings |
+| `message` | `true`/`false` | Show messages |

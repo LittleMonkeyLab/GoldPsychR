@@ -1,0 +1,51 @@
+---
+title: "Demo: webR in RevealJS"
+subtitle: "Stats in slides!"
+authors: "Gordon Wright"
+format: 
+  revealjs:
+    theme: simple
+    scrollable: true
+engine: knitr
+filters:
+  - webr
+---
+
+## webR in RevealJS 
+
+This is a webR-enabled code cell in a Quarto RevealJS document.
+
+```{webr-r}
+fit = lm(mpg ~ wt, data = mtcars)
+
+summary(fit)
+```
+
+
+## Print
+
+
+```{webr-r}
+print("Hello quarto-webr RevealJS world!")
+
+3 + 5
+```
+
+## Text Before and After Code Cell
+
+Sample text before
+
+```{webr-r}
+message("Hello World!")
+```
+
+Sample text after
+
+## Scrollable Class Enabled
+
+```{webr-r}
+2 + 3
+```
+
+The default webR block should not make the slide too wide 
+(no scrollbar at the bottom).

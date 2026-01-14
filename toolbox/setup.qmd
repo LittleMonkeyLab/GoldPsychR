@@ -1,0 +1,15 @@
+---
+title: "Setup"
+---
+
+## Installing R and RStudio
+
+Instructions for getting started with R.
+
+## Packages
+
+Essential packages for psychology research:
+
+```r
+install.packages(c("tidyverse", "psych", "effectsize", "report"))
+```

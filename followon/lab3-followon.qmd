@@ -1,0 +1,313 @@
+---
+title: "Lab 3 Follow-On: Transfer Practice"
+subtitle: "ANOVA with New Data"
+author: "YOUR NAME HERE"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+# Introduction
+
+This follow-on exercise uses an **anxiety treatment** dataset to help you consolidate your Lab 3 ANOVA skills.
+
+::: {.callout-note}
+## Dataset: Anxiety Treatment Trial
+
+A clinical trial compared three treatments for generalised anxiety:
+
+- **Participants**: 90 patients with GAD
+- **Design**: Between-subjects with 3 treatment conditions
+- **Treatments**: CBT, Medication, Waitlist Control
+- **Measure**: GAD-7 anxiety score (0-21, higher = more anxiety)
+- **Hypothesis**: Treatment groups will differ in anxiety reduction
+:::
+
+```{r}
+#| label: simulate-data
+#| echo: false
+
+# Simulate anxiety treatment data
+set.seed(2026)
+n <- 90
+
+anxiety <- data.frame(
+  patient_id = 1:n,
+  treatment = rep(c("CBT", "Medication", "Waitlist"), each = n/3),
+  gad7_post = c(
+    rnorm(n/3, mean = 7, sd = 3),   # CBT: largest reduction
+    rnorm(n/3, mean = 10, sd = 3),  # Medication: moderate reduction
+    rnorm(n/3, mean = 14, sd = 3)   # Waitlist: minimal change
+  )
+)
+
+# Ensure scores stay in valid range
+anxiety$gad7_post <- pmin(21, pmax(0, round(anxiety$gad7_post, 0)))
+
+write_csv(anxiety, "../data/anxiety_treatment.csv")
+```
+
+# Task 1: Load and Explore
+
+```{r}
+#| label: load-data
+
+anxiety <- read_csv("../data/anxiety_treatment.csv", show_col_types = FALSE)
+```
+
+```{r}
+#| label: explore
+
+# YOUR CODE: View the first few rows
+
+
+# YOUR CODE: Check group sizes
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. How many patients in each treatment group? ___
+2. What are the three treatment conditions? ___
+:::
+
+# Task 2: Descriptive Statistics by Group
+
+Calculate mean, SD, and n for each treatment group:
+
+```{r}
+#| label: descriptives
+
+# YOUR CODE: Calculate descriptives for each treatment group
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. Which treatment has the lowest mean anxiety? ___
+2. Which treatment has the highest mean anxiety? ___
+3. Are the standard deviations similar across groups? ___
+:::
+
+# Task 3: Visualisation
+
+## Boxplot by treatment
+
+```{r}
+#| label: boxplot
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a boxplot of gad7_post by treatment
+
+
+```
+
+## Bar chart with error bars
+
+```{r}
+#| label: barchart
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a bar chart showing mean anxiety by treatment with SE error bars
+# Hint: First create a summary, then use geom_col() and geom_errorbar()
+
+
+```
+
+# Task 4: One-Way ANOVA
+
+Test whether anxiety scores differ across treatment groups:
+
+```{r}
+#| label: anova
+
+# YOUR CODE: Fit the ANOVA model
+
+
+# YOUR CODE: View the summary
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the F-statistic? ___
+2. What are the degrees of freedom? (between, within) ___
+3. What is the p-value? ___
+4. Is the overall ANOVA significant (p < .05)? ___
+:::
+
+# Task 5: Post-Hoc Tests
+
+Since we have 3+ groups, run Tukey's HSD to identify which pairs differ:
+
+```{r}
+#| label: posthoc
+
+# YOUR CODE: Run Tukey's HSD
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. Does CBT differ significantly from Medication? ___
+2. Does CBT differ significantly from Waitlist? ___
+3. Does Medication differ significantly from Waitlist? ___
+:::
+
+# Task 6: Effect Size (Eta-Squared)
+
+Calculate eta-squared to measure the proportion of variance explained:
+
+```{r}
+#| label: effect-size
+
+# YOUR CODE: Calculate eta-squared
+# Hint: eta_sq = SS_between / SS_total
+
+
+```
+
+::: {.callout-tip}
+## Interpreting Eta-Squared
+
+- η² = 0.01: Small effect
+- η² = 0.06: Medium effect
+- η² = 0.14: Large effect
+:::
+
+::: {.callout-note}
+## Questions
+
+1. What is eta-squared? ___
+2. How would you interpret this effect size? ___
+3. What percentage of variance in anxiety is explained by treatment? ___
+:::
+
+# Task 7: Assumptions Check
+
+Check the assumption of homogeneity of variance:
+
+```{r}
+#| label: levene
+
+# YOUR CODE: Run Levene's test
+# Hint: car::leveneTest(gad7_post ~ treatment, data = anxiety)
+# Or use: bartlett.test(gad7_post ~ treatment, data = anxiety)
+
+
+```
+
+# Task 8: APA Write-Up
+
+Write an APA-style results paragraph including:
+
+- Descriptive statistics for each group
+- ANOVA results (F, df, p)
+- Effect size (η²)
+- Post-hoc comparisons
+- Brief interpretation
+
+**YOUR WRITE-UP:**
+
+[Write your paragraph here]
+
+# Solutions
+
+::: {.callout-caution collapse="true"}
+## Click to reveal solutions (try first!)
+
+### Task 2: Descriptives
+```r
+anxiety |>
+  group_by(treatment) |>
+  summarise(
+    mean = mean(gad7_post),
+    sd = sd(gad7_post),
+    n = n()
+  )
+```
+
+### Task 3: Boxplot
+```r
+ggplot(anxiety, aes(x = treatment, y = gad7_post, fill = treatment)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Anxiety Scores by Treatment",
+       x = "Treatment", y = "GAD-7 Score")
+```
+
+### Task 3: Bar chart with error bars
+```r
+summary_data <- anxiety |>
+  group_by(treatment) |>
+  summarise(
+    mean = mean(gad7_post),
+    se = sd(gad7_post) / sqrt(n())
+  )
+
+ggplot(summary_data, aes(x = treatment, y = mean, fill = treatment)) +
+  geom_col(alpha = 0.7) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Mean Anxiety by Treatment",
+       x = "Treatment", y = "Mean GAD-7 Score")
+```
+
+### Task 4: ANOVA
+```r
+model <- aov(gad7_post ~ treatment, data = anxiety)
+summary(model)
+```
+
+### Task 5: Post-hoc
+```r
+TukeyHSD(model)
+```
+
+### Task 6: Eta-squared
+```r
+model_summary <- summary(model)
+ss_treatment <- model_summary[[1]]["treatment", "Sum Sq"]
+ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
+eta_sq <- ss_treatment / (ss_treatment + ss_residual)
+eta_sq
+```
+
+### Task 8: APA Write-Up Example
+> A one-way ANOVA was conducted to examine the effect of treatment type on anxiety levels. There was a significant effect of treatment on GAD-7 scores, *F*(2, 87) = 28.45, *p* < .001, η² = .40. Post-hoc comparisons using Tukey's HSD indicated that CBT (*M* = 7.2, *SD* = 2.9) resulted in significantly lower anxiety than both Medication (*M* = 10.1, *SD* = 3.1, *p* = .003) and Waitlist (*M* = 14.0, *SD* = 3.2, *p* < .001). Medication also showed significantly lower anxiety than Waitlist (*p* < .001). The large effect size suggests that treatment type explains a substantial proportion of variance in anxiety outcomes.
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+sessionInfo()
+```

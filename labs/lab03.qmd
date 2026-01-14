@@ -1,0 +1,53 @@
+---
+title: "Lab 3: ANOVA"
+subtitle: "Analysis of Variance"
+---
+
+# Overview
+
+In this lab, you'll learn to compare three or more groups using ANOVA. We'll run one-way and two-way analyses, conduct post-hoc tests, and calculate effect sizes.
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Run one-way ANOVA
+- Conduct Tukey's HSD post-hoc comparisons
+- Calculate and interpret eta-squared
+- Run two-way (factorial) ANOVA
+- Interpret interaction effects
+- Write APA-style results
+
+# Lab Resources
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Open each resource in a separate browser tab so you can switch between them easily.
+:::
+
+## Part 1: Instructor Demo
+
+[**Open Slides**](../slides/lab3-slides.qmd){.btn .btn-primary target="_blank"}
+
+## Part 2: Browser Practice
+
+[**Open WebR Practice**](../chapters/lab3-webr.qmd){.btn .btn-success}
+
+## Part 3: RStudio Exercise
+
+[**Download Exercise**](../templates/lab3-exercise.qmd){.btn .btn-warning}
+
+## Extra Practice
+
+[**Follow-On Exercise**](../followon/lab3-followon.qmd){.btn .btn-secondary}
+
+# Key Concepts
+
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | One-Way ANOVA | `aov(score ~ condition)` |
+| 2 | Post-Hoc Tests | `TukeyHSD(model)` |
+| 3 | Effect Size | Eta-squared (η²) |
+| 4 | Two-Way ANOVA | `aov(score ~ A * B)` |
+| 5 | Interactions | Interaction plots |

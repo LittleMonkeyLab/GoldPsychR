@@ -1,0 +1,31 @@
+---
+title: "Wrangle"
+---
+
+## Data Wrangling with dplyr
+
+### Select columns
+
+```r
+data |> select(id, age, score)
+```
+
+### Filter rows
+
+```r
+data |> filter(age > 18)
+```
+
+### Create new variables
+
+```r
+data |> mutate(score_centered = score - mean(score))
+```
+
+### Summarise data
+
+```r
+data |>
+  group_by(condition) |>
+  summarise(mean_score = mean(score), sd_score = sd(score))
+```

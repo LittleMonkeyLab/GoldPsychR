@@ -1,0 +1,103 @@
+---
+title: "Embedding Slides in Documents"
+format: html
+---
+
+## Why Embed Slides?
+
+You can embed revealjs presentations directly into HTML documents. This is useful for:
+
+- Providing slides alongside reading materials
+- Creating all-in-one lab documents
+- Letting students review slides without navigating away
+
+---
+
+## Method 1: Simple iframe
+
+Embed slides using an iframe with responsive sizing:
+
+```html
+<iframe
+  src="../slides/lab1-slides.html"
+  width="100%"
+  height="500"
+  title="Lab 1 Slides">
+</iframe>
+```
+
+**Result:**
+
+<iframe
+  src="../slides/lab1-slides.html"
+  width="100%"
+  height="500"
+  title="Lab 1 Slides"
+  style="border: 1px solid #ccc; border-radius: 4px;">
+</iframe>
+
+---
+
+## Method 2: Responsive 16:9 Container
+
+For better aspect ratio control:
+
+```html
+<div style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden;">
+  <iframe
+    src="../slides/lab1-slides.html"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+**Result:**
+
+<div style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border: 1px solid #ccc; border-radius: 4px;">
+  <iframe
+    src="../slides/lab1-slides.html"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+    allowfullscreen>
+  </iframe>
+</div>
+
+---
+
+## Method 3: Link to Full Screen
+
+Sometimes a link is better than an embed:
+
+[Open Lab 1 Slides in Full Screen](../slides/lab1-slides.html){target="_blank" .btn .btn-primary}
+
+Or with a preview thumbnail:
+
+[![Click to open slides](https://via.placeholder.com/640x360?text=Lab+1+Slides)](../slides/lab1-slides.html){target="_blank"}
+
+---
+
+## Tips for Embedding
+
+1. **Use relative paths** - `../slides/filename.html` from the demos folder
+2. **Set a reasonable height** - 500-600px works well for most screens
+3. **Add `allowfullscreen`** - lets users expand the slides
+4. **Consider mobile** - the 16:9 responsive method scales better
+5. **Add borders** - helps distinguish the embed from page content
+
+---
+
+## Collapsible Slides
+
+Use a `<details>` element to hide slides until needed:
+
+<details>
+<summary>Click to show Lab 1 slides</summary>
+
+<iframe
+  src="../slides/lab1-slides.html"
+  width="100%"
+  height="450"
+  style="border: 1px solid #ccc; border-radius: 4px; margin-top: 1rem;">
+</iframe>
+
+</details>

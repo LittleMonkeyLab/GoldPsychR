@@ -1,0 +1,258 @@
+---
+title: "Lab 1 Follow-On: Transfer Practice"
+subtitle: "Applying Your Skills to New Data"
+author: "YOUR NAME HERE"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+# Introduction
+
+This follow-on exercise uses a **different dataset** to help you consolidate your Lab 1 skills. You'll apply the same techniques to new data with less scaffolding.
+
+::: {.callout-note}
+## Dataset: Wellbeing Study
+
+Researchers investigated the effect of a mindfulness intervention on psychological wellbeing. Participants completed a 6-item wellbeing questionnaire before and after an 8-week programme.
+
+- **Participants**: 120 university students
+- **Design**: 2 (group: control vs mindfulness) x 2 (time: pre vs post)
+- **Measures**: 6 wellbeing items (w1-w6) on a 1-7 scale
+- **Reverse-scored items**: w3 and w5
+:::
+
+
+# Task 1: Load and Inspect
+
+Load the wellbeing dataset and explore its structure.
+
+```{r}
+#| label: load-data
+
+# Load data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/wellbeing_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+```{r}
+#| label: inspect
+
+# YOUR CODE: View the first few rows
+
+
+# YOUR CODE: Check the structure
+
+
+# YOUR CODE: Check dimensions
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. How many participants? ___
+2. How many variables? ___
+3. What are the condition levels? ___
+:::
+
+# Task 2: Reverse Scoring
+
+Items w3 and w5 are negatively worded. Reverse-score them.
+
+::: {.callout-tip}
+## Hint
+
+For a 1-7 scale, the formula is: `reversed = 8 - original`
+:::
+
+```{r}
+#| label: reverse-score
+
+# YOUR CODE: Create reversed versions of w3 and w5
+
+
+# YOUR CODE: Verify the reversal worked
+
+```
+
+# Task 3: Create Total Score
+
+Sum all items (using reversed versions for w3 and w5) to create `wellbeing_total`.
+
+```{r}
+#| label: total-score
+
+# YOUR CODE: Create the total wellbeing score
+
+
+# YOUR CODE: View a few rows to check
+
+```
+
+# Task 4: Descriptive Statistics
+
+## Overall Statistics
+
+```{r}
+#| label: overall-stats
+
+# YOUR CODE: Calculate overall mean, SD, and n
+
+
+```
+
+## Grouped Statistics
+
+```{r}
+#| label: grouped-stats
+
+# YOUR CODE: Calculate mean, SD, and n by condition and timepoint
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+Fill in from your output:
+
+| Condition | Timepoint | M | SD | n |
+|-----------|-----------|---|----|----|
+| control | pre | ___ | ___ | ___ |
+| control | post | ___ | ___ | ___ |
+| mindfulness | pre | ___ | ___ | ___ |
+| mindfulness | post | ___ | ___ | ___ |
+:::
+
+# Task 5: Visualisation
+
+Create a boxplot showing wellbeing scores by condition and timepoint.
+
+```{r}
+#| label: boxplot
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a boxplot
+
+
+```
+
+Create one additional visualisation of your choice:
+
+```{r}
+#| label: custom-viz
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create another visualisation
+
+
+```
+
+# Task 6: APA Write-Up
+
+Write an APA-style paragraph describing your findings. Include:
+
+- Overall mean and SD
+- Means and SDs by condition at each timepoint
+- Description of any apparent effects
+
+**YOUR WRITE-UP:**
+
+[Write your paragraph here]
+
+# Task 7: Comparison
+
+::: {.callout-note}
+## Reflection
+
+Compare this analysis to Lab 1:
+
+1. **What was the same?**
+
+[YOUR ANSWER]
+
+2. **What was different?**
+
+[YOUR ANSWER]
+
+3. **What formula did you use for reverse-scoring, and why was it different from Lab 1?**
+
+[YOUR ANSWER]
+
+4. **How confident do you feel applying these skills to new data?**
+
+[YOUR ANSWER]
+:::
+
+# Solutions
+
+::: {.callout-caution collapse="true"}
+## Click to reveal solutions (try first!)
+
+### Task 2: Reverse Scoring
+```r
+wellbeing$rev_w3 <- 8 - wellbeing$w3
+wellbeing$rev_w5 <- 8 - wellbeing$w5
+```
+
+### Task 3: Total Score
+```r
+wellbeing$wellbeing_total <- wellbeing$w1 + wellbeing$w2 +
+                              wellbeing$rev_w3 + wellbeing$w4 +
+                              wellbeing$rev_w5 + wellbeing$w6
+```
+
+### Task 4: Grouped Statistics
+```r
+wellbeing |>
+  group_by(condition, timepoint) |>
+  summarise(
+    mean = mean(wellbeing_total, na.rm = TRUE),
+    sd = sd(wellbeing_total, na.rm = TRUE),
+    n = n(),
+    .groups = "drop"
+  )
+```
+
+### Task 5: Boxplot
+```r
+ggplot(wellbeing, aes(x = condition, y = wellbeing_total, fill = timepoint)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Wellbeing Scores by Condition and Timepoint",
+    x = "Condition",
+    y = "Wellbeing Score",
+    fill = "Timepoint"
+  )
+```
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```

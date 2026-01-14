@@ -1,0 +1,182 @@
+---
+title: "Part 3: Reverse Scoring"
+subtitle: "Lab 1: Descriptive Statistics"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    width: 1050
+    height: 700
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 1, Part 3"
+    embed-resources: false
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+## Why Reverse Scoring?
+
+Questionnaires often include **negatively worded items** to:
+
+- Reduce response bias
+- Check if participants are paying attention
+- Balance the scale
+
+**Example:**
+
+- Positive: "I am the life of the party"
+- Negative: "I don't like to draw attention to myself"
+
+---
+
+## The Problem
+
+If someone scores **5** (strongly agree) on both:
+
+- "I am outgoing" → High extraversion ✓
+- "I prefer to be alone" → High extraversion? ✗
+
+We need to **reverse** the negative item before summing!
+
+---
+
+## The Formula
+
+For a **1-5 scale**:
+
+$$\text{reversed} = 6 - \text{original}$$
+
+| Original | Reversed |
+|----------|----------|
+| 1 | 5 |
+| 2 | 4 |
+| 3 | 3 |
+| 4 | 2 |
+| 5 | 1 |
+
+---
+
+## Why 6?
+
+The formula is: `(max + min) - original`
+
+For a 1-5 scale: `(5 + 1) - original = 6 - original`
+
+For a 1-7 scale: `(7 + 1) - original = 8 - original`
+
+---
+
+## In Our Data
+
+Items `p4` and `p5` are negatively worded.
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# Look at p4 values
+head(data$p4)
+```
+
+---
+
+## Creating Reversed Columns
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# Reverse score p4 and p5
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Check it worked
+head(data[, c("p4", "rev_p4")])
+```
+
+---
+
+## Verifying the Reversal
+
+The original and reversed should sum to 6:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+data$rev_p4 <- 6 - data$p4
+
+# Check: do they sum to 6?
+head(data$p4 + data$rev_p4)
+```
+
+---
+
+## Creating a Total Score
+
+Sum **all items**, using the **reversed** versions:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+data$rev_p4 <- 6 - data$p4
+data$rev_p5 <- 6 - data$p5
+
+# Create total score
+data$pers_score <- data$p1 + data$p2 + data$p3 +
+                   data$rev_p4 + data$rev_p5
+
+head(data$pers_score)
+```
+
+---
+
+## Common Mistake!
+
+Using the **original** items instead of **reversed**:
+
+```r
+# WRONG! Using p4 instead of rev_p4
+data$wrong_score <- data$p1 + data$p2 + data$p3 +
+                    data$p4 + data$p5
+```
+
+Always double-check you're using `rev_` versions!
+
+---
+
+## Summary: Part 3
+
+You learned:
+
+- Why we reverse-score items
+- The formula: `6 - original` (for 1-5 scale)
+- How to create reversed columns
+- How to create a total score
+
+---
+
+## Now Practice!
+
+Scroll down to practice reverse scoring.
+
+{{< countdown "10:00" >}}
+
+::: {.callout-tip}
+## Tips
+- Check your reversal: original + reversed = 6
+- Use `rev_` prefix for reversed columns
+- Sum using reversed versions!
+:::

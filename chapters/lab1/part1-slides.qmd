@@ -1,0 +1,211 @@
+---
+title: "Part 1: What is R?"
+subtitle: "Lab 1: Descriptive Statistics"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    width: 1050
+    height: 700
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 1, Part 1"
+    embed-resources: false
+filters:
+  - webr
+  - countdown
+webr:
+  packages: []
+  show-startup-message: false
+---
+
+## The Data Story
+
+Over the next **4 weeks**, we'll work through a complete research workflow:
+
+- **Week 1**: Describe and visualise your data
+- **Week 2**: Compare groups with t-tests
+- **Week 3**: Compare multiple groups with ANOVA
+- **Week 4**: Explore relationships with correlation & regression
+
+---
+
+## Today's Dataset
+
+We've collected **Big Five personality data** from a training study:
+
+- 160 participants completed personality questionnaires
+- Half received a training intervention, half were controls
+- Measured before (pre) and after (post) the intervention
+
+**Our question**: Did the training affect personality scores?
+
+---
+
+## What is R?
+
+**R** is a programming language designed for statistics and data analysis.
+
+- **Free** and **open source** - anyone can use it
+- Created by statisticians, for statisticians
+- Thousands of packages for specialised analyses
+- The standard in psychology, biology, and social sciences
+
+---
+
+## Why R (not SPSS)?
+
+| R | SPSS |
+|---|------|
+| Free forever | Expensive licence |
+| Code is reproducible | Point-and-click is hard to repeat |
+| Cutting-edge methods | Lags behind |
+| Used in academia & industry | Mainly academia |
+
+**Learning R is an investment in your future career.**
+
+---
+
+## RStudio: Your R Workspace
+
+**RStudio** is an application that makes R easier to use.
+
+Think of it like this:
+
+- **R** = the engine
+- **RStudio** = the car dashboard
+
+You'll work in RStudio, but R does the actual computing.
+
+---
+
+## The Four Panes
+
+:::: {.columns}
+::: {.column width="50%"}
+**Top-Left: Source**
+
+- Where you write scripts
+- Save your work here
+
+**Bottom-Left: Console**
+
+- Where code runs
+- Immediate feedback
+:::
+::: {.column width="50%"}
+**Top-Right: Environment**
+
+- Your data and objects
+- Watch it update!
+
+**Bottom-Right: Files/Plots/Help**
+
+- Navigate files
+- View outputs
+:::
+::::
+
+---
+
+## RStudio in Action
+
+![RStudio IDE](../../labs/images/rstudio.png){fig-align="center" width="85%"}
+
+---
+
+## Your First Code
+
+Try this in the Console:
+
+```{webr-r}
+1 + 1
+```
+
+R returned the answer! The `[1]` just means "first result".
+
+---
+
+## Creating Variables
+
+We store values using the **assignment operator** `<-`
+
+```{webr-r}
+x <- 5
+y <- 2
+x + y
+```
+
+Watch the **Environment pane** update when you create variables!
+
+---
+
+## Vectors: Multiple Values
+
+A **vector** is a collection of values. Create them with `c()`:
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5)
+scores
+```
+
+---
+
+## Basic Functions
+
+R has built-in functions for statistics:
+
+```{webr-r}
+scores <- c(4, 5, 3, 2, 5)
+mean(scores)
+sd(scores)
+length(scores)
+```
+
+---
+
+## Common Error: Object Not Found
+
+```r
+z + 1
+```
+
+```
+Error: object 'z' not found
+```
+
+**Fix:** Create the object first!
+
+```{webr-r}
+z <- 10
+z + 1
+```
+
+---
+
+## Summary: Part 1
+
+You learned:
+
+- What R and RStudio are
+- How to navigate the four panes
+- How to create variables with `<-`
+- How to create vectors with `c()`
+- How to use functions like `mean()`, `sd()`
+
+---
+
+## Now Practice!
+
+Scroll down to the **Try It Yourself** section and work through the exercises.
+
+{{< countdown "10:00" >}}
+
+::: {.callout-tip}
+## Tips
+- Edit the code and experiment
+- Copy code to your RStudio console
+- Complete the self-assessment before moving on
+:::

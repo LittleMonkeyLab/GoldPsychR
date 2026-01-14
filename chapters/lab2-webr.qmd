@@ -1,0 +1,246 @@
+---
+title: "Lab 2: Comparing Groups"
+subtitle: "Interactive Practice with WebR"
+author: "Gordon Wright"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+filters:
+  - webr
+webr:
+  packages: ['dplyr', 'ggplot2']
+  show-startup-message: false
+---
+
+```{r}
+#| echo: false
+#| message: false
+library(webexercises)
+```
+
+# Welcome
+
+This interactive chapter lets you practice t-tests and effect sizes directly in your browser.
+
+::: {.callout-tip}
+## How to Use This Page
+
+1. Read the explanations carefully
+2. Run the code cells by clicking the **Run** button
+3. Modify code and experiment
+4. Complete the self-check questions
+:::
+
+```{webr-r}
+#| context: setup
+#| autorun: true
+
+# Simulate experimental data
+set.seed(42)
+n <- 60
+
+experiment <- data.frame(
+  participant = 1:n,
+  condition = rep(c("control", "treatment"), each = n/2),
+  score = c(
+    rnorm(n/2, mean = 50, sd = 10),
+    rnorm(n/2, mean = 58, sd = 10)
+  )
+)
+
+# Pre-post data
+pre_post <- data.frame(
+  participant = 1:30,
+  pre = rnorm(30, mean = 45, sd = 8),
+  post = rnorm(30, mean = 52, sd = 8)
+)
+```
+
+# Independent Samples t-test
+
+## When to Use
+
+Use an **independent samples t-test** when:
+
+- Comparing two **different** groups
+- Each participant is in only one condition
+- The outcome variable is continuous
+
+## Running the Test
+
+```{webr-r}
+#| autorun: true
+
+# View the data
+head(experiment)
+```
+
+```{webr-r}
+# Run independent samples t-test
+t.test(score ~ condition, data = experiment)
+```
+
+::: {.callout-note}
+## Self-Check
+
+What does the formula `score ~ condition` mean?
+
+`r mcq(c("Score equals condition", answer = "Score predicted by condition", "Score minus condition"))`
+:::
+
+## Understanding the Output
+
+Key values to report:
+
+- **t-statistic**: How many standard errors the means differ
+- **df**: Degrees of freedom
+- **p-value**: Probability under the null hypothesis
+- **95% CI**: Confidence interval for the difference
+
+::: {.callout-note}
+## Self-Check
+
+If p < .05, we conclude:
+
+`r mcq(c("No effect", answer = "Statistically significant difference", "Large effect size"))`
+:::
+
+# Paired Samples t-test
+
+## When to Use
+
+Use a **paired samples t-test** when:
+
+- Same participants measured **twice**
+- Pre-post designs
+- Within-subjects comparisons
+
+## Running the Test
+
+```{webr-r}
+#| autorun: true
+
+# View pre-post data
+head(pre_post)
+```
+
+```{webr-r}
+# Paired t-test
+t.test(pre_post$pre, pre_post$post, paired = TRUE)
+```
+
+::: {.callout-note}
+## Self-Check
+
+What does `paired = TRUE` tell R?
+
+`r mcq(c("Use two separate groups", answer = "Same participants measured twice", "Double the sample size"))`
+:::
+
+# Effect Sizes
+
+## Why Effect Sizes Matter
+
+Statistical significance tells us IF there's an effect.
+
+Effect size tells us HOW BIG the effect is.
+
+## Cohen's d
+
+```{webr-r}
+# Calculate Cohen's d manually
+control_mean <- mean(experiment$score[experiment$condition == "control"])
+treatment_mean <- mean(experiment$score[experiment$condition == "treatment"])
+pooled_sd <- sd(experiment$score)
+
+cohens_d <- (treatment_mean - control_mean) / pooled_sd
+cohens_d
+```
+
+## Interpreting Cohen's d
+
+| d value | Interpretation |
+|---------|----------------|
+| 0.2 | Small |
+| 0.5 | Medium |
+| 0.8 | Large |
+
+::: {.callout-note}
+## Self-Check
+
+A Cohen's d of 0.65 would be considered:
+
+`r mcq(c("Small", answer = "Medium", "Large"))`
+:::
+
+# Visualising Group Differences
+
+## Boxplot
+
+```{webr-r}
+#| fig-width: 8
+#| fig-height: 5
+
+library(ggplot2)
+
+ggplot(experiment, aes(x = condition, y = score, fill = condition)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Scores by Condition",
+       x = "Condition", y = "Score")
+```
+
+# APA Reporting
+
+## Template
+
+> An independent samples t-test revealed a [significant/non-significant] difference between groups, *t*(df) = [t-value], *p* = [p-value], *d* = [effect size].
+
+## Example
+
+```{webr-r}
+# Get values for reporting
+result <- t.test(score ~ condition, data = experiment)
+cat("t =", round(result$statistic, 2), "\n")
+cat("df =", round(result$parameter, 0), "\n")
+cat("p =", round(result$p.value, 3), "\n")
+```
+
+# Knowledge Check
+
+::: {.webex-check .webex-box}
+
+**1. Which test compares the same participants at two time points?**
+
+`r mcq(c("Independent samples t-test", answer = "Paired samples t-test", "One-way ANOVA"))`
+
+**2. True or False: A significant p-value tells us the effect is large.**
+
+`r torf(FALSE)`
+
+**3. What effect size measure is commonly used with t-tests?**
+
+`r fitb("Cohen's d", ignore_case = TRUE)`
+
+:::
+
+# Summary
+
+::: {.callout-tip}
+## Key Skills Practised
+
+1. Running independent samples t-tests
+2. Running paired samples t-tests
+3. Calculating effect sizes
+4. Interpreting and reporting results
+:::
+
+## Next Steps
+
+1. Download the **exercise** (.qmd file)
+2. Complete the analysis in RStudio
+3. Try the **follow-on exercise** for extra practice

@@ -1,0 +1,35 @@
+---
+title: "Tests"
+---
+
+## Statistical Tests
+
+### t-test
+
+```r
+t.test(score ~ group, data = data)
+```
+
+### Paired t-test
+
+```r
+t.test(data$pre, data$post, paired = TRUE)
+```
+
+### One-way ANOVA
+
+```r
+aov(score ~ condition, data = data) |> summary()
+```
+
+### Chi-square test
+
+```r
+chisq.test(table(data$group, data$outcome))
+```
+
+### Correlation
+
+```r
+cor.test(data$x, data$y)
+```

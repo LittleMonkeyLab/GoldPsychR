@@ -1,0 +1,66 @@
+---
+title: "explain these answers demo"
+subtitle: "An integrated workflow: Slides → WebR → Scaffolded .qmd"
+author: "Gordon Wright"
+date: "2026"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    highlight-style: github
+    code-block-bg: true
+    code-block-border-left: true
+
+
+---
+```{r, echo = FALSE, results='asis'}
+knitr::opts_chunk$set(echo = FALSE)
+library(webexercises)
+```
+
+
+## Activity 1: Personality traits
+
+For the next set of chapters we're going to use data from the most popular model of personality, the Big Five.
+
+* First, take part in [this online version](https://personality.co/big5-test) of the Big-5. It only takes a few minutes to complete and it used the items from [Soto and John (2017)](https://www-sciencedirect-com.gold.idm.oclc.org/science/article/abs/pii/S0092656616301325) which a short-form version of the Big Five Inventory 2 (BFI-2).  
+* Second, read the [textbook chapter](https://openstax.org/books/psychology-2e/pages/11-7-trait-theorists) on personality trait theorists.
+* Finally, answer the following questions. Please note that your responses will not save in the browser - if you want to save them, make a note of them somewhere.
+
+<br>
+
+1. The trait 'Agreeableness' in the Big Five personality model refers to:
+`r longmcq(c("The tendency to be organized, careful, and disciplined", answer = "The tendency to be compassionate, cooperative, and warm towards others", "The tendency to be outgoing, energetic, and sociable", "The tendency to experience mood swings, anxiety, and irritability."))`
+
+<br>
+
+2. In the context of the Big Five Personality model, which trait might be associated with a person who is diligent, efficient, and follows a schedule?
+
+`r longmcq(c("Neuroticism", answer = "Conscientiousness", "Extraversion", "Agreeableness"))`
+
+<br>
+
+3. Individuals who are often nervous, insecure, and easily upset, are considered to have high `r fitb("neuroticism", ignore_case = TRUE)` according to the Big Five Personality Model.
+
+<br>
+
+4. In the Big Five Personality Model, people who are outgoing, sociable, and assertive score high on the trait known as `r fitb(c("extraversion", "extroversion"), ignore_case = TRUE)`
+
+<br>
+
+5. Which of these traits in the Big Five Personality model is most closely associated with creativity and a preference for novelty?
+`r longmcq(c("Extraversion", "Conscientiousness", "Neuroticism", answer = "Openness to Experience"))`
+
+`r hide("Explain these answers")`
+1. The correct answer is "The tendency to be compassionate, cooperative, and warm towards others". Agreeableness as a personality trait characterizes individuals who are friendly, compassionate, and like working with others. They tend to be more cooperative while interacting with others.
+
+2. The correct answer is "Conscientiousness". This trait is associated with people who are organized, responsible, and prefer planned rather than spontaneous behavior. High conscientiousness means a person is disciplined, efficient, and diligent.
+
+3. Neuroticism is a personality trait in the Big Five Model. High neuroticism often means a person is likely to experience feelings such as anxiety, anger, or depression. These individuals are more likely to interpret ordinary situations as threatening and minor frustrations as hopelessly difficult.
+
+4. Extraversion characterizes individuals who are outgoing, sociable, and often possess high group visibility. They like to talk, assert themselves, and draw attention to themselves.
+
+5. The correct answer is "Openness to Experience". Individuals with high openness are often very creative, curious about their surroundings, and more aware of their feelings. They tend to think and act in individualistic and non-conforming ways and are likely to have a broad range of interests.
+
+`r unhide()`

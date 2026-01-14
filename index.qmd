@@ -1,0 +1,119 @@
+---
+title: "GoldPsychR"
+subtitle: "4-Week Intensive R Labs for Psychology"
+---
+
+# Welcome
+
+This is the course hub for **PS51020A R Labs**, a 4-week intensive programme teaching R for psychological research at Goldsmiths, University of London.
+
+::: {.callout-tip}
+## Getting Started
+
+If this is your first time here:
+
+1. Access the [RStudio Server](https://psy909.gold.ac.uk/rstudioserver/){target="_blank"} and check you can login correctly
+2. You need to use your `@campus.goldsmiths.ac.uk` username, such as `jbond007@campus.goldsmiths.ac.uk`
+3. All datasets used in this course are available to download from the VLE or the internet
+:::
+
+# Course Schedule
+
+Each week follows the same learning pathway:
+
+**Slides** → **WebR Practice** → **Exercise** → **Follow-On**
+
+| Week | Topic | Resources |
+|:----:|-------|-----------|
+| 1 | **Descriptive Statistics** | [Slides](slides/lab1-slides.qmd){target="_blank"} • [WebR](chapters/lab1-webr.qmd) • [Exercise](templates/lab1-exercise.qmd) • [Follow-On](followon/lab1-followon.qmd) |
+| 2 | **Comparing Groups (t-tests)** | [Slides](slides/lab2-slides.qmd){target="_blank"} • [WebR](chapters/lab2-webr.qmd) • [Exercise](templates/lab2-exercise.qmd) • [Follow-On](followon/lab2-followon.qmd) |
+| 3 | **ANOVA** | [Slides](slides/lab3-slides.qmd){target="_blank"} • [WebR](chapters/lab3-webr.qmd) • [Exercise](templates/lab3-exercise.qmd) • [Follow-On](followon/lab3-followon.qmd) |
+| 4 | **Correlation & Regression** | [Slides](slides/lab4-slides.qmd){target="_blank"} • [WebR](chapters/lab4-webr.qmd) • [Exercise](templates/lab4-exercise.qmd) • [Follow-On](followon/lab4-followon.qmd) |
+
+# Learning Pathway
+
+Key techniques are taught in a research context through three core stages:
+
+:::: {.columns}
+::: {.column width="33%"}
+::: {.card .border .p-3}
+**Stage 1: Instructor Demo**
+
+*Watch & Learn*
+
+Live demonstration of R skills with real psychology data
+:::
+:::
+::: {.column width="33%"}
+::: {.card .border .p-3}
+**Stage 2: WebR Practice**
+
+*Try in Browser*
+
+Interactive practice with instant feedback - no installation needed
+:::
+:::
+::: {.column width="33%"}
+::: {.card .border .p-3}
+**Stage 3: Exercise**
+
+*Work in RStudio*
+
+Apply skills independently and submit your work
+:::
+:::
+::::
+
+**Additional Resources:**
+
+- **Follow-On Exercises** - Extra practice with different datasets to consolidate learning
+- **R Toolbox** - Reference guide organised by skill for quick lookup
+
+# Quick Links
+
+::: {.grid}
+::: {.g-col-6}
+### Learning Materials
+
+- [Lab Materials](labs/index.qmd) - Full lab worksheets
+- [WebR Practice](chapters/lab1-webr.qmd) - Interactive browser-based R
+- [Follow-On Exercises](followon/index.qmd) - Transfer practice
+:::
+
+::: {.g-col-6}
+### Reference
+
+- [R Toolbox](toolbox/index.qmd) - Code reference by topic
+- [R Handbook](handbook/r-handbook.qmd) - Comprehensive guide
+- [Troubleshooting](toolbox/troubleshooting.qmd) - Common errors & fixes
+:::
+:::
+
+# What You'll Learn
+
+By the end of this programme, you will be able to:
+
+- Load, inspect, and clean data in R
+- Calculate descriptive statistics and reverse-score questionnaire items
+- Create publication-quality visualisations with ggplot2
+- Compare two groups using independent and paired t-tests
+- Compare multiple groups using one-way and factorial ANOVA
+- Run correlation and simple regression analyses
+- Calculate and interpret effect sizes (Cohen's d, eta-squared, R²)
+- Write APA-style results sections
+- Use Quarto for reproducible reports
+
+# Support
+
+::: {.callout-note}
+## Need Help?
+
+- **During labs**: Ask your instructor or demonstrators
+- **Between labs**: Post on the course discussion forum
+- **Technical issues**: Check the [Troubleshooting Guide](toolbox/troubleshooting.qmd)
+- **Bug reports**: [Report an issue on GitHub](https://github.com/LittleMonkeyLab/GoldPsychR/issues)
+:::
+
+---
+
+**Course Lead**: Gordon Wright | **Email**: gordon@littlemonkeylab.com

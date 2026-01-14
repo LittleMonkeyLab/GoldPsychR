@@ -1,0 +1,58 @@
+---
+title: "Lab 4: Correlation & Regression"
+subtitle: "Linear Models"
+---
+
+# Overview
+
+In this lab, you'll learn to explore relationships between continuous variables using correlation and regression. We'll build predictive models and check assumptions.
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Run correlation analyses (Pearson's r)
+- Create scatterplots with trend lines
+- Build simple linear regression models
+- Add multiple predictors
+- Interpret R², coefficients, and p-values
+- Check model assumptions
+- Write APA-style results
+
+# Lab Resources
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Open each resource in a separate browser tab so you can switch between them easily.
+:::
+
+## Part 1: Instructor Demo
+
+[**Open Slides**](../slides/lab4-slides.qmd){.btn .btn-primary target="_blank"}
+
+## Part 2: Browser Practice
+
+[**Open WebR Practice**](../chapters/lab4-webr.qmd){.btn .btn-success}
+
+## Part 3: RStudio Exercise
+
+[**Download Exercise**](../templates/lab4-exercise.qmd){.btn .btn-warning}
+
+## Extra Practice
+
+[**Follow-On Exercise**](../followon/lab4-followon.qmd){.btn .btn-secondary}
+
+# Key Concepts
+
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | Correlation | `cor.test(x, y)` |
+| 2 | Scatterplots | `geom_smooth(method = "lm")` |
+| 3 | Simple Regression | `lm(y ~ x)` |
+| 4 | Multiple Regression | `lm(y ~ x1 + x2)` |
+| 5 | Diagnostics | Assumption checking |
+
+# Course Complete!
+
+Congratulations on completing the 4-week GoldPsychR intensive programme!

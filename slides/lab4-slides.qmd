@@ -1,0 +1,105 @@
+---
+title: "Lab Slides Week 4"
+subtitle: "Linear Models & Correlation"
+format:
+  revealjs:
+    theme: default
+    logo: ../assets/images/logo.png
+    footer: "GoldPsychR - 4-Week Intensive"
+    slide-number: true
+    preview-links: auto
+    code-line-numbers: false
+    highlight-style: github
+---
+
+## Lab 4 Preview {.center}
+
+**Week 4: Linear Models & Correlation**
+
+---
+
+## Today's Lab Overview
+
+**Duration:** 2 hours
+
+**Dataset:** Longitudinal Data (n=150)
+
+**What we'll do:**
+
+- Correlation analysis
+- Simple linear regression
+- Multiple regression basics
+- Model interpretation
+
+---
+
+## Part 1: Correlation
+
+**Time:** 30 minutes
+
+Examine relationships:
+
+```r
+cor.test(x, y)
+```
+
+- Pearson r
+- Scatterplots
+- Correlation matrices
+
+---
+
+## Part 2: Simple Regression
+
+**Time:** 30 minutes
+
+Predict one variable from another:
+
+```r
+model <- lm(outcome ~ predictor, data = mydata)
+summary(model)
+```
+
+---
+
+## Part 3: Multiple Regression
+
+**Time:** 30 minutes
+
+Add multiple predictors:
+
+```r
+model <- lm(outcome ~ pred1 + pred2 + pred3, data = mydata)
+```
+
+---
+
+## Part 4: Model Diagnostics
+
+**Time:** 30 minutes
+
+Check assumptions:
+
+- Linearity
+- Normality of residuals
+- Homoscedasticity
+- Independence
+
+---
+
+## Key Takeaways
+
+Today you learned to:
+
+- ✅ Run correlation analyses
+- ✅ Build regression models
+- ✅ Interpret coefficients
+- ✅ Check model assumptions
+
+---
+
+## Course Complete! {.center}
+
+::: {.r-fit-text}
+Congratulations on completing the 4-week intensive! 🎉
+:::

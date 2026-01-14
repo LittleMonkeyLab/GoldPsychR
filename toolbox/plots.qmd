@@ -1,0 +1,33 @@
+---
+title: "Plots"
+---
+
+## ggplot2 Basics
+
+### Histogram
+
+```r
+ggplot(data, aes(x = score)) +
+  geom_histogram(bins = 30)
+```
+
+### Bar plot
+
+```r
+ggplot(data, aes(x = condition, y = score)) +
+  geom_col()
+```
+
+### Scatter plot
+
+```r
+ggplot(data, aes(x = age, y = score)) +
+  geom_point()
+```
+
+### Box plot
+
+```r
+ggplot(data, aes(x = condition, y = score)) +
+  geom_boxplot()
+```

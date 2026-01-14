@@ -1,0 +1,21 @@
+{
+  "hash": "2f647d9e36a638462e1968dcd10795b8",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Demo: webR in RevealJS\"\nsubtitle: \"Stats in slides!\"\nauthors: \"Gordon Wright\"\nformat: \n  revealjs:\n    theme: simple\n    scrollable: true\nengine: knitr\nfilters:\n  - webr\n---\n\n## webR in RevealJS \n\nThis is a webR-enabled code cell in a Quarto RevealJS document.\n\n```{webr-r}\nfit = lm(mpg ~ wt, data = mtcars)\n\nsummary(fit)\n```\n\n\n## Print\n\n\n```{webr-r}\nprint(\"Hello quarto-webr RevealJS world!\")\n\n3 + 5\n```\n\n## Text Before and After Code Cell\n\nSample text before\n\n```{webr-r}\nmessage(\"Hello World!\")\n```\n\nSample text after\n\n## Scrollable Class Enabled\n\n```{webr-r}\n2 + 3\n```\n\nThe default webR block should not make the slide too wide \n(no scrollbar at the bottom).",
+    "supporting": [
+      "webr_slides-demo_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-after-body": [
+        "\n<script>\n  // htmlwidgets need to know to resize themselves when slides are shown/hidden.\n  // Fire the \"slideenter\" event (handled by htmlwidgets.js) when the current\n  // slide changes (different for each slide format).\n  (function () {\n    // dispatch for htmlwidgets\n    function fireSlideEnter() {\n      const event = window.document.createEvent(\"Event\");\n      event.initEvent(\"slideenter\", true, true);\n      window.document.dispatchEvent(event);\n    }\n\n    function fireSlideChanged(previousSlide, currentSlide) {\n      fireSlideEnter();\n\n      // dispatch for shiny\n      if (window.jQuery) {\n        if (previousSlide) {\n          window.jQuery(previousSlide).trigger(\"hidden\");\n        }\n        if (currentSlide) {\n          window.jQuery(currentSlide).trigger(\"shown\");\n        }\n      }\n    }\n\n    // hookup for slidy\n    if (window.w3c_slidy) {\n      window.w3c_slidy.add_observer(function (slide_num) {\n        // slide_num starts at position 1\n        fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);\n      });\n    }\n\n  })();\n</script>\n\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

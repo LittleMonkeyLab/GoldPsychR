@@ -1,0 +1,162 @@
+---
+title: "Part 2: Loading Data"
+subtitle: "Lab 1: Descriptive Statistics"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    width: 1050
+    height: 700
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 1, Part 2"
+    embed-resources: false
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+## Our Dataset
+
+We have **Big Five personality data** from a training study:
+
+| Variable | Description |
+|----------|-------------|
+| `id` | Participant ID |
+| `group` | control or training |
+| `time` | pre or post |
+| `p1`-`p5` | Personality items (1-5 scale) |
+
+---
+
+## Loading Packages
+
+Before loading data, we need the `readr` package:
+
+```{webr-r}
+library(readr)
+```
+
+::: {.callout-note}
+## Why readr?
+`read_csv()` from readr is faster and creates tidier output than base R's `read.csv()`.
+:::
+
+---
+
+## Loading from a URL
+
+Data can be loaded directly from the internet:
+
+```{webr-r}
+# The URL where our data lives
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+
+# Load it!
+data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+---
+
+## Inspecting: head()
+
+`head()` shows the first few rows:
+
+```{webr-r}
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+head(data)
+```
+
+---
+
+## Inspecting: str()
+
+`str()` shows the **structure** - column names and types:
+
+```{webr-r}
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+str(data)
+```
+
+---
+
+## Inspecting: dim()
+
+`dim()` tells you **rows** and **columns**:
+
+```{webr-r}
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+dim(data)
+```
+
+How many participants? How many variables?
+
+---
+
+## Accessing Columns
+
+Use `$` to access a single column:
+
+```{webr-r}
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+
+# Access the group column
+data$group
+```
+
+---
+
+## Common Error: Function Not Found
+
+```r
+read_csv("data.csv")
+```
+
+```
+Error: could not find function "read_csv"
+```
+
+**Fix:** Load the package first!
+
+```{webr-r}
+library(readr)  # Load the package
+# Now read_csv() works
+```
+
+---
+
+## Summary: Part 2
+
+You learned:
+
+- How to load packages with `library()`
+- How to load CSV data with `read_csv()`
+- How to inspect data with `head()`, `str()`, `dim()`
+- How to access columns with `$`
+
+---
+
+## Now Practice!
+
+Scroll down to practice loading and inspecting data.
+
+{{< countdown "10:00" >}}
+
+::: {.callout-tip}
+## Tips
+- Try loading the data yourself
+- Use `head()` to peek at your data
+- Check the structure with `str()`
+:::

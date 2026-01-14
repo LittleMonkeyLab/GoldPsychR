@@ -1,0 +1,277 @@
+---
+title: "Lab 2 Follow-On: Transfer Practice"
+subtitle: "Comparing Groups with New Data"
+author: "YOUR NAME HERE"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    code-fold: false
+    code-annotations: below
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+# Introduction
+
+This follow-on exercise uses a **sleep and academic performance** dataset to help you consolidate your Lab 2 hypothesis testing skills.
+
+::: {.callout-note}
+## Dataset: Sleep & Performance Study
+
+Researchers investigated whether sleep duration affects academic performance in university students.
+
+- **Participants**: 80 students
+- **Design**: Between-subjects comparison (adequate sleep vs sleep deprived)
+- **Measure**: Exam score (0-100)
+- **Hypothesis**: Students with adequate sleep will perform better
+:::
+
+```{r}
+#| label: simulate-data
+#| echo: false
+
+# Simulate sleep and performance data
+set.seed(2026)
+n <- 80
+
+sleep_data <- data.frame(
+  student_id = 1:n,
+  sleep_group = rep(c("adequate", "deprived"), each = n/2),
+  exam_score = c(
+    rnorm(n/2, mean = 72, sd = 10),  # adequate sleep
+    rnorm(n/2, mean = 64, sd = 12)   # sleep deprived
+  )
+)
+
+# Ensure scores in valid range
+sleep_data$exam_score <- pmin(100, pmax(30, round(sleep_data$exam_score, 1)))
+
+write_csv(sleep_data, "../data/sleep_performance.csv")
+```
+
+# Task 1: Load and Explore
+
+```{r}
+#| label: load-data
+
+sleep_data <- read_csv("../data/sleep_performance.csv", show_col_types = FALSE)
+```
+
+```{r}
+#| label: explore
+
+# YOUR CODE: View the first few rows
+
+
+# YOUR CODE: Check the structure
+
+
+# YOUR CODE: Count participants in each group
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. How many students in each sleep group? ___
+2. What is the overall mean exam score? ___
+:::
+
+# Task 2: Descriptive Statistics by Group
+
+Calculate mean, SD, and n for each sleep group:
+
+```{r}
+#| label: descriptives
+
+# YOUR CODE: Calculate descriptives for each sleep group
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the mean score for the adequate sleep group? ___
+2. What is the mean score for the sleep deprived group? ___
+3. Which group has more variability (higher SD)? ___
+:::
+
+# Task 3: Visualisation
+
+## Boxplot
+
+```{r}
+#| label: boxplot
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a boxplot of exam_score by sleep_group
+
+
+```
+
+## Add individual points
+
+```{r}
+#| label: boxplot-jitter
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE: Create a boxplot with jittered points overlaid
+# Hint: Add geom_jitter(width = 0.1, alpha = 0.5)
+
+
+```
+
+# Task 4: Independent Samples t-test
+
+Test whether exam scores differ between sleep groups:
+
+```{r}
+#| label: t-test
+
+# YOUR CODE: Run an independent samples t-test
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the t-statistic? ___
+2. What are the degrees of freedom? ___
+3. What is the p-value? ___
+4. Is the difference statistically significant (p < .05)? ___
+:::
+
+# Task 5: Effect Size
+
+Calculate Cohen's d to measure the size of the effect:
+
+```{r}
+#| label: effect-size
+
+# YOUR CODE: Calculate Cohen's d manually
+# Hint: d = (mean1 - mean2) / pooled_sd
+
+
+```
+
+::: {.callout-tip}
+## Interpreting Cohen's d
+
+- d = 0.2: Small effect
+- d = 0.5: Medium effect
+- d = 0.8: Large effect
+:::
+
+::: {.callout-note}
+## Questions
+
+1. What is Cohen's d? ___
+2. How would you interpret this effect size? ___
+:::
+
+# Task 6: Confidence Interval
+
+Extract and interpret the 95% confidence interval:
+
+```{r}
+#| label: ci
+
+# YOUR CODE: Run t.test and examine the confidence interval
+# result <- t.test(...)
+# result$conf.int
+
+
+```
+
+::: {.callout-note}
+## Questions
+
+1. What is the 95% CI for the mean difference? [___, ___]
+2. Does the CI include zero? ___
+3. What does this tell us about statistical significance? ___
+:::
+
+# Task 7: APA Write-Up
+
+Write an APA-style results paragraph including:
+
+- Descriptive statistics for each group
+- t-test results (t, df, p)
+- Effect size (Cohen's d)
+- Confidence interval
+- Brief interpretation
+
+**YOUR WRITE-UP:**
+
+[Write your paragraph here]
+
+# Solutions
+
+::: {.callout-caution collapse="true"}
+## Click to reveal solutions (try first!)
+
+### Task 2: Descriptives
+```r
+sleep_data |>
+  group_by(sleep_group) |>
+  summarise(
+    mean = mean(exam_score),
+    sd = sd(exam_score),
+    n = n()
+  )
+```
+
+### Task 3: Boxplot with jitter
+```r
+ggplot(sleep_data, aes(x = sleep_group, y = exam_score, fill = sleep_group)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Exam Scores by Sleep Group",
+       x = "Sleep Group", y = "Exam Score")
+```
+
+### Task 4: t-test
+```r
+t.test(exam_score ~ sleep_group, data = sleep_data)
+```
+
+### Task 5: Cohen's d
+```r
+adequate <- sleep_data |> filter(sleep_group == "adequate") |> pull(exam_score)
+deprived <- sleep_data |> filter(sleep_group == "deprived") |> pull(exam_score)
+
+mean_diff <- mean(adequate) - mean(deprived)
+pooled_sd <- sqrt((sd(adequate)^2 + sd(deprived)^2) / 2)
+cohens_d <- mean_diff / pooled_sd
+cohens_d
+```
+
+### Task 7: APA Write-Up Example
+> An independent samples t-test was conducted to compare exam scores between students with adequate sleep (*M* = 72.3, *SD* = 9.8) and sleep-deprived students (*M* = 63.7, *SD* = 11.5). There was a significant difference between groups, *t*(78) = 3.58, *p* < .001, *d* = 0.80, 95% CI [3.85, 13.42]. This represents a large effect, suggesting that adequate sleep is associated with meaningfully better exam performance.
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+sessionInfo()
+```
