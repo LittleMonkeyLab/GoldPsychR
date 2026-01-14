@@ -233,6 +233,4 @@ This approach draws on established learning science:
 
 ---
 
-*Created: January 2026*
-*Designed for: UK university teaching staff (research methods & psychology)*
-*Audience: Year 1 undergraduate students, absolute beginners in R*
+
