@@ -10,9 +10,12 @@ project:
     - "!followon/"
 
 website:
-  title: "GoldPsychR - 4-Week Intensive"
-  description: "R for Psychology at Goldsmiths - Intensive Programme"
+  title: "GoldPsychR"
+  description: "R for Psychology at Goldsmiths"
+  
   navbar:
+    logo: assets/images/GoldLogo.png
+    title: false
     background: "#9B1B30"
     foreground: "#FFFFFF"
     left:
@@ -20,50 +23,120 @@ website:
         href: index.qmd
       - text: "Labs"
         href: labs/index.qmd
-      - text: "Slides"
-        menu:
-          - text: "Lab 1: Intro & Descriptives"
-            href: slides/lab1-slides.qmd
-          - text: "Lab 2: Comparing Groups (t-tests)"
-            href: slides/lab2-slides.qmd
-          - text: "Lab 3: ANOVA"
-            href: slides/lab3-slides.qmd
-          - text: "Lab 4: Linear Models"
-            href: slides/lab4-slides.qmd
-          - text: "---"
-          - text: "Code Animation Demo"
-            href: demos/revealjs-code-animation.qmd
-      - text: "WebR Practice"
-        menu:
-          - text: "Lab 1: Descriptive Statistics"
-            href: chapters/lab1-webr.qmd
-          - text: "Lab 2: Comparing Groups (t-tests)"
-            href: chapters/lab2-webr.qmd
-          - text: "Lab 3: ANOVA"
-            href: chapters/lab3-webr.qmd
-          - text: "Lab 4: Linear Models"
-            href: chapters/lab4-webr.qmd
-      - text: "Follow-On Practice"
-        menu:
-          - text: "About Follow-Ons"
-            href: followon/index.qmd
-          - text: "---"
-          - text: "Lab 1: Wellbeing Study"
-            href: followon/lab1-followon.qmd
-          - text: "Lab 2: Sleep & Performance"
-            href: followon/lab2-followon.qmd
-          - text: "Lab 3: Anxiety Treatment"
-            href: followon/lab3-followon.qmd
-          - text: "Lab 4: Study Habits"
-            href: followon/lab4-followon.qmd
       - text: "R Toolbox"
         href: toolbox/index.qmd
       - text: "Pedagogical Approach"
         href: pedagogical.qmd
-      - text: "Demos"
+    right:
+      - icon: github
+        href: https://github.com/LittleMonkeyLab/GoldPsychR
+      - text: "RStudio Server"
+        href: https://psy909.gold.ac.uk/rstudioserver/
+
+  sidebar:
+    header: "**GoldPsychR**"
+    tools:
+      - icon: github
         menu:
+          - text: Source Code
+            href: https://github.com/LittleMonkeyLab/GoldPsychR
+          - text: Data Repository
+            href: https://github.com/LittleMonkeyLab/datarepo
+    style: docked
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - href: labs/index.qmd
+        text: Labs Overview
+      
+      - text: "---"
+      
+      - section: "Lab 1: Intro & Descriptives"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab01.qmd
+          # - text: "Slides"
+          #   href: slides/lab1-slides.qmd
+          # - text: "WebR Practice"
+          #   href: chapters/lab1-webr.qmd
+          # - text: "Follow-On: Wellbeing Study"
+          #   href: followon/lab1-followon.qmd
+          # - text: "Exercise Template"
+          #   href: templates/lab1-exercise.qmd
+      
+      - section: "Lab 2: Comparing Groups (t-tests)"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab02.qmd
+          # - text: "Slides"
+          #   href: slides/lab2-slides.qmd
+          # - text: "WebR Practice"
+          #   href: chapters/lab2-webr.qmd
+          # - text: "Follow-On: Sleep & Performance"
+          #   href: followon/lab2-followon.qmd
+          # - text: "Exercise Template"
+          #   href: templates/lab2-exercise.qmd
+      
+      - section: "Lab 3: ANOVA"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab03.qmd
+          # - text: "Slides"
+          #   href: slides/lab3-slides.qmd
+          # - text: "WebR Practice"
+          #   href: chapters/lab3-webr.qmd
+          # - text: "Follow-On: Anxiety Treatment"
+          #   href: followon/lab3-followon.qmd
+          # - text: "Exercise Template"
+          #   href: templates/lab3-exercise.qmd
+      
+      - section: "Lab 4: Linear Models"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab04.qmd
+          # - text: "Slides"
+          #   href: slides/lab4-slides.qmd
+          # - text: "WebR Practice"
+          #   href: chapters/lab4-webr.qmd
+          # - text: "Follow-On: Study Habits"
+          #   href: followon/lab4-followon.qmd
+          # - text: "Exercise Template"
+          #   href: templates/lab4-exercise.qmd
+      
+      - text: "---"
+      
+      - section: "R Toolbox"
+        contents:
+          - text: "Toolbox Home"
+            href: toolbox/index.qmd
+          - text: "R Handbook (Single Page)"
+            href: r-handbook.qmd
+          # - text: "Setup & Installation"
+          #   href: toolbox/setup.qmd
+          # - text: "Importing Data"
+          #   href: toolbox/import.qmd
+          # - text: "Data Wrangling"
+          #   href: toolbox/wrangle.qmd
+          # - text: "Plots & Visualisation"
+          #   href: toolbox/plots.qmd
+          # - text: "Statistical Tests"
+          #   href: toolbox/tests.qmd
+          # - text: "Linear Models"
+          #   href: toolbox/models.qmd
+          # - text: "Reporting Results"
+          #   href: toolbox/reporting.qmd
+          # - text: "Troubleshooting"
+          #   href: toolbox/troubleshooting.qmd
+      
+      - text: "---"
+      
+      - section: "Demos & Examples"
+        contents:
           - text: "Code Options"
             href: demos/codeoptions-demo.qmd
+          - text: "Code Animation"
+            href: demos/revealjs-code-animation.qmd
           - text: "WebExercises"
             href: demos/webex_general.qmd
           - text: "Explain Answers"
@@ -72,152 +145,19 @@ website:
             href: demos/embedded_slides-demo.qmd
           - text: "WebR Slides"
             href: demos/webr_slides-demo.qmd
-          - text: "Revealjs Animation"
-            href: demos/revealjs-code-animation.qmd
-    right:
-      - icon: github
-        href: https://github.com/LittleMonkeyLab/GoldPsychR
-      - text: "RStudio Server"
-        href: https://psy909.gold.ac.uk/rstudioserver/
-
-  sidebar:
-    - id: labs
-      title: "Labs"
-      style: docked
-      search: true
-      contents:
-        - labs/index.qmd
-        - section: "Lab Materials"
-          contents:
-            - labs/lab01.qmd
-            - labs/lab02.qmd
-            - labs/lab03.qmd
-            - labs/lab04.qmd
-        - section: "Interactive Practice"
-          contents:
-            - chapters/lab1-webr.qmd
-            - chapters/lab2-webr.qmd
-            - chapters/lab3-webr.qmd
-            - chapters/lab4-webr.qmd
-        - section: "Exercises"
-          contents:
-            - text: "Lab 1: Descriptive Statistics"
-              href: templates/lab1-exercise.qmd
-            - text: "Lab 2: Comparing Groups (t-tests)"
-              href: templates/lab2-exercise.qmd
-            - text: "Lab 3: ANOVA"
-              href: templates/lab3-exercise.qmd
-            - text: "Lab 4: Linear Models"
-              href: templates/lab4-exercise.qmd
-        - section: "Follow-On Practice"
-          contents:
-            - followon/index.qmd
-            - followon/lab1-followon.qmd
-            - followon/lab2-followon.qmd
-            - followon/lab3-followon.qmd
-            - followon/lab4-followon.qmd
-
-    - id: slides
-      title: "Slides"
-      style: docked
-      contents:
-        - section: "Instructor Slides"
-          contents:
-            - slides/lab1-slides.qmd
-            - slides/lab2-slides.qmd
-            - slides/lab3-slides.qmd
-            - slides/lab4-slides.qmd
-        - section: "Slide Demos"
-          contents:
-            - demos/revealjs-code-animation.qmd
-            - demos/webr_slides-demo.qmd
-
-    - id: toolbox
-      title: "R Toolbox"
-      style: docked
-      search: true
-      contents:
-        - toolbox/index.qmd
-        - section: "Quick Reference"
-          contents:
-            - text: "R Handbook (Single Page)"
-              href: r-handbook.qmd
-        - section: "Getting Started"
-          contents:
-            - toolbox/setup.qmd
-            - toolbox/import.qmd
-        - section: "Data Skills"
-          contents:
-            - toolbox/wrangle.qmd
-            - toolbox/plots.qmd
-        - section: "Statistics"
-          contents:
-            - toolbox/tests.qmd
-            - toolbox/models.qmd
-        - section: "Output"
-          contents:
-            - toolbox/reporting.qmd
-            - toolbox/troubleshooting.qmd
-
-    - id: handbook
-      title: "R Handbook"
-      style: docked
-      search: true
-      contents:
-        - handbook/r-handbook.qmd
-
-    - id: demos
-      title: "Demos"
-      style: docked
-      contents:
-        - section: "Code Display"
-          contents:
-            - demos/codeoptions-demo.qmd
-            - demos/revealjs-code-animation.qmd
-        - section: "WebExercises"
-          contents:
-            - demos/webex_general.qmd
-            - demos/webex_explain_these_answers.qmd
-        - section: "Embedding"
-          contents:
-            - demos/embedded_slides-demo.qmd
-            - demos/webr_slides-demo.qmd
-
-    - id: chapters
-      title: "WebR Practice"
-      style: docked
-      contents:
-        - chapters/lab1-webr.qmd
-        - chapters/lab2-webr.qmd
-        - chapters/lab3-webr.qmd
-        - chapters/lab4-webr.qmd
-
-    - id: lab1-integrated
-      title: "Lab 1: Descriptives"
-      style: docked
-      contents:
-        - chapters/lab1/index.qmd
-        - chapters/lab1/part1.qmd
-        - chapters/lab1/part2.qmd
-        - chapters/lab1/part3.qmd
-        - chapters/lab1/part4.qmd
-        - chapters/lab1/part5.qmd
-
-    - id: followon
-      title: "Follow-On Practice"
-      style: docked
-      contents:
-        - followon/index.qmd
-        - followon/lab1-followon.qmd
-        - followon/lab2-followon.qmd
-        - followon/lab3-followon.qmd
-        - followon/lab4-followon.qmd
+      
+      - text: "---"
+      
+      - href: pedagogical.qmd
+        text: Pedagogical Approach
+      # - href: followon/index.qmd
+      #   text: About Follow-Ons
 
   page-footer:
     left: |
       © 2026 Goldsmiths, University of London
     center: |
-      Built with [Quarto](https://quarto.org)
+      Crafted with 💛 using [R](https://posit.co/products/open-source/rstudio/?sid=1) and [Quarto](https://quarto.org)
     right: |
       [Report an issue](https://github.com/LittleMonkeyLab/GoldPsychR/issues)
 
@@ -254,5 +194,5 @@ execute:
   warning: false
   message: false
 
-author: "Goldsmiths Psychology"
+author: "Gordon Wright"
 date-modified: last-modified

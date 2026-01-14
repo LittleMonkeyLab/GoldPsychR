@@ -1,6 +1,7 @@
  format:
-  revealjs: 
-    logo: assets/images/GoldLogo.png 
+  revealjs:
+    logo: assets/images/GoldLogo.png
+    css: slides.css
     scrollable: true
     slide-number: true
     progress: true

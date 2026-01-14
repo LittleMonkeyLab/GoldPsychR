@@ -1,0 +1,7 @@
+/* Custom styles for RevealJS slides */
+
+/* Increase logo size */
+.slide-logo {
+  max-height: 120px !important;  /* Default is ~70px */
+  width: auto !important;
+}

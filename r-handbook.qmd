@@ -16,6 +16,8 @@ format:
       dark: darkly
     highlight-style: github
     embed-resources: true
+  typst: 
+    mainfont: "Atkinson Hyperlegible"
 ---
 
 # About This Handbook
