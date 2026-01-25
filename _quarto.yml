@@ -97,25 +97,6 @@ website:
       
       - text: "---"
       
-      - section: "Demos & Examples"
-        contents:
-          # - text: "Code Options"
-          #   href: demos/codeoptions-demo.qmd
-          # - text: "Code Animation"
-          #   href: demos/revealjs-code-animation.qmd
-          # - text: "WebExercises"
-          #   href: demos/webex_general.qmd
-          # - text: "Explain Answers"
-          #   href: demos/webex_explain_these_answers.qmd
-          # - text: "Embedded Slides"
-          #   href: demos/embedded_slides-demo.qmd
-          # - text: "WebR Slides"
-          #   href: demos/webr_slides-demo.qmd
-          - text: "Week 12 Data"
-            href: demos/week12-data.qmd
-      
-      - text: "---"
-      
       # - href: pedagogical.qmd
       #   text: Pedagogical Approach
       # - href: followon/index.qmd
