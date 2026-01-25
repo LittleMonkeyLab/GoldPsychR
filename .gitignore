@@ -12,3 +12,6 @@
 
 # Old Quarto output
 index_files/
+
+# Developer notes and working documents
+FIXES_SUMMARY.md
