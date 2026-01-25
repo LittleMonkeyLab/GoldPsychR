@@ -18,7 +18,13 @@ knitr::opts_chunk$set(echo = FALSE)
 Follow along with the slides below.
 
 ```{=html}
-<iframe src="part2-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+<div style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border: 1px solid #ccc; border-radius: 8px;">
+  <iframe
+    src="part2-slides.html"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+    allowfullscreen>
+  </iframe>
+</div>
 ```
 
 ::: {.callout-tip}
@@ -47,13 +53,13 @@ library(readr)
 
 ### Load Data from GitHub
 
-Now load the personality dataset:
+Now load the Grit Scale dataset:
 
 ```{webr-r}
 library(readr)
 
 # The URL for our data
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 
 # Load it
 data <- read_csv(data_url, show_col_types = FALSE)
@@ -68,7 +74,7 @@ View the first 6 rows:
 
 ```{webr-r}
 library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
 
 head(data)
@@ -85,7 +91,7 @@ Check the structure:
 
 ```{webr-r}
 library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
 
 str(data)
@@ -97,7 +103,7 @@ How many rows and columns?
 
 ```{webr-r}
 library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
 
 dim(data)
@@ -109,16 +115,16 @@ Use `$` to get a specific column:
 
 ```{webr-r}
 library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
 
-# Get the group column
-data$group
+# Get the Study_Year column
+data$Study_Year
 ```
 
 ::: {.callout-note}
 ## Challenge
-Try accessing `data$p1` to see the first personality item scores.
+Try accessing `data$G1` to see the first Grit Scale item scores.
 :::
 
 ---
@@ -146,24 +152,6 @@ Check your understanding before moving on.
 **5. To access a column called "score" from data called "df", you write: df`r fitb("$")`score**
 
 :::
-
----
-
-## Download Exercise
-
-Continue practicing in RStudio:
-
-```{r}
-#| echo: false
-downloadthis::download_file(
-  path = "../../templates/lab1-exercise.qmd",
-  output_name = "lab1-exercise",
-  button_label = "Download Exercise (.qmd)",
-  button_type = "warning",
-  icon = "fa fa-download",
-  class = "btn-lg"
-)
-```
 
 ---
 

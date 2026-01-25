@@ -1,0 +1,204 @@
+---
+title: "Week 12 Data Analysis"
+subtitle: "Data Skills Assignment"
+author: "Your Name"
+date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: false
+    number-sections: true
+    highlight-style: github
+    code-fold: true
+    code-summary: "Show code"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, fig.height = 5)
+```
+
+## Introduction
+
+This document presents the analysis of Week 12 reaction time data. The dataset contains measurements from 60 participants across baseline, control, and experimental conditions, with participants assigned to either Happy or Scary experimental conditions.
+
+## Loading the Data
+
+```{r load-data}
+# Load the data directly from GitHub CSV
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week_12_data.csv"
+
+# Load the data using base R
+Lab_12_data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Convert to tibble for better display
+library(tibble)
+Lab_12_data <- as_tibble(Lab_12_data)
+
+# Display data structure
+cat("Data loaded successfully!\n")
+cat("Dataset dimensions:", nrow(Lab_12_data), "participants ×", ncol(Lab_12_data), "variables\n\n")
+head(Lab_12_data)
+```
+
+The dataset contains reaction time measurements with the following structure:
+
+- **ID**: Participant identifier
+- **Condition**: Experimental condition (1 = Happy, 2 = Scary)
+- **Base1, Base2, Base3**: Three baseline condition trials
+- **Control1, Control2, Control3**: Three control condition trials  
+- **Expt1, Expt2, Expt3**: Three experimental condition trials
+
+## Task 1: Calculate Overall Means
+
+Calculate the mean for baseline, control, and experimental conditions (averaging across all trials and participants).
+
+```{r task1-calculate}
+# Calculate column means first
+numeric_cols <- sapply(Lab_12_data, is.numeric)
+myColumnMeans <- colMeans(Lab_12_data[, numeric_cols, drop = FALSE], na.rm = TRUE)
+
+# Find columns for each condition
+base_cols <- grep("^Base", names(Lab_12_data), ignore.case = TRUE)
+control_cols <- grep("^Control", names(Lab_12_data), ignore.case = TRUE)
+expt_cols <- grep("^Expt", names(Lab_12_data), ignore.case = TRUE)
+
+# Calculate overall means for each condition (averaging across trials)
+baseMean <- mean(myColumnMeans[base_cols], na.rm = TRUE)
+controlMean <- mean(myColumnMeans[control_cols], na.rm = TRUE)
+expMean <- mean(myColumnMeans[expt_cols], na.rm = TRUE)
+
+cat("Overall Means:\n")
+cat("==============\n\n")
+cat("Baseline mean:", round(baseMean, 2), "\n")
+cat("Control mean:", round(controlMean, 2), "\n")
+cat("Experimental mean:", round(expMean, 2), "\n")
+
+# Store for later use
+overall_means <- c(baseMean, controlMean, expMean)
+```
+
+**What pattern do you notice in these means?**
+
+Write your observations here:
+
+---
+
+## Task 2: Calculate Means by Condition
+
+Calculate the mean for baseline, control, and experimental, **separated by condition** (1=happy, 2=scary).
+
+```{r task2-calculate}
+# Use by() function to calculate means by condition
+groupedMeans <- by(Lab_12_data, Lab_12_data$Condition, colMeans, na.rm = TRUE)
+
+# Extract means for each group
+gp1Means <- groupedMeans[[1]]  # Condition 1 (Happy)
+gp2Means <- groupedMeans[[2]]  # Condition 2 (Scary)
+
+# Calculate means for each condition type within each group
+gp1BaseMean <- mean(gp1Means[base_cols], na.rm = TRUE)
+gp1ControlMean <- mean(gp1Means[control_cols], na.rm = TRUE)
+gp1ExpMean <- mean(gp1Means[expt_cols], na.rm = TRUE)
+
+gp2BaseMean <- mean(gp2Means[base_cols], na.rm = TRUE)
+gp2ControlMean <- mean(gp2Means[control_cols], na.rm = TRUE)
+gp2ExpMean <- mean(gp2Means[expt_cols], na.rm = TRUE)
+
+cat("Means by Experimental Condition:\n")
+cat("================================\n\n")
+cat("Happy Condition (1):\n")
+cat("  Baseline:", round(gp1BaseMean, 2), "\n")
+cat("  Control:", round(gp1ControlMean, 2), "\n")
+cat("  Experimental:", round(gp1ExpMean, 2), "\n\n")
+
+cat("Scary Condition (2):\n")
+cat("  Baseline:", round(gp2BaseMean, 2), "\n")
+cat("  Control:", round(gp2ControlMean, 2), "\n")
+cat("  Experimental:", round(gp2ExpMean, 2), "\n")
+
+# Store for plotting
+happy_means <- c(gp1BaseMean, gp1ControlMean, gp1ExpMean)
+scary_means <- c(gp2BaseMean, gp2ControlMean, gp2ExpMean)
+```
+
+**What differences do you notice between the happy and scary conditions?**
+
+Write your observations here:
+
+---
+
+## Task 3: Create a Single Line Graph
+
+Plot a line graph showing the overall means across the three conditions (Baseline → Control → Experimental).
+
+```{r task3-plot}
+# Use the calculated means from Task 1
+conditions <- c("Baseline", "Control", "Experimental")
+
+plot(1:3, overall_means, 
+     type = "b",  # Both points and lines
+     xlab = "Condition", 
+     ylab = "Mean Reaction Time (ms)",
+     main = "Overall Mean Reaction Times Across Conditions",
+     xaxt = "n",
+     pch = 19,
+     col = "#9B1B30",
+     lwd = 2,
+     ylim = c(min(overall_means) * 0.95, max(overall_means) * 1.05))
+axis(1, at = 1:3, labels = conditions)
+grid()
+```
+
+**What does this graph suggest about the pattern of reaction times?**
+
+Write your interpretation here:
+
+---
+
+## Task 4: Create a Multi-Line Graph
+
+Plot a line graph with **2 lines** (one for each experimental condition: happy vs. scary) on the same graph.
+
+```{r task4-plot}
+# Use the calculated means from Task 2
+all_means <- c(happy_means, scary_means)
+y_range <- c(min(all_means) * 0.95, max(all_means) * 1.05)
+
+plot(1:3, happy_means, 
+     type = "b",
+     xlab = "Condition", 
+     ylab = "Mean Reaction Time (ms)",
+     main = "Mean Reaction Times by Experimental Condition",
+     xaxt = "n",
+     pch = 19,
+     col = "#2E7D32",  # Green for happy
+     lwd = 2,
+     ylim = y_range)
+lines(1:3, scary_means, 
+      type = "b",
+      pch = 19,
+      col = "#C62828",  # Red for scary
+      lwd = 2)
+axis(1, at = 1:3, labels = conditions)
+legend("topright", 
+       legend = c("Happy", "Scary"),
+       col = c("#2E7D32", "#C62828"),
+       lty = 1,
+       lwd = 2,
+       pch = 19)
+grid()
+```
+
+**What does this comparison reveal about the differences between conditions?**
+
+#Question_1.1 - REPLACE THIS TEXT WITH YOUR FINDINGS
+
+---
+
+## Summary
+
+
+#Question_1.2 - REPLACE THIS TEXT WITH YOUR SUMMARY OF THE MAIN FINDINGS.

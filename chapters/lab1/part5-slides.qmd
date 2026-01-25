@@ -13,11 +13,12 @@ format:
     logo: ../../assets/images/GoldLogo.png
     footer: "GoldPsychR - Lab 1, Part 5"
     embed-resources: false
+    css: part-slides.css
 filters:
   - webr
   - countdown
 webr:
-  packages: ['readr', 'dplyr']
+  packages: ['dplyr']
   show-startup-message: false
 ---
 
@@ -60,20 +61,29 @@ Always report all three!
 ## Getting Your Numbers
 
 ```{webr-r}
-library(readr)
 library(dplyr)
 
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
-data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+data$Study_Year <- factor(data$Study_Year)
 
 data |>
-  group_by(group, time) |>
+  group_by(Study_Year) |>
   summarise(
-    M = round(mean(pers_score), 2),
-    SD = round(sd(pers_score), 2),
+    M_consistency = round(mean(consistency), 2),
+    SD_consistency = round(sd(consistency), 2),
+    M_perseverance = round(mean(perseverance), 2),
+    SD_perseverance = round(sd(perseverance), 2),
     n = n(),
     .groups = "drop"
   )
@@ -86,15 +96,15 @@ data |>
 A good descriptive results paragraph has:
 
 1. **Overall description** (M, SD for whole sample)
-2. **Baseline comparison** (were groups similar?)
-3. **Post-intervention comparison** (what changed?)
+2. **Group comparison** (how do study years differ?)
+3. **Subscale comparison** (Consistency vs Perseverance)
 4. **Interpretation** (what does this suggest?)
 
 ---
 
 ## Example Paragraph
 
-> Participants reported moderate levels of personality overall (*M* = 15.23, *SD* = 2.45). At baseline, the control group (*M* = 15.10, *SD* = 2.38, *n* = 40) and training group (*M* = 15.36, *SD* = 2.52, *n* = 40) showed similar scores. Following the intervention, the control group showed little change (*M* = 15.15, *SD* = 2.41), whereas the training group showed an increase (*M* = 16.89, *SD* = 2.21). These descriptive patterns suggest a potential training effect.
+> Participants reported moderate levels of Consistency of Interest overall (*M* = 12.45, *SD* = 2.38) and Perseverance of Effort (*M* = 13.21, *SD* = 2.15). First-year students showed lower Consistency of Interest scores (*M* = 11.89, *SD* = 2.41, *n* = 60) compared to final-year students (*M* = 13.01, *SD* = 2.28, *n* = 60). For Perseverance of Effort, first-year students (*M* = 12.95, *SD* = 2.18) showed similar scores to final-year students (*M* = 13.47, *SD* = 2.11). These descriptive patterns suggest that consistency of interest may develop with academic experience, while perseverance remains relatively stable.
 
 ---
 
@@ -108,9 +118,9 @@ A good descriptive results paragraph has:
 
 ✓ "*M* = 3.27"
 
-❌ "Group 1 had higher scores"
+❌ "First-year students had higher scores"
 
-✓ "The training group (*M* = 16.89) had higher scores than the control group (*M* = 15.15)"
+✓ "First-year students (*M* = 11.89) had lower Consistency of Interest scores than final-year students (*M* = 13.01)"
 
 ---
 
@@ -119,25 +129,37 @@ A good descriptive results paragraph has:
 Make nice tables:
 
 ```{webr-r}
-library(readr)
 library(dplyr)
 
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
-data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+data$Study_Year <- factor(data$Study_Year)
 
 summary_table <- data |>
-  group_by(group, time) |>
+  group_by(Study_Year) |>
   summarise(
-    M = round(mean(pers_score), 2),
-    SD = round(sd(pers_score), 2),
+    M_consistency = round(mean(consistency), 2),
+    SD_consistency = round(sd(consistency), 2),
+    M_perseverance = round(mean(perseverance), 2),
+    SD_perseverance = round(sd(perseverance), 2),
     n = n(),
     .groups = "drop"
   )
 
-knitr::kable(summary_table, caption = "Descriptive Statistics")
+knitr::kable(summary_table, 
+             caption = "Descriptive Statistics for Grit Subscales by Study Year",
+             col.names = c("Study Year", "M (Consistency)", "SD (Consistency)", 
+                          "M (Perseverance)", "SD (Perseverance)", "n"))
 ```
 
 ---
@@ -169,9 +191,9 @@ You've learned:
 
 ## Now Practice!
 
-Complete the write-up in your exercise file.
+Open the activity page for Part 5 and complete the write-up in your exercise file.
 
-{{< countdown "10:00" >}}
+{{< countdown "10:00" start_immediately="true" >}}
 
 ::: {.callout-tip}
 ## Tips

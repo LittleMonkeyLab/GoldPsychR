@@ -13,6 +13,7 @@ format:
     logo: ../../assets/images/GoldLogo.png
     footer: "GoldPsychR - Lab 1, Part 1"
     embed-resources: false
+    css: part-slides.css
 filters:
   - webr
   - countdown
@@ -21,52 +22,92 @@ webr:
   show-startup-message: false
 ---
 
+## How This Lab Works: Watch → Try → Do
+
+Every part of this lab follows the same **3-step cycle**:
+
+:::::: columns
+::: {.column width="33%"}
+### 1️⃣ Watch
+
+**Instructor Demo**
+
+I'll show you how R works using interactive slides. Watch and follow along!
+:::
+
+::: {.column width="33%"}
+### 2️⃣ Try
+
+**Practice Here**
+
+On the activity page, edit code directly in your browser. Experiment and learn!
+:::
+
+::: {.column width="33%"}
+### 3️⃣ Do
+
+**Your Notebook**
+
+Download the `.qmd` file and complete exercises in RStudio Server. This is your work!
+:::
+::::::
+
+**This cycle repeats for each part. Let's start!**
+
+------------------------------------------------------------------------
+
 ## The Data Story
 
 Over the next **4 weeks**, we'll work through a complete research workflow:
 
-- **Week 1**: Describe and visualise your data
-- **Week 2**: Compare groups with t-tests
-- **Week 3**: Compare multiple groups with ANOVA
-- **Week 4**: Explore relationships with correlation & regression
+-   **Week 1**: Describe and visualise your data
+-   **Week 2**: Compare groups with t-tests
+-   **Week 3**: Compare multiple groups with ANOVA
+-   **Week 4**: Explore relationships with correlation & regression
 
----
+------------------------------------------------------------------------
 
 ## Today's Dataset
 
-We've collected **Big Five personality data** from a training study:
+We've collected **Grit Scale data** from university students:
 
-- 160 participants completed personality questionnaires
-- Half received a training intervention, half were controls
-- Measured before (pre) and after (post) the intervention
+-   120 students completed the Short Grit Scale (8 items)
+-   Participants are either First Year or Final Year students
+-   The scale measures two subscales: Consistency of Interest and Perseverance of Effort
 
-**Our question**: Did the training affect personality scores?
+**Our question**: Do grit scores differ between first-year and final-year students?
 
----
+::: callout-note
+## Learn More About the Grit Scale
+
+Want to read the original research? [Access the source article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
+:::
+
+------------------------------------------------------------------------
 
 ## What is R?
 
 **R** is a programming language designed for statistics and data analysis.
 
-- **Free** and **open source** - anyone can use it
-- Created by statisticians, for statisticians
-- Thousands of packages for specialised analyses
-- The standard in psychology, biology, and social sciences
+-   **Free** and **open source** - anyone can use it
+-   Created by statisticians, for statisticians
+-   Thousands of packages for specialised analyses
+-   The standard in psychology, biology, and social sciences
 
----
+------------------------------------------------------------------------
 
 ## Why R (not SPSS)?
 
-| R | SPSS |
-|---|------|
-| Free forever | Expensive licence |
-| Code is reproducible | Point-and-click is hard to repeat |
-| Cutting-edge methods | Lags behind |
-| Used in academia & industry | Mainly academia |
+| R                           | SPSS                              |
+|-----------------------------|-----------------------------------|
+| Free forever                | Expensive licence                 |
+| Code is reproducible        | Point-and-click is hard to repeat |
+| Cutting-edge methods        | Lags behind                       |
+| Used in academia & industry | Mainly academia                   |
 
 **Learning R is an investment in your future career.**
 
----
+------------------------------------------------------------------------
 
 ## RStudio: Your R Workspace
 
@@ -74,51 +115,52 @@ We've collected **Big Five personality data** from a training study:
 
 Think of it like this:
 
-- **R** = the engine
-- **RStudio** = the car dashboard
+-   **R** = the engine
+-   **RStudio** = the car dashboard
 
 You'll work in RStudio, but R does the actual computing.
 
----
+------------------------------------------------------------------------
 
 ## The Four Panes
 
-:::: {.columns}
+::::: columns
 ::: {.column width="50%"}
 **Top-Left: Source**
 
-- Where you write scripts
-- Save your work here
+-   Where you write scripts
+-   Save your work here
 
 **Bottom-Left: Console**
 
-- Where code runs
-- Immediate feedback
+-   Where code runs
+-   Immediate feedback
 :::
+
 ::: {.column width="50%"}
 **Top-Right: Environment**
 
-- Your data and objects
-- Watch it update!
+-   Your data and objects
+-   Watch it update!
 
 **Bottom-Right: Files/Plots/Help**
 
-- Navigate files
-- View outputs
+-   Navigate files
+-   View outputs
 :::
-::::
+:::::
 
----
+------------------------------------------------------------------------
 
 ## RStudio in Action
 
 ![RStudio IDE](../../labs/images/rstudio.png){fig-align="center" width="85%"}
 
----
+------------------------------------------------------------------------
 
 ## Your First Code
 
-Try this in the Console:
+Let me show you how R works. I'll click "Run Code" on this example:
 
 ```{webr-r}
 1 + 1
@@ -126,11 +168,15 @@ Try this in the Console:
 
 R returned the answer! The `[1]` just means "first result".
 
----
+::: callout-tip
+Try changing `1 + 1` to `1 + 2`?
+:::
+
+------------------------------------------------------------------------
 
 ## Creating Variables
 
-We store values using the **assignment operator** `<-`
+We store values using the **assignment operator** `<-`. Watch me create some variables:
 
 ```{webr-r}
 x <- 5
@@ -138,24 +184,32 @@ y <- 2
 x + y
 ```
 
-Watch the **Environment pane** update when you create variables!
+Variables are stored in memory and can be reused!
 
----
+::: callout-tip
+Try changing `x <- 5` to `x <- 10`?
+:::
+
+------------------------------------------------------------------------
 
 ## Vectors: Multiple Values
 
-A **vector** is a collection of values. Create them with `c()`:
+A **vector** is a collection of values. Create them with `c()`. Let me demonstrate:
 
 ```{webr-r}
 scores <- c(4, 5, 3, 2, 5)
 scores
 ```
 
----
+::: callout-tip
+Try adding `6` to the vector?
+:::
+
+------------------------------------------------------------------------
 
 ## Basic Functions
 
-R has built-in functions for statistics:
+R has built-in functions for statistics. Watch me calculate:
 
 ```{webr-r}
 scores <- c(4, 5, 3, 2, 5)
@@ -164,48 +218,116 @@ sd(scores)
 length(scores)
 ```
 
----
+::: callout-tip
+Try changing the scores to `c(10, 20, 30)`?
+:::
+
+------------------------------------------------------------------------
 
 ## Common Error: Object Not Found
 
-```r
+Watch what happens if I try to use a variable that doesn't exist:
+
+``` r
 z + 1
 ```
 
-```
+```         
 Error: object 'z' not found
 ```
 
-**Fix:** Create the object first!
+**Fix:** I need to create the object first! Let me run this:
 
 ```{webr-r}
 z <- 10
 z + 1
 ```
 
----
+------------------------------------------------------------------------
+
+## Download the Exercise Notebook
+
+At the end of this part, you will be asked to download the `.qmd` notebook file for RStudio Server.
+
+**Location:** On the practice page, there's a download button.
+
+![](images/download.png){fig-align="center"}
+
+**What happens:** The file `lab1-exercise.qmd` will download to your Downloads folder.
+
+------------------------------------------------------------------------
+
+## RStudio Server Setup
+
+You will need to:
+
+1.  **Log in** to RStudio Server at `https://psy909.gold.ac.uk/rstudioserver/`
+2.  **Use full email format:** `username@campus.goldsmiths.ac.uk`
+3.  **Create a folder** called `RLab1` in the Files pane
+4.  **Upload** the downloaded `.qmd` file
+5.  **Open** the file in the Source pane
+
+![](images/Signin.png){fig-align="center"}
+
+![](images/exercise.png){fig-align="center"}
+
+## What's in the Notebook?
+
+When you open `lab1-exercise.qmd` in RStudio Server, you'll see:
+
+-   **YAML header** (between `---` lines) - metadata at the top
+-   **Markdown text** - instructions and explanations
+-   **Code chunks** - gray boxes with R code
+-   **Green play buttons** - to run each code chunk
+
+::: callout-tip
+## Your Work Notebook
+
+This notebook is where you'll complete all your work for this lab. You'll use it across all 5 parts!
+:::
+
+------------------------------------------------------------------------
+
+## Your First Task: Change Your Name
+
+Once you've opened the notebook in RStudio Server, here's your **very first task**:
+
+1.  **Find line 4** in the YAML header: `author: "YOUR NAME HERE"`
+2.  **Replace** `"YOUR NAME HERE"` with your actual name (keep the quotes!)
+3.  **Click the Render button** (top toolbar, looks like a knitting needle)
+
+![](images/Named.png)
+
+**This is your first success!** You've rendered your notebook. The HTML file shows your name in the document header. Now press Render and see what the output looks like!
+
+![](images/Render.png){fig-align="center"}
+
+------------------------------------------------------------------------
 
 ## Summary: Part 1
 
-You learned:
+We've covered:
 
-- What R and RStudio are
-- How to navigate the four panes
-- How to create variables with `<-`
-- How to create vectors with `c()`
-- How to use functions like `mean()`, `sd()`
+-   What R and RStudio are
+-   How to navigate the four panes
+-   How to create variables with `<-`
+-   How to create vectors with `c()`
+-   How to use functions like `mean()`, `sd()`
+-   How to download and set up the exercise notebook in RStudio Server
 
----
+------------------------------------------------------------------------
 
-## Now Practice!
+## Now It's Your Turn!
 
-Scroll down to the **Try It Yourself** section and work through the exercises.
+Open the activity page for Part 1 and work through the **Try It Yourself** exercises.
 
-{{< countdown "10:00" >}}
+{{< countdown "10:00" start_immediately="true" >}}
 
-::: {.callout-tip}
+::: callout-tip
 ## Tips
-- Edit the code and experiment
-- Copy code to your RStudio console
-- Complete the self-assessment before moving on
+
+-   **Edit code directly** in the WebR cells on the page - no need to copy to RStudio yet!
+-   Experiment with different values and see what happens
+-   Complete the self-assessment before moving on
+-   **Download the exercise notebook** and set it up in RStudio Server before Part 2
 :::

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
+    <rect x="0" y="0" width="300" height="80" rx="8" fill="#9B1B30"/>
+    <rect x="0" y="0" width="300" height="26" rx="8" fill="#7a1526"/>
+    <rect x="0" y="18" width="300" height="8" fill="#7a1526"/>
+    <circle cx="16" cy="13" r="6" fill="#ff5f57"/>
+    <circle cx="34" cy="13" r="6" fill="#febc2e"/>
+    <circle cx="52" cy="13" r="6" fill="#28c840"/>
+    <text x="150" y="17" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="rgba(255,255,255,0.6)" text-anchor="middle">R Console</text>
+    <text x="20" y="58" font-family="ui-monospace, 'SF Mono', Menlo, Monaco, monospace" font-size="20" fill="rgba(255,255,255,0.5)">&gt;</text>
+    <text x="40" y="58" font-family="ui-monospace, 'SF Mono', Menlo, Monaco, monospace" font-size="20" fill="#ffffff">GoldPsychR</text>
+    <rect x="178" y="40" width="2" height="22" fill="#ffffff"/>
+</svg>

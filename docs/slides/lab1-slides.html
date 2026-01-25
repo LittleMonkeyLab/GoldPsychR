@@ -492,7 +492,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"1 + 1","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"x <- 5\ny <- 2\nx + y","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"scores <- c(4, 5, 3, 2, 5)\nscores","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"scores <- c(4, 5, 3, 2, 5)\nmean(scores)\nsd(scores)\nlength(scores)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"z <- 10\nz + 1","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Simulate the personality dataset\nset.seed(42)\nn <- 160\n\ndata <- data.frame(\n  id = 1:n,\n  group = rep(c(\"control\", \"training\"), each = n/2),\n  time = rep(rep(c(\"pre\", \"post\"), each = n/4), 2),\n  p1 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),\n  p2 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.15, 0.35, 0.25, 0.15)),\n  p3 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),\n  p4 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.25, 0.3, 0.2, 0.1)),\n  p5 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.2, 0.35, 0.2, 0.1))\n)\n\n# Add training effect\ntraining_post <- data$group == \"training\" & data$time == \"post\"\ndata$p1[training_post] <- pmin(5, data$p1[training_post] + sample(0:1, sum(training_post), replace = TRUE))\ndata$p2[training_post] <- pmin(5, data$p2[training_post] + sample(0:1, sum(training_post), replace = TRUE))\ndata$p3[training_post] <- pmin(5, data$p3[training_post] + sample(0:1, sum(training_post), replace = TRUE))","id":6,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# View the first 6 rows\nhead(data)","id":7,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-7","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Check dimensions: rows x columns\ndim(data)","id":8,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-8","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# See column names\nnames(data)","id":9,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-9","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Reverse-score p4 and p5\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\n\n# Check it worked\nhead(data[, c(\"p4\", \"rev_p4\", \"p5\", \"rev_p5\")])","id":10,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Sum all items using REVERSED versions for p4 and p5\ndata$pers_score <- data$p1 + data$p2 + data$p3 +\n                   data$rev_p4 + data$rev_p5\n\n# View result\nhead(data[, c(\"id\", \"group\", \"time\", \"pers_score\")])","id":11,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-11","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Calculate overall statistics\nmean(data$pers_score, na.rm = TRUE)\nsd(data$pers_score, na.rm = TRUE)\nlength(data$pers_score)","id":12,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-12","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(dplyr)\n\ndata |>\n  group_by(group, time) |>\n  summarise(\n    mean = mean(pers_score, na.rm = TRUE),\n    sd = sd(pers_score, na.rm = TRUE),\n    n = n(),\n    .groups = \"drop\"\n  )","id":13,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-13","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(ggplot2)\n\nggplot(data, aes(x = group, y = pers_score, fill = time)) +\n  geom_boxplot(alpha = 0.7) +\n  theme_minimal() +\n  labs(\n    title = \"Personality Scores by Group and Time\",\n    x = \"Group\",\n    y = \"Personality Score\",\n    fill = \"Time\"\n  )","id":14,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":"5","fig-width":"10","label":"unnamed-chunk-14","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qwebrCellDetails = [{"code":"1 + 1","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"x <- 5\ny <- 2\nx + y","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"scores <- c(4, 5, 3, 2, 5)\nscores","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"scores <- c(4, 5, 3, 2, 5)\nmean(scores)\nsd(scores)\nlength(scores)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"z <- 10\nz + 1","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Load the Grit Scale data from GitHub\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)","id":6,"options":{"autorun":"true","classes":"","comment":"","context":"setup","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# View the first 6 rows\nhead(data)","id":7,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-7","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Check dimensions: rows x columns\ndim(data)","id":8,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-8","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# See column names\nnames(data)","id":9,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-9","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Load data first\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse-score G1, G3, G5, and G6\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Check it worked\nhead(data[, c(\"G1\", \"rev_G1\", \"G3\", \"rev_G3\")])","id":10,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-10","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse-score items\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Consistency of Interest (4 items: G1, G3, G5, G6 - all reversed)\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\n\n# Perseverance of Effort (4 items: G2, G4, G7, G8 - forward scored)\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\n\n# View result\nhead(data[, c(\"ID\", \"Study_Year\", \"consistency\", \"perseverance\")])","id":11,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-11","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Load and prepare data\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse-score items\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Create subscales\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\n\n# Calculate overall statistics\nmean(data$consistency, na.rm = TRUE)\nsd(data$consistency, na.rm = TRUE)\nlength(data$consistency)","id":12,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-12","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(dplyr)\n\n# Convert Study_Year to factor for grouping\ndata$Study_Year <- factor(data$Study_Year, levels = c(1, 2), labels = c(\"First Year\", \"Final Year\"))\n\ndata |>\n  group_by(Study_Year) |>\n  summarise(\n    M_consistency = mean(consistency, na.rm = TRUE),\n    SD_consistency = sd(consistency, na.rm = TRUE),\n    M_perseverance = mean(perseverance, na.rm = TRUE),\n    SD_perseverance = sd(perseverance, na.rm = TRUE),\n    n = n(),\n    .groups = \"drop\"\n  )","id":13,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-13","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(ggplot2)\n\n# Convert Study_Year to factor\ndata$Study_Year <- factor(data$Study_Year, levels = c(1, 2), labels = c(\"First Year\", \"Final Year\"))\n\nggplot(data, aes(x = Study_Year, y = consistency, fill = Study_Year)) +\n  geom_boxplot(alpha = 0.7) +\n  theme_minimal() +\n  theme(legend.position = \"none\") +\n  labs(\n    title = \"Consistency of Interest by Study Year\",\n    x = \"Study Year\",\n    y = \"Consistency of Interest Score\"\n  )","id":14,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":"5","fig-width":"10","label":"unnamed-chunk-14","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
   </script>
   <script type="module">
@@ -2036,7 +2036,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Lab 1: Descriptive Statistics</h1>
-  <p class="subtitle">Personality &amp; The Big Five</p>
+  <p class="subtitle">Grit &amp; The Short Grit Scale</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -2055,26 +2055,38 @@ Gordon Wright
 </section>
 <section id="the-data-story" class="slide level2">
 <h2>The Data Story</h2>
-<p>Over the next <strong>4 weeks</strong>, we’ll work through a complete research workflow:</p>
+<p>Today we’ll work with <strong>Grit Scale data</strong> to learn descriptive statistics:</p>
 <ul>
-<li class="fragment"><strong>Week 1</strong>: Describe and visualise your data</li>
-<li class="fragment"><strong>Week 2</strong>: Compare groups with t-tests</li>
-<li class="fragment"><strong>Week 3</strong>: Compare multiple groups with ANOVA</li>
-<li class="fragment"><strong>Week 4</strong>: Explore relationships with correlation &amp; regression</li>
+<li>Load and inspect data</li>
+<li>Reverse-score questionnaire items</li>
+<li>Calculate subscale scores</li>
+<li>Compare groups with descriptive statistics</li>
+<li>Visualise differences with boxplots</li>
+<li>Write up results in APA style</li>
 </ul>
-<div class="fragment">
-<p>We’ll use the same dataset throughout, plus <strong>similar datasets</strong> for extra practice.</p>
-</div>
 </section>
 <section id="todays-dataset" class="slide level2">
 <h2>Today’s Dataset</h2>
-<p>We’ve collected <strong>Big Five personality data</strong> from a training study:</p>
+<p>We’ve collected <strong>Grit Scale data</strong> from university students:</p>
 <ul>
-<li>160 participants completed personality questionnaires</li>
-<li>Half received a training intervention, half were controls</li>
-<li>Measured before (pre) and after (post) the intervention</li>
+<li>120 students completed the Short Grit Scale (8 items)</li>
+<li>Participants are either First Year or Final Year students</li>
+<li>The scale measures two subscales: Consistency of Interest and Perseverance of Effort</li>
 </ul>
-<p><strong>Our question</strong>: Did the training affect personality scores?</p>
+<p><strong>Our question</strong>: Do grit scores differ between first-year and final-year students?</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Learn More About the Grit Scale</strong></p>
+</div>
+<div class="callout-content">
+<p>Want to read the original research? <a href="https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290">Access the source article</a> through the Goldsmiths Library.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="todays-goals" class="slide level2 scrollable">
 <h2>Today’s Goals</h2>
@@ -2101,6 +2113,7 @@ Gordon Wright
 </section>
 <section id="todays-schedule" class="slide level2">
 <h2>Today’s Schedule</h2>
+<p><strong>Lab Time: 13:00 - 15:00</strong></p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -2110,39 +2123,39 @@ Gordon Wright
 </thead>
 <tbody>
 <tr class="odd">
-<td>0:00-0:10</td>
+<td>13:00-13:10</td>
 <td>Part 1: What is R? + RStudio Tour</td>
 </tr>
 <tr class="even">
-<td>0:10-0:20</td>
+<td>13:10-13:20</td>
 <td><strong>Practice: WebR basics</strong></td>
 </tr>
 <tr class="odd">
-<td>0:20-0:35</td>
+<td>13:20-13:35</td>
 <td>Part 2: Loading Data</td>
 </tr>
 <tr class="even">
-<td>0:35-0:50</td>
+<td>13:35-13:50</td>
 <td><strong>Practice: Data loading</strong></td>
 </tr>
 <tr class="odd">
-<td>0:50-1:05</td>
+<td>13:50-14:05</td>
 <td>Part 3: Reverse Scoring</td>
 </tr>
 <tr class="even">
-<td>1:05-1:20</td>
+<td>14:05-14:20</td>
 <td><strong>Practice: Scoring</strong></td>
 </tr>
 <tr class="odd">
-<td>1:20-1:40</td>
+<td>14:20-14:40</td>
 <td>Part 4: Descriptives &amp; Visualisation</td>
 </tr>
 <tr class="even">
-<td>1:40-1:55</td>
+<td>14:40-14:55</td>
 <td><strong>Practice: Analysis + Write-Up</strong></td>
 </tr>
 <tr class="odd">
-<td>1:55-2:00</td>
+<td>14:55-15:00</td>
 <td>Wrap-up</td>
 </tr>
 </tbody>
@@ -2340,7 +2353,7 @@ Gordon Wright
 </div>
 </div>
 </div>
-<countdown-timer id="timer_5032cd817666936fef191b8132026a44fb11dcde" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<countdown-timer id="timer_260c287740e81c4f8501ce814d00cfc59d4a669f" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 </section></section>
 <section>
@@ -2348,22 +2361,23 @@ Gordon Wright
 <h1>Part 2: Loading Data</h1>
 
 </section>
-<section id="the-personality-dataset" class="slide level2">
-<h2>The Personality Dataset</h2>
+<section id="the-grit-scale-dataset" class="slide level2">
+<h2>The Grit Scale Dataset</h2>
 <p>Our study collected data on:</p>
 <ul>
-<li><strong>160 participants</strong></li>
-<li><strong>5 personality items</strong> (p1-p5) on a 1-5 scale</li>
-<li><strong>Group</strong>: control vs training</li>
-<li><strong>Time</strong>: pre vs post intervention</li>
+<li><strong>120 university students</strong></li>
+<li><strong>8 Grit Scale items</strong> (G1-G8) on a 1-5 scale</li>
+<li><strong>Study_Year</strong>: First Year (1) or Final Year (2)</li>
+<li><strong>Demographics</strong>: Age, Gender</li>
 </ul>
-<p>Items p4 and p5 are negatively worded (we’ll deal with that later!).</p>
+<p>Items G1, G3, G5, and G6 are negatively worded (we’ll reverse-score them!).</p>
 </section>
 <section id="loading-a-csv-file" class="slide level2 scrollable">
 <h2>Loading a CSV File</h2>
 <div class="cell" data-code-annotations="hover">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb3-2"><a aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"personality_lab.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"</span></span>
+<span id="cb3-3"><a aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(data_url, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol type="1">
 <li>Load the <code>readr</code> package</li>
@@ -2400,14 +2414,14 @@ Gordon Wright
 <section id="common-error-function-not-found" class="slide level2">
 <h2>Common Error: Function Not Found</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"personality_lab.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"Y1_Week13_Lab1_grit_data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code>Error: could not find function "read_csv"</code></pre>
 <div class="fragment fade-up">
 <p><strong>Fix:</strong> Load the package first!</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb6-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"personality_lab.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"Y1_Week13_Lab1_grit_data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section></section>
@@ -2444,7 +2458,7 @@ Gordon Wright
 </div>
 </div>
 </div>
-<countdown-timer id="timer_5032cd817666936fef191b8132026a44fb11dcde" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<countdown-timer id="timer_260c287740e81c4f8501ce814d00cfc59d4a669f" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 </section></section>
 <section>
@@ -2454,14 +2468,14 @@ Gordon Wright
 </section>
 <section id="why-reverse-score" class="slide level2">
 <h2>Why Reverse Score?</h2>
-<p>Some questionnaire items are <strong>negatively worded</strong>:</p>
+<p>The Grit Scale has <strong>negatively worded items</strong>:</p>
 <ul>
-<li>“I rarely feel anxious” (reversed)</li>
-<li>“I often feel anxious” (normal)</li>
+<li><strong>G1</strong>: “New ideas and projects sometimes distract me from previous ones” (reversed)</li>
+<li><strong>G2</strong>: “Setbacks don’t discourage me” (normal)</li>
 </ul>
-<p>If someone is anxious, they’d score <strong>low</strong> on the first but <strong>high</strong> on the second.</p>
+<p>If someone is gritty, they’d score <strong>low</strong> on G1 but <strong>high</strong> on G2.</p>
 <div class="fragment">
-<p>To create a valid total score, we must <strong>reverse</strong> the negatively-worded items.</p>
+<p>To create valid subscale scores, we must <strong>reverse</strong> items G1, G3, G5, and G6.</p>
 </div>
 </section>
 <section id="the-formula" class="slide level2">
@@ -2504,8 +2518,9 @@ Gordon Wright
 <div id="qwebr-insertion-location-10"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="creating-the-total-score" class="slide level2">
-<h2>Creating the Total Score</h2>
+<section id="creating-subscale-scores" class="slide level2">
+<h2>Creating Subscale Scores</h2>
+<p>The Grit Scale has two subscales:</p>
 <div id="qwebr-insertion-location-11"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div class="callout callout-important callout-titled callout-style-default">
@@ -2517,7 +2532,7 @@ Gordon Wright
 <p><strong>Critical Check</strong></p>
 </div>
 <div class="callout-content">
-<p>Use the <strong>reversed</strong> versions (rev_p4, rev_p5), not the originals!</p>
+<p>Use the <strong>reversed</strong> versions (rev_G1, rev_G3, rev_G5, rev_G6) for Consistency subscale!</p>
 </div>
 </div>
 </div>
@@ -2526,15 +2541,17 @@ Gordon Wright
 <h2>Common Error: Wrong Items in Sum</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># WRONG - using unreversed items!</span></span>
-<span id="cb7-2"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>pers_score <span class="ot">&lt;-</span> data<span class="sc">$</span>p1 <span class="sc">+</span> data<span class="sc">$</span>p2 <span class="sc">+</span> data<span class="sc">$</span>p3 <span class="sc">+</span></span>
-<span id="cb7-3"><a aria-hidden="true" tabindex="-1"></a>                   data<span class="sc">$</span>p4 <span class="sc">+</span> data<span class="sc">$</span>p5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-2"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>consistency <span class="ot">&lt;-</span> data<span class="sc">$</span>G1 <span class="sc">+</span> data<span class="sc">$</span>G3 <span class="sc">+</span> data<span class="sc">$</span>G5 <span class="sc">+</span> data<span class="sc">$</span>G6</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment fade-up">
 <p><strong>Fix:</strong> Always use reversed versions:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># CORRECT</span></span>
-<span id="cb8-2"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>pers_score <span class="ot">&lt;-</span> data<span class="sc">$</span>p1 <span class="sc">+</span> data<span class="sc">$</span>p2 <span class="sc">+</span> data<span class="sc">$</span>p3 <span class="sc">+</span></span>
-<span id="cb8-3"><a aria-hidden="true" tabindex="-1"></a>                   data<span class="sc">$</span>rev_p4 <span class="sc">+</span> data<span class="sc">$</span>rev_p5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>rev_G1 <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> data<span class="sc">$</span>G1</span>
+<span id="cb8-3"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>rev_G3 <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> data<span class="sc">$</span>G3</span>
+<span id="cb8-4"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>rev_G5 <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> data<span class="sc">$</span>G5</span>
+<span id="cb8-5"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>rev_G6 <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> data<span class="sc">$</span>G6</span>
+<span id="cb8-6"><a aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>consistency <span class="ot">&lt;-</span> data<span class="sc">$</span>rev_G1 <span class="sc">+</span> data<span class="sc">$</span>rev_G3 <span class="sc">+</span> data<span class="sc">$</span>rev_G5 <span class="sc">+</span> data<span class="sc">$</span>rev_G6</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section></section>
@@ -2551,8 +2568,8 @@ Gordon Wright
 </ul>
 <p><strong>RStudio Exercise:</strong></p>
 <ul>
-<li>Section 2: Reverse Scoring</li>
-<li>Complete Exercise 2.1</li>
+<li>Section 3: Reverse Scoring</li>
+<li>Complete Exercise 3.1</li>
 </ul>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -2565,14 +2582,14 @@ Gordon Wright
 <div class="callout-content">
 <ol type="1">
 <li>Apply the formula: <code>6 - original</code></li>
-<li>Create reversed items for p4 and p5</li>
-<li>Sum all items (using reversed versions!)</li>
+<li>Create reversed items for G1, G3, G5, and G6</li>
+<li>Create both subscales (Consistency and Perseverance)</li>
 <li>Verify your reversal worked</li>
 </ol>
 </div>
 </div>
 </div>
-<countdown-timer id="timer_5032cd817666936fef191b8132026a44fb11dcde" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<countdown-timer id="timer_260c287740e81c4f8501ce814d00cfc59d4a669f" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 </section></section>
 <section>
@@ -2622,22 +2639,22 @@ Gordon Wright
 </div><div class="column" style="width:50%;">
 <p><strong>Questions to ask:</strong></p>
 <ul>
-<li>Do groups differ at baseline?</li>
-<li>Is there change over time?</li>
-<li>Which group changed more?</li>
+<li>Do first-year and final-year students differ?</li>
+<li>Which group has higher consistency?</li>
+<li>Is the difference meaningful?</li>
 </ul>
 </div></div>
 </section>
 <section id="common-error-forgetting-na.rm" class="slide level2">
 <h2>Common Error: Forgetting na.rm</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>pers_score)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>consistency)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If any value is <code>NA</code>, the result is <code>NA</code>!</p>
 <div class="fragment fade-up">
 <p><strong>Fix:</strong> Always include <code>na.rm = TRUE</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>pers_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>consistency, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section></section>
@@ -2649,13 +2666,13 @@ Gordon Wright
 <section id="template" class="slide level2">
 <h2>Template</h2>
 <blockquote>
-<p>Participants reported moderate levels of [TRAIT] overall (M = <strong><em>, SD = </em></strong>). At baseline, the control group (M = <strong><em>, SD = </em></strong>, n = <strong><em>) and training group (M = </em></strong>, SD = <strong><em>, n = </em></strong>) were similar. Following the intervention, the control group showed [minimal change / a decrease / an increase] (M = <strong><em>, SD = </em></strong>), whereas the training group showed [change description] (M = <strong><em>, SD = </em></strong>).</p>
+<p>Participants reported moderate levels of [SUBSCALE] overall (M = <strong><em>, SD = </em></strong>). First-year students (M = <strong><em>, SD = </em></strong>, n = <strong><em>) and final-year students (M = </em></strong>, SD = <strong><em>, n = </em></strong>) showed [similar/different] levels of grit. Specifically, first-year students scored [higher/lower] on Consistency of Interest (M = <strong><em>, SD = </em></strong>) compared to final-year students (M = <strong><em>, SD = </em></strong>).</p>
 </blockquote>
 </section>
 <section id="example-write-up" class="slide level2">
 <h2>Example Write-Up</h2>
 <blockquote>
-<p>Participants reported moderate levels of personality overall (M = 15.42, SD = 2.31). At baseline, the control group (M = 15.10, SD = 2.25, n = 40) and training group (M = 15.33, SD = 2.18, n = 40) were similar. Following the intervention, the control group showed minimal change (M = 15.28, SD = 2.41), whereas the training group showed an increase (M = 16.95, SD = 2.15).</p>
+<p>Participants reported moderate levels of grit overall. First-year students (M = 12.45, SD = 2.31, n = 60) and final-year students (M = 13.82, SD = 2.15, n = 60) showed different levels of Consistency of Interest. Specifically, final-year students scored higher on Consistency of Interest (M = 13.82, SD = 2.15) compared to first-year students (M = 12.45, SD = 2.31), suggesting that students may develop greater consistency in their interests as they progress through their degree.</p>
 </blockquote>
 </section></section>
 <section>
@@ -2673,10 +2690,10 @@ Gordon Wright
 </ul>
 <p><strong>RStudio Exercise:</strong></p>
 <ul>
-<li>Section 3-4: Descriptives &amp; Visualisation</li>
-<li>Section 5-6: APA Write-Up &amp; Reflection</li>
+<li>Section 4: Descriptives &amp; Visualisation</li>
+<li>Section 5: APA Write-Up &amp; Reflection</li>
 </ul>
-<countdown-timer id="timer_5032cd817666936fef191b8132026a44fb11dcde" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<countdown-timer id="timer_260c287740e81c4f8501ce814d00cfc59d4a669f" minutes="15" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 </section></section>
 <section>
@@ -2762,7 +2779,7 @@ Gordon Wright
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../assets/images/GoldLogo.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p>GoldPsychR - 4-Week Intensive</p>
+<p>GoldPsychR - Lab 1</p>
 </div>
 </div></div>
 

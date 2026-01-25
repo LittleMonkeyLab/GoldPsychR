@@ -98,6 +98,7 @@
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="part-slides.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -467,7 +468,7 @@
   // Document level settings ----
 
   // Determine if we need to install R packages
-  globalThis.qwebrInstallRPackagesList = ['readr'];
+  globalThis.qwebrInstallRPackagesList = [];
 
   // Specify possible locations to search for the repository
   globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -489,7 +490,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"library(readr)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# The URL where our data lives\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\n\n# Load it!\ndata <- read_csv(data_url, show_col_types = FALSE)","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\nhead(data)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\nstr(data)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\ndim(data)","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\n# Access the group column\ndata$group","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)  # Load the package\n# Now read_csv() works","id":7,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-7","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qwebrCellDetails = [{"code":"# The URL where our data lives\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\n\n# Load it! (Using base R for WebR compatibility)\ndata <- read.csv(data_url, stringsAsFactors = FALSE)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\nhead(data)","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\nstr(data)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\ndim(data)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Access the Study_Year column\ndata$Study_Year","id":5,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-5","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)  # Load the package\n# Now read_csv() works","id":6,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-6","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
   </script>
   <script type="module">
@@ -2046,7 +2047,7 @@ Gordon Wright
 </section>
 <section id="our-dataset" class="slide level2">
 <h2>Our Dataset</h2>
-<p>We have <strong>Big Five personality data</strong> from a training study:</p>
+<p>We have <strong>Grit Scale data</strong> from university students:</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -2056,72 +2057,70 @@ Gordon Wright
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>id</code></td>
+<td><code>ID</code></td>
 <td>Participant ID</td>
 </tr>
 <tr class="even">
-<td><code>group</code></td>
-<td>control or training</td>
+<td><code>Age</code>, <code>Gender</code></td>
+<td>Demographics</td>
 </tr>
 <tr class="odd">
-<td><code>time</code></td>
-<td>pre or post</td>
+<td><code>Study_Year</code></td>
+<td>First Year (1) or Final Year (2)</td>
 </tr>
 <tr class="even">
-<td><code>p1</code>-<code>p5</code></td>
-<td>Personality items (1-5 scale)</td>
+<td><code>G1</code>-<code>G8</code></td>
+<td>Grit Scale items (1-5 scale)</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="loading-packages" class="slide level2">
 <h2>Loading Packages</h2>
-<p>Before loading data, we need the <code>readr</code> package:</p>
-<div id="qwebr-insertion-location-1"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>In RStudio Server, you’ll use <code>read_csv()</code> from the <code>readr</code> package. For WebR slides, we use base R’s <code>read.csv()</code> for better compatibility.</p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Why readr?</strong></p>
+<p><strong>Note for RStudio</strong></p>
 </div>
 <div class="callout-content">
-<p><code>read_csv()</code> from readr is faster and creates tidier output than base R’s <code>read.csv()</code>.</p>
+<p>In your RStudio notebook, use <code>read_csv()</code> from <code>readr</code> - it’s faster and creates tidier output. The slides use <code>read.csv()</code> because it works more reliably in WebR.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="loading-from-a-url" class="slide level2">
 <h2>Loading from a URL</h2>
-<p>Data can be loaded directly from the internet:</p>
-<div id="qwebr-insertion-location-2"></div>
+<p>Data can be loaded directly from the internet. For WebR, we’ll use base R’s <code>read.csv()</code>:</p>
+<div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="inspecting-head" class="slide level2">
 <h2>Inspecting: head()</h2>
 <p><code>head()</code> shows the first few rows:</p>
-<div id="qwebr-insertion-location-3"></div>
+<div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="inspecting-str" class="slide level2">
 <h2>Inspecting: str()</h2>
 <p><code>str()</code> shows the <strong>structure</strong> - column names and types:</p>
-<div id="qwebr-insertion-location-4"></div>
+<div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="inspecting-dim" class="slide level2">
 <h2>Inspecting: dim()</h2>
 <p><code>dim()</code> tells you <strong>rows</strong> and <strong>columns</strong>:</p>
-<div id="qwebr-insertion-location-5"></div>
+<div id="qwebr-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>How many participants? How many variables?</p>
 </section>
 <section id="accessing-columns" class="slide level2">
 <h2>Accessing Columns</h2>
 <p>Use <code>$</code> to access a single column:</p>
-<div id="qwebr-insertion-location-6"></div>
+<div id="qwebr-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="common-error-function-not-found" class="slide level2">
@@ -2129,7 +2128,7 @@ Gordon Wright
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">read_csv</span>(<span class="st">"data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Error: could not find function "read_csv"</code></pre>
 <p><strong>Fix:</strong> Load the package first!</p>
-<div id="qwebr-insertion-location-7"></div>
+<div id="qwebr-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary-part-2" class="slide level2">
@@ -2144,8 +2143,8 @@ Gordon Wright
 </section>
 <section id="now-practice" class="slide level2">
 <h2>Now Practice!</h2>
-<p>Scroll down to practice loading and inspecting data.</p>
-<countdown-timer id="timer_b8e1cfa5a93e8262bf83c2d6bf30d86e29431ada" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<p>Open the activity page for Part 2 and practice loading and inspecting data.</p>
+<countdown-timer id="timer_697d6828e6c74e7f5aba5253bd583a5f1f133b37" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="true" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">

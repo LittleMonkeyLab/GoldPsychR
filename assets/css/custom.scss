@@ -58,7 +58,8 @@ $code-color: $gold-dark;
 }
 
 .navbar-logo {
-  max-height: 80px;  // default is around 30-40px
+  max-height: 80px;  // reasonable size for navbar
+  width: auto;
 }
 
 // Content styling

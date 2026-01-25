@@ -1,6 +1,6 @@
 ---
 title: "Lab 1: Descriptive Statistics"
-subtitle: "Personality & The Big Five"
+subtitle: "Grit & The Short Grit Scale"
 author: "YOUR NAME HERE"
 date: today
 format:
@@ -27,38 +27,109 @@ library(ggplot2)
 
 # Introduction
 
-In this lab, you will analyse Big Five personality data to practice:
+In this lab, you will analyse Grit Scale data to practice:
 
 - Loading and inspecting data
 - Reverse-scoring questionnaire items
+- Calculating subscale scores
 - Calculating descriptive statistics
 - Creating visualisations
 - Writing APA-style results
 
 ::: {.callout-important}
-## Before You Start
+## How This Lab Works: Watch → Try → Do
 
-1. Replace "YOUR NAME HERE" in the YAML header with your name
-2. Run each code chunk and complete the exercises
-3. Render to HTML when finished
+Every part follows the same **3-step cycle**:
 
-The data will be downloaded automatically from GitHub when you run the first code chunk.
+1. **Watch** - Follow along with the instructor slides
+2. **Try** - Practice with interactive code on the activity page
+3. **Do** - Complete exercises in this notebook (that's this file!)
+
+You'll work through this notebook across all 5 parts. Let's start with your first task!
 :::
+
+---
+
+# Your First Task: Change Your Name and Render
 
 ::: {.callout-note}
-## Cycling with Slides
-
-This exercise is designed to be completed **alongside** the Lab 1 slides:
-
-| Slides Part | Exercise Section |
-|--------------|------------------|
-| Part 2: Loading Data | Section 1: Load and Inspect Data |
-| Part 3: Reverse Scoring | Section 2: Reverse Scoring |
-| Part 4: Analysis | Sections 3-4: Descriptives & Visualisation |
-| Part 5: Write-Up | Sections 5-6: APA Write-Up & Reflection |
+## Slides Part 1
+Complete this task during **Part 1: What is R?** practice time.
 :::
 
-# Load and Inspect Data
+## Step 1: Find Your Name
+
+Look at the **very top** of this file (lines 1-5). You'll see:
+
+```yaml
+---
+title: "Lab 1: Descriptive Statistics"
+subtitle: "Grit & The Short Grit Scale"
+author: "YOUR NAME HERE"
+date: today
+```
+
+**Find line 4** where it says `author: "YOUR NAME HERE"`
+
+## Step 2: Replace with Your Name
+
+1. **Click** on `"YOUR NAME HERE"` 
+2. **Type** your actual name (keep the quotation marks!)
+3. For example: `author: "Jane Smith"` or `author: "Alex Johnson"`
+
+## Step 3: Render Your Notebook
+
+1. **Look at the top toolbar** in RStudio Server
+2. **Find the Render button** - it looks like a knitting needle 🧶
+3. **Click the Render button**
+4. Wait a few seconds... RStudio will process your file
+5. When it's done, a **preview window** will open showing your rendered HTML document
+6. **Check the top** - you should see your name in the document header!
+
+::: {.callout-success}
+## Success!
+
+If you see your name in the rendered HTML document, **congratulations!** You've just:
+- ✅ Edited a Quarto document
+- ✅ Rendered it to HTML
+- ✅ Created your first output file
+
+This is exactly how you'll work throughout the lab. Make changes → Render → See results!
+:::
+
+**What happened?** The Render button converted your `.qmd` file into a beautiful HTML document. Every time you make changes and render, you create a new version with your latest work. This is how you'll submit your assignments!
+
+---
+
+# Part 1: Setup and Overview
+
+::: {.callout-note}
+## Slides Part 1
+Continue with this section during **Part 1: What is R?** practice time.
+:::
+
+## About the Grit Scale
+
+The Short Grit Scale (Grit-S) measures trait-level perseverance and passion for long-term goals. It has 8 items that form two subscales:
+
+- **Consistency of Interest** (4 items: G1, G3, G5, G6) - measures ability to maintain interest
+- **Perseverance of Effort** (4 items: G2, G4, G7, G8) - measures ability to work hard despite setbacks
+
+**Important**: Items G1, G3, G5, and G6 are reverse-scored.
+
+::: {.callout-note}
+## Source Article
+
+Want to learn more about the Grit Scale? [Read the original research article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
+:::
+
+Write a brief overview of what you expect to find in this analysis:
+
+**[YOUR BRIEF OVERVIEW - 2-3 sentences about what you'll be analyzing]**
+
+---
+
+# Part 2: Load and Inspect Data
 
 ::: {.callout-note}
 ## Slides Part 2
@@ -70,9 +141,9 @@ Complete this section during **Part 2: Loading Data** practice time.
 ```{r}
 #| label: load-data
 
-# Load the personality data from GitHub
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+# Load the Grit Scale data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+grit_data <- read_csv(data_url, show_col_types = FALSE)
 ```
 
 ## Inspect the Data
@@ -81,43 +152,53 @@ data <- read_csv(data_url, show_col_types = FALSE)
 #| label: inspect-head
 
 # View the first 6 rows
-head(data)
+head(grit_data)
 ```
 
 ```{r}
 #| label: inspect-structure
 
 # Check the structure
-str(data)
+str(grit_data)
 ```
 
 ```{r}
 #| label: inspect-dimensions
 
 # Check dimensions
-dim(data)
+dim(grit_data)
+```
+
+```{r}
+#| label: inspect-summary
+
+# Get summary statistics
+summary(grit_data)
 ```
 
 ::: {.callout-note}
-## Exercise 1.1
+## Exercise 2.1
 
 Answer the following questions based on your inspection:
 
 1. How many participants are in the dataset? **[YOUR ANSWER]**
 2. How many variables are there? **[YOUR ANSWER]**
-3. What are the two levels of the `group` variable? **[YOUR ANSWER]**
+3. What are the two levels of the `Study_Year` variable? **[YOUR ANSWER]**
+4. What is the range of values for the Grit items (G1-G8)? **[YOUR ANSWER]**
 :::
 
-# Reverse Scoring
+---
+
+# Part 3: Reverse Scoring
 
 ::: {.callout-note}
 ## Slides Part 3
 Complete this section during **Part 3: Reverse Scoring** practice time.
 :::
 
-## Understanding the Items
+## Understanding Reverse-Scored Items
 
-Items `p4` and `p5` are negatively worded and need to be reverse-scored before creating a total score.
+Items G1, G3, G5, and G6 are reverse-scored. These items measure lack of consistency, so we reverse them to align with the other items.
 
 For a 1-5 Likert scale, we use the formula: `reversed = 6 - original`
 
@@ -127,49 +208,74 @@ For a 1-5 Likert scale, we use the formula: `reversed = 6 - original`
 #| label: reverse-score
 #| code-annotations: below
 
-# Reverse-score items p4 and p5
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
+# Reverse-score items G1, G3, G5, G6
+grit_data$rev_G1 <- 6 - grit_data$G1
+grit_data$rev_G3 <- 6 - grit_data$G3
+grit_data$rev_G5 <- 6 - grit_data$G5
+grit_data$rev_G6 <- 6 - grit_data$G6
 
 # Verify the reversal worked correctly
-head(data[, c("p4", "rev_p4", "p5", "rev_p5")])
+head(grit_data[, c("G1", "rev_G1", "G3", "rev_G3", "G5", "rev_G5", "G6", "rev_G6")])
 ```
 
-1. Apply the reverse formula to p4
-2. Apply the reverse formula to p5
+1. Apply the reverse formula to G1
+2. Apply the reverse formula to G3
+3. Apply the reverse formula to G5
+4. Apply the reverse formula to G6
 
 ::: {.callout-note}
-## Exercise 2.1
+## Exercise 3.1
 
 Look at the output above. For the first participant:
 
-- Original p4 score: **[YOUR ANSWER]**
-- Reversed p4 score: **[YOUR ANSWER]**
+- Original G1 score: **[YOUR ANSWER]**
+- Reversed G1 score: **[YOUR ANSWER]**
 - Do they sum to 6? **[YOUR ANSWER]**
 :::
 
-## Create Total Score
+## Calculate Subscale Scores
 
 ```{r}
-#| label: total-score
+#| label: calculate-subscales
 #| code-annotations: below
 
-# Create personality total score
-# Sum all items, using REVERSED versions for p4 and p5
-data$pers_score <- data$p1 + data$p2 + data$p3 +
-                   data$rev_p4 + data$rev_p5
+# Consistency of Interest subscale (use REVERSED versions of G1, G3, G5, G6)
+grit_data$consistency_interest <- (grit_data$rev_G1 + grit_data$rev_G3 + 
+                                    grit_data$rev_G5 + grit_data$rev_G6) / 4
 
-# View the new column
-head(data[, c("group", "time", "pers_score")])
+# Perseverance of Effort subscale (forward-scored items G2, G4, G7, G8)
+grit_data$perseverance_effort <- (grit_data$G2 + grit_data$G4 + 
+                                  grit_data$G7 + grit_data$G8) / 4
+
+# Total Grit score (average of all 8 items after reverse-scoring)
+grit_data$total_grit <- (grit_data$rev_G1 + grit_data$rev_G3 + grit_data$rev_G5 + grit_data$rev_G6 +
+                         grit_data$G2 + grit_data$G4 + grit_data$G7 + grit_data$G8) / 8
+
+# View the new columns
+head(grit_data[, c("Study_Year", "consistency_interest", "perseverance_effort", "total_grit")])
 ```
 
-1. Sum items p1, p2, p3 plus the reversed p4 and p5
-
-# Descriptive Statistics
+1. Calculate Consistency of Interest as mean of reversed G1, G3, G5, G6
+2. Calculate Perseverance of Effort as mean of G2, G4, G7, G8
+3. Calculate Total Grit as mean of all 8 items (after reverse-scoring)
 
 ::: {.callout-note}
-## Slides Part 4 (Part 1)
-Complete this section during **Part 4: Analysis** practice time.
+## Exercise 3.2
+
+Check your calculations:
+
+- What is the range of possible scores for each subscale? **[YOUR ANSWER]**
+- What is the range for total grit? **[YOUR ANSWER]**
+- Do the subscales appear to be on the same scale? **[YOUR ANSWER]**
+:::
+
+---
+
+# Part 4: Descriptive Statistics and Visualisation
+
+::: {.callout-note}
+## Slides Part 4
+Complete this section during **Part 4: Descriptives & Visualisation** practice time.
 :::
 
 ## Overall Descriptives
@@ -177,149 +283,205 @@ Complete this section during **Part 4: Analysis** practice time.
 ```{r}
 #| label: overall-descriptives
 
-# Calculate overall mean, SD, and n
-mean_overall <- mean(data$pers_score, na.rm = TRUE)
-sd_overall <- sd(data$pers_score, na.rm = TRUE)
-n_overall <- length(data$pers_score)
+# Calculate overall mean, SD, and n for each scale
+cat("=== Consistency of Interest ===\n")
+cat("M =", round(mean(grit_data$consistency_interest, na.rm = TRUE), 2), "\n")
+cat("SD =", round(sd(grit_data$consistency_interest, na.rm = TRUE), 2), "\n")
+cat("n =", length(grit_data$consistency_interest), "\n\n")
 
-# Display results
-cat("Overall Statistics:\n")
-cat("M =", round(mean_overall, 2), "\n")
-cat("SD =", round(sd_overall, 2), "\n")
-cat("n =", n_overall, "\n")
+cat("=== Perseverance of Effort ===\n")
+cat("M =", round(mean(grit_data$perseverance_effort, na.rm = TRUE), 2), "\n")
+cat("SD =", round(sd(grit_data$perseverance_effort, na.rm = TRUE), 2), "\n")
+cat("n =", length(grit_data$perseverance_effort), "\n\n")
+
+cat("=== Total Grit ===\n")
+cat("M =", round(mean(grit_data$total_grit, na.rm = TRUE), 2), "\n")
+cat("SD =", round(sd(grit_data$total_grit, na.rm = TRUE), 2), "\n")
+cat("n =", length(grit_data$total_grit), "\n")
 ```
 
-## Descriptives by Group and Time
+## Descriptives by Study Year
 
 ```{r}
 #| label: grouped-descriptives
 #| code-annotations: below
 
-# Calculate descriptives by group and time
-data_summary <- data |>
-  group_by(group, time) |>
+# Calculate descriptives by Study_Year
+grit_summary <- grit_data |>
+  group_by(Study_Year) |>
   summarise(
-    mean = mean(pers_score, na.rm = TRUE),
-    sd = sd(pers_score, na.rm = TRUE),
     n = n(),
+    consistency_M = mean(consistency_interest, na.rm = TRUE),
+    consistency_SD = sd(consistency_interest, na.rm = TRUE),
+    perseverance_M = mean(perseverance_effort, na.rm = TRUE),
+    perseverance_SD = sd(perseverance_effort, na.rm = TRUE),
+    total_M = mean(total_grit, na.rm = TRUE),
+    total_SD = sd(total_grit, na.rm = TRUE),
     .groups = "drop"
   )
 
 # Display the summary table
-data_summary
+grit_summary
 ```
 
 1. Pipe data forward
-2. Group by both factors
-3. Calculate mean, SD, and n for each group
+2. Group by Study_Year
+3. Calculate mean, SD, and n for each subscale and total
 4. Remove grouping structure
 
 ```{r}
 #| label: formatted-table
 
 # Create a nicely formatted table
-knitr::kable(data_summary,
+knitr::kable(grit_summary,
              digits = 2,
-             caption = "Descriptive Statistics by Group and Time",
-             col.names = c("Group", "Time", "Mean", "SD", "n"))
+             caption = "Descriptive Statistics by Study Year",
+             col.names = c("Study Year", "n", "Consistency M", "Consistency SD", 
+                          "Perseverance M", "Perseverance SD", "Total M", "Total SD"))
 ```
-
-::: {.callout-note}
-## Exercise 3.1
-
-Use the summary table to answer:
-
-1. Which group-time combination has the highest mean? **[YOUR ANSWER]**
-2. Which group-time combination has the lowest mean? **[YOUR ANSWER]**
-3. Are the sample sizes equal across groups? **[YOUR ANSWER]**
-:::
-
-# Visualisation
-
-::: {.callout-note}
-## Slides Part 4 (Part 2)
-Complete this section during **Part 4: Analysis** practice time.
-:::
-
-## Boxplot by Group and Time
-
-```{r}
-#| label: boxplot
-#| fig-width: 8
-#| fig-height: 5
-#| code-annotations: below
-
-# Create a boxplot
-ggplot(data, aes(x = group, y = pers_score, fill = time)) +
-  geom_boxplot(alpha = 0.7) +
-  theme_minimal() +
-  labs(
-    title = "Personality Scores by Group and Time",
-    x = "Group",
-    y = "Personality Score",
-    fill = "Time"
-  )
-```
-
-1. Set up plot with aesthetics
-2. Add boxplot geometry
-3. Apply minimal theme
-4. Add informative labels
 
 ::: {.callout-note}
 ## Exercise 4.1
 
-Describe what you see in the boxplot:
+Use the summary table to answer:
 
-1. Do the groups appear similar at baseline (pre)? **[YOUR ANSWER]**
-2. Which group shows more change from pre to post? **[YOUR ANSWER]**
-3. Are there any outliers visible? **[YOUR ANSWER]**
+1. Which study year has higher Consistency of Interest? **[YOUR ANSWER]**
+2. Which study year has higher Perseverance of Effort? **[YOUR ANSWER]**
+3. Are the sample sizes equal? **[YOUR ANSWER]**
 :::
 
-## Your Custom Visualisation
-
-Create your own visualisation below. You might try:
-
-- A histogram of the total scores
-- Separate boxplots for each time point
-- A bar chart of means with error bars
+## Boxplots
 
 ```{r}
-#| label: custom-plot
+#| label: boxplot-consistency
 #| fig-width: 8
 #| fig-height: 5
+#| code-annotations: below
 
-# YOUR CODE HERE
-# Create your own visualisation
-
-
+# Create a boxplot for Consistency of Interest
+ggplot(grit_data, aes(x = factor(Study_Year), y = consistency_interest, fill = factor(Study_Year))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_x_discrete(labels = c("1" = "First Year", "2" = "Final Year")) +
+  scale_fill_manual(values = c("#9B1B30", "#2E7D32"), guide = "none") +
+  theme_minimal() +
+  labs(
+    title = "Consistency of Interest by Study Year",
+    x = "Study Year",
+    y = "Consistency of Interest Score"
+  )
 ```
 
-# APA Write-Up
+1. Set up plot with aesthetics (x = Study_Year, y = consistency_interest)
+2. Add boxplot geometry
+3. Customize labels and colors
+4. Apply minimal theme
+5. Add informative labels
+
+```{r}
+#| label: boxplot-perseverance
+#| fig-width: 8
+#| fig-height: 5
+#| code-annotations: below
+
+# Create a boxplot for Perseverance of Effort
+ggplot(grit_data, aes(x = factor(Study_Year), y = perseverance_effort, fill = factor(Study_Year))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_x_discrete(labels = c("1" = "First Year", "2" = "Final Year")) +
+  scale_fill_manual(values = c("#9B1B30", "#2E7D32"), guide = "none") +
+  theme_minimal() +
+  labs(
+    title = "Perseverance of Effort by Study Year",
+    x = "Study Year",
+    y = "Perseverance of Effort Score"
+  )
+```
+
+```{r}
+#| label: boxplot-total
+#| fig-width: 8
+#| fig-height: 5
+#| code-annotations: below
+
+# Create a boxplot for Total Grit
+ggplot(grit_data, aes(x = factor(Study_Year), y = total_grit, fill = factor(Study_Year))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_x_discrete(labels = c("1" = "First Year", "2" = "Final Year")) +
+  scale_fill_manual(values = c("#9B1B30", "#2E7D32"), guide = "none") +
+  theme_minimal() +
+  labs(
+    title = "Total Grit by Study Year",
+    x = "Study Year",
+    y = "Total Grit Score"
+  )
+```
+
+::: {.callout-note}
+## Exercise 4.2
+
+Describe what you see in the boxplots:
+
+1. Do the groups appear similar or different for Consistency of Interest? **[YOUR ANSWER]**
+2. Do the groups appear similar or different for Perseverance of Effort? **[YOUR ANSWER]**
+3. Are there any outliers visible? **[YOUR ANSWER]**
+4. Which subscale shows the largest difference between groups? **[YOUR ANSWER]**
+:::
+
+---
+
+# Part 5: APA Write-Up and Development
 
 ::: {.callout-note}
 ## Slides Part 5
-Complete this section during **Part 5: Write-Up** practice time.
+Complete this section during **Part 5: APA Write-Up** practice time.
 :::
 
-## Write Your Results
+## Write Your Results Paragraph
 
-Using the summary statistics from Section 3, write an APA-style paragraph describing the descriptive statistics.
+Using the summary statistics from Section 4, write an APA-style paragraph describing the descriptive statistics.
 
 ::: {.callout-tip}
 ## Template
 
-Participants reported [description] levels of personality overall (M = ___, SD = ___). At baseline, the control group (M = ___, SD = ___, n = ___) and training group (M = ___, SD = ___, n = ___) were [similar/different]. Following the intervention, the control group showed [description of change] (M = ___, SD = ___), whereas the training group showed [description of change] (M = ___, SD = ___). These descriptive patterns suggest [your interpretation].
+Participants reported [description] levels of grit overall. First-year students (M = ___, SD = ___, n = ___) showed [description] compared to final-year students (M = ___, SD = ___, n = ___) on Consistency of Interest. For Perseverance of Effort, first-year students (M = ___, SD = ___) [description] compared to final-year students (M = ___, SD = ___). Overall grit scores were [description] for first-year students (M = ___, SD = ___) compared to final-year students (M = ___, SD = ___). These descriptive patterns suggest [your interpretation].
 :::
 
 **YOUR WRITE-UP HERE:**
 
-[Write your APA-style paragraph here, filling in the statistics from your analysis]
+[Write your APA-style paragraph here, filling in the statistics from your analysis above]
+
+---
+
+## Proactive Coding Challenge
+
+Now try creating your own analysis. You might:
+
+- Calculate descriptives by Gender
+- Create a combined plot showing both subscales
+- Calculate the difference between subscales for each participant
+- Explore the relationship between age and grit scores
+
+```{r}
+#| label: proactive-analysis
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE HERE
+# Create your own analysis or visualization
+# Be creative! What else might be interesting to explore?
+
+
+```
+
+**Describe what you did and what you found:**
+
+[YOUR DESCRIPTION OF YOUR PROACTIVE ANALYSIS]
+
+---
 
 # Reflection
 
 ::: {.callout-note}
-## Exercise 6.1
+## Exercise 5.1
 
 Answer these reflection questions:
 
@@ -353,9 +515,9 @@ sessionInfo()
 Before submitting, ensure you have:
 
 - [ ] Replaced "YOUR NAME HERE" with your name
-- [ ] Completed all exercises
+- [ ] Completed all exercises (2.1, 3.1, 3.2, 4.1, 4.2, 5.1)
 - [ ] Written the APA results paragraph
-- [ ] Created a custom visualisation
+- [ ] Created a proactive analysis or visualization
 - [ ] Answered the reflection questions
 - [ ] Rendered to HTML successfully
 :::

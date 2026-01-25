@@ -98,6 +98,7 @@
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="part-slides.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -467,7 +468,7 @@
   // Document level settings ----
 
   // Determine if we need to install R packages
-  globalThis.qwebrInstallRPackagesList = ['readr'];
+  globalThis.qwebrInstallRPackagesList = [];
 
   // Specify possible locations to search for the repository
   globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -489,7 +490,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"library(readr)\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\n# Look at p4 values\nhead(data$p4)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\n# Reverse score p4 and p5\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\n\n# Check it worked\nhead(data[, c(\"p4\", \"rev_p4\")])","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\ndata$rev_p4 <- 6 - data$p4\n\n# Check: do they sum to 6?\nhead(data$p4 + data$rev_p4)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\n\n# Create total score\ndata$pers_score <- data$p1 + data$p2 + data$p3 +\n                   data$rev_p4 + data$rev_p5\n\nhead(data$pers_score)","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qwebrCellDetails = [{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Look at G1 values\nhead(data$G1)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse score G1, G3, G5, and G6\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Check it worked\nhead(data[, c(\"G1\", \"rev_G1\")])","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\ndata$rev_G1 <- 6 - data$G1\n\n# Check: do they sum to 6?\nhead(data$G1 + data$rev_G1)","id":3,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-3","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"data_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Consistency of Interest (G1, G3, G5, G6 - all reversed)\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\n\n# Perseverance of Effort (G2, G4, G7, G8 - no reversing needed)\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\n\nhead(data[, c(\"consistency\", \"perseverance\")])","id":4,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-4","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
   </script>
   <script type="module">
@@ -2110,7 +2111,7 @@ Gordon Wright
 </section>
 <section id="in-our-data" class="slide level2">
 <h2>In Our Data</h2>
-<p>Items <code>p4</code> and <code>p5</code> are negatively worded.</p>
+<p>Items <code>G1</code>, <code>G3</code>, <code>G5</code>, and <code>G6</code> are negatively worded and need reverse scoring.</p>
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -2125,19 +2126,18 @@ Gordon Wright
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="creating-a-total-score" class="slide level2">
-<h2>Creating a Total Score</h2>
-<p>Sum <strong>all items</strong>, using the <strong>reversed</strong> versions:</p>
+<section id="creating-subscale-scores" class="slide level2">
+<h2>Creating Subscale Scores</h2>
+<p>The Grit Scale has two subscales. Sum items using <strong>reversed</strong> versions:</p>
 <div id="qwebr-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="common-mistake" class="slide level2">
 <h2>Common Mistake!</h2>
 <p>Using the <strong>original</strong> items instead of <strong>reversed</strong>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># WRONG! Using p4 instead of rev_p4</span></span>
-<span id="cb1-2"><a></a>data<span class="sc">$</span>wrong_score <span class="ot">&lt;-</span> data<span class="sc">$</span>p1 <span class="sc">+</span> data<span class="sc">$</span>p2 <span class="sc">+</span> data<span class="sc">$</span>p3 <span class="sc">+</span></span>
-<span id="cb1-3"><a></a>                    data<span class="sc">$</span>p4 <span class="sc">+</span> data<span class="sc">$</span>p5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Always double-check you’re using <code>rev_</code> versions!</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># WRONG! Using G1 instead of rev_G1</span></span>
+<span id="cb1-2"><a></a>data<span class="sc">$</span>wrong_consistency <span class="ot">&lt;-</span> data<span class="sc">$</span>G1 <span class="sc">+</span> data<span class="sc">$</span>G3 <span class="sc">+</span> data<span class="sc">$</span>G5 <span class="sc">+</span> data<span class="sc">$</span>G6</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Always double-check you’re using <code>rev_</code> versions for G1, G3, G5, and G6!</p>
 </section>
 <section id="summary-part-3" class="slide level2">
 <h2>Summary: Part 3</h2>
@@ -2146,13 +2146,13 @@ Gordon Wright
 <li>Why we reverse-score items</li>
 <li>The formula: <code>6 - original</code> (for 1-5 scale)</li>
 <li>How to create reversed columns</li>
-<li>How to create a total score</li>
+<li>How to create subscale scores (Consistency of Interest, Perseverance of Effort)</li>
 </ul>
 </section>
 <section id="now-practice" class="slide level2">
 <h2>Now Practice!</h2>
-<p>Scroll down to practice reverse scoring.</p>
-<countdown-timer id="timer_c13f3f443e5707317cb6c226ffbb1f0c770921db" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<p>Open the activity page for Part 3 and practice reverse scoring.</p>
+<countdown-timer id="timer_9d206ffc6a22f742d8b7c98cada511cc19f024b9" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="true" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">

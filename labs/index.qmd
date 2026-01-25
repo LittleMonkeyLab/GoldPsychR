@@ -8,19 +8,16 @@ Each week's lab includes multiple resources. Use them in order during lab sessio
 
 | Week | Topic | Materials |
 |:----:|-------|-----------|
-| 1 | Descriptive Statistics | [Lab Overview](lab01.qmd) |
-| 2 | Comparing Groups (t-tests) | [Lab Overview](lab02.qmd) |
-| 3 | ANOVA | [Lab Overview](lab03.qmd) |
-| 4 | Correlation & Regression | [Lab Overview](lab04.qmd) |
+| 1 | Descriptive Statistics | Lab Overview |
 
 # Learning Pathway
 
 For each lab, follow this sequence:
 
-1. **Slides** - Watch the instructor demo (opens in new tab)
-2. **WebR Practice** - Try it yourself in the browser
-3. **Exercise** - Apply skills in RStudio and submit
-4. **Follow-On** - Extra practice with different data
+1. ![](/assets/images/svg/slides.svg){width=20} **Slides** - Watch the instructor demo (opens in new tab)
+2. ![](/assets/images/svg/play.svg){width=20} **WebR Practice** - Try it yourself in the browser
+3. ![](/assets/images/svg/laptop.svg){width=20} **Exercise** - Apply skills in RStudio and submit
+4. ![](/assets/images/svg/document.svg){width=20} **Follow-On** - Extra practice with different data
 
 ::: {.callout-tip}
 ## Tip: Multi-Tab Workflow

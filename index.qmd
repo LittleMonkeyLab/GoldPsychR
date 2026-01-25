@@ -1,11 +1,11 @@
 ---
 title: "GoldPsychR"
-subtitle: "4-Week Intensive R Labs for Psychology"
+subtitle: "R Labs for Psychology"
 ---
 
 # Welcome
 
-This is the course hub for **PS51020A R Labs**, a 4-week intensive programme teaching R for psychological research at Goldsmiths, University of London.
+This is the course hub for **PS51020A R Labs**, teaching R for psychological research at Goldsmiths, University of London.
 
 ::: {.callout-tip}
 ## Getting Started
@@ -19,6 +19,8 @@ If this is your first time here:
 
 # Course Schedule
 
+**Lab Times: 13:00 - 15:00**
+
 Each week follows the same learning pathway:
 
 **Slides** → **WebR Practice** → **Exercise** → **Follow-On**
@@ -26,9 +28,6 @@ Each week follows the same learning pathway:
 | Week | Topic | Resources |
 |:----:|-------|-----------|
 | 1 | **Descriptive Statistics** | [Slides](slides/lab1-slides.qmd){target="_blank"} • [WebR](chapters/lab1-webr.qmd) • [Exercise](templates/lab1-exercise.qmd) • [Follow-On](followon/lab1-followon.qmd) |
-| 2 | **Comparing Groups (t-tests)** | [Slides](slides/lab2-slides.qmd){target="_blank"} • [WebR](chapters/lab2-webr.qmd) • [Exercise](templates/lab2-exercise.qmd) • [Follow-On](followon/lab2-followon.qmd) |
-| 3 | **ANOVA** | [Slides](slides/lab3-slides.qmd){target="_blank"} • [WebR](chapters/lab3-webr.qmd) • [Exercise](templates/lab3-exercise.qmd) • [Follow-On](followon/lab3-followon.qmd) |
-| 4 | **Correlation & Regression** | [Slides](slides/lab4-slides.qmd){target="_blank"} • [WebR](chapters/lab4-webr.qmd) • [Exercise](templates/lab4-exercise.qmd) • [Follow-On](followon/lab4-followon.qmd) |
 
 # Learning Pathway
 
@@ -37,6 +36,8 @@ Key techniques are taught in a research context through three core stages:
 :::: {.columns}
 ::: {.column width="33%"}
 ::: {.card .border .p-3}
+![](/assets/images/svg/slides.svg){width=32 style="float: left; margin-right: 10px;"}
+
 **Stage 1: Instructor Demo**
 
 *Watch & Learn*
@@ -46,6 +47,8 @@ Live demonstration of R skills with real psychology data
 :::
 ::: {.column width="33%"}
 ::: {.card .border .p-3}
+![](/assets/images/svg/play.svg){width=32 style="float: left; margin-right: 10px;"}
+
 **Stage 2: WebR Practice**
 
 *Try in Browser*
@@ -55,6 +58,8 @@ Interactive practice with instant feedback - no installation needed
 :::
 ::: {.column width="33%"}
 ::: {.card .border .p-3}
+![](/assets/images/svg/laptop.svg){width=32 style="float: left; margin-right: 10px;"}
+
 **Stage 3: Exercise**
 
 *Work in RStudio*
@@ -66,8 +71,8 @@ Apply skills independently and submit your work
 
 **Additional Resources:**
 
-- **Follow-On Exercises** - Extra practice with different datasets to consolidate learning
-- **R Toolbox** - Reference guide organised by skill for quick lookup
+- ![](/assets/images/svg/document.svg){width=16} **Follow-On Exercises** - Extra practice with different datasets to consolidate learning
+- ![](/assets/images/svg/book.svg){width=16} **R Toolbox** - Reference guide organised by skill for quick lookup
 
 # Quick Links
 
@@ -75,31 +80,27 @@ Apply skills independently and submit your work
 ::: {.g-col-6}
 ### Learning Materials
 
-- [Lab Materials](labs/index.qmd) - Full lab worksheets
-- [WebR Practice](chapters/lab1-webr.qmd) - Interactive browser-based R
-- [Follow-On Exercises](followon/index.qmd) - Transfer practice
+- ![](/assets/images/svg/laptop.svg){width=16} [Lab Materials](labs/index.qmd) - Full lab worksheets
+- ![](/assets/images/svg/play.svg){width=16} [WebR Practice](chapters/lab1-webr.qmd) - Interactive browser-based R
+- ![](/assets/images/svg/document.svg){width=16} [Follow-On Exercises](followon/index.qmd) - Transfer practice
 :::
 
 ::: {.g-col-6}
 ### Reference
 
-- [R Toolbox](toolbox/index.qmd) - Code reference by topic
-- [R Handbook](handbook/r-handbook.qmd) - Comprehensive guide
-- [Troubleshooting](toolbox/troubleshooting.qmd) - Common errors & fixes
+- ![](/assets/images/svg/book.svg){width=16} [R Toolbox](toolbox/index.qmd) - Code reference by topic
+- ![](/assets/images/svg/book.svg){width=16} [R Handbook](handbook/r-handbook.qmd) - Comprehensive guide
+- ![](/assets/images/svg/help.svg){width=16} [Troubleshooting](toolbox/troubleshooting.qmd) - Common errors & fixes
 :::
 :::
 
 # What You'll Learn
 
-By the end of this programme, you will be able to:
+By the end of Lab 1, you will be able to:
 
 - Load, inspect, and clean data in R
 - Calculate descriptive statistics and reverse-score questionnaire items
 - Create publication-quality visualisations with ggplot2
-- Compare two groups using independent and paired t-tests
-- Compare multiple groups using one-way and factorial ANOVA
-- Run correlation and simple regression analyses
-- Calculate and interpret effect sizes (Cohen's d, eta-squared, R²)
 - Write APA-style results sections
 - Use Quarto for reproducible reports
 
@@ -117,3 +118,7 @@ By the end of this programme, you will be able to:
 ---
 
 **Course Lead**: Gordon Wright | **Email**: gordon@littlemonkeylab.com
+
+---
+
+*Made with 💛 using [R](https://posit.co/products/open-source/rstudio/?sid=1) and [Quarto](https://quarto.org) | A LittleMonkeyLab caper*

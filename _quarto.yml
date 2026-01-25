@@ -4,17 +4,21 @@ project:
   resources:
     - templates/*.qmd
     - followon/*.qmd
+    - downloads/
+    - assets/images/
   render:
     - "**/*.qmd"
     - "!templates/"
     - "!followon/"
+    - "!**/*-notebook.qmd"
+    - "!downloads/"
 
 website:
   title: "GoldPsychR"
   description: "R for Psychology at Goldsmiths"
   
   navbar:
-    logo: assets/images/GoldLogo.png
+    logo: assets/images/svg/goldpsychr-logo-animated.svg
     title: false
     background: "#9B1B30"
     foreground: "#FFFFFF"
@@ -25,8 +29,8 @@ website:
         href: labs/index.qmd
       - text: "R Toolbox"
         href: toolbox/index.qmd
-      - text: "Pedagogical Approach"
-        href: pedagogical.qmd
+      # - text: "Pedagogical Approach"
+      #   href: pedagogical.qmd
     right:
       - icon: github
         href: https://github.com/LittleMonkeyLab/GoldPsychR
@@ -34,14 +38,15 @@ website:
         href: https://psy909.gold.ac.uk/rstudioserver/
 
   sidebar:
-    header: "**GoldPsychR**"
-    tools:
-      - icon: github
-        menu:
-          - text: Source Code
-            href: https://github.com/LittleMonkeyLab/GoldPsychR
-          - text: Data Repository
-            href: https://github.com/LittleMonkeyLab/datarepo
+    # logo: assets/images/GoldLogo.png
+    # header: "**GoldPsychR**"
+    # tools:
+    #   - icon: github
+    #     menu:
+    #       - text: Source Code
+    #         href: https://github.com/LittleMonkeyLab/GoldPsychR
+    #       - text: Data Repository
+    #         href: https://github.com/LittleMonkeyLab/datarepo
     style: docked
     search: true
     contents:
@@ -64,45 +69,6 @@ website:
           #   href: followon/lab1-followon.qmd
           # - text: "Exercise Template"
           #   href: templates/lab1-exercise.qmd
-      
-      - section: "Lab 2: Comparing Groups (t-tests)"
-        contents:
-          - text: "Lab Materials"
-            href: labs/lab02.qmd
-          # - text: "Slides"
-          #   href: slides/lab2-slides.qmd
-          # - text: "WebR Practice"
-          #   href: chapters/lab2-webr.qmd
-          # - text: "Follow-On: Sleep & Performance"
-          #   href: followon/lab2-followon.qmd
-          # - text: "Exercise Template"
-          #   href: templates/lab2-exercise.qmd
-      
-      - section: "Lab 3: ANOVA"
-        contents:
-          - text: "Lab Materials"
-            href: labs/lab03.qmd
-          # - text: "Slides"
-          #   href: slides/lab3-slides.qmd
-          # - text: "WebR Practice"
-          #   href: chapters/lab3-webr.qmd
-          # - text: "Follow-On: Anxiety Treatment"
-          #   href: followon/lab3-followon.qmd
-          # - text: "Exercise Template"
-          #   href: templates/lab3-exercise.qmd
-      
-      - section: "Lab 4: Linear Models"
-        contents:
-          - text: "Lab Materials"
-            href: labs/lab04.qmd
-          # - text: "Slides"
-          #   href: slides/lab4-slides.qmd
-          # - text: "WebR Practice"
-          #   href: chapters/lab4-webr.qmd
-          # - text: "Follow-On: Study Habits"
-          #   href: followon/lab4-followon.qmd
-          # - text: "Exercise Template"
-          #   href: templates/lab4-exercise.qmd
       
       - text: "---"
       
@@ -133,23 +99,25 @@ website:
       
       - section: "Demos & Examples"
         contents:
-          - text: "Code Options"
-            href: demos/codeoptions-demo.qmd
-          - text: "Code Animation"
-            href: demos/revealjs-code-animation.qmd
-          - text: "WebExercises"
-            href: demos/webex_general.qmd
-          - text: "Explain Answers"
-            href: demos/webex_explain_these_answers.qmd
-          - text: "Embedded Slides"
-            href: demos/embedded_slides-demo.qmd
-          - text: "WebR Slides"
-            href: demos/webr_slides-demo.qmd
+          # - text: "Code Options"
+          #   href: demos/codeoptions-demo.qmd
+          # - text: "Code Animation"
+          #   href: demos/revealjs-code-animation.qmd
+          # - text: "WebExercises"
+          #   href: demos/webex_general.qmd
+          # - text: "Explain Answers"
+          #   href: demos/webex_explain_these_answers.qmd
+          # - text: "Embedded Slides"
+          #   href: demos/embedded_slides-demo.qmd
+          # - text: "WebR Slides"
+          #   href: demos/webr_slides-demo.qmd
+          - text: "Week 12 Data"
+            href: demos/week12-data.qmd
       
       - text: "---"
       
-      - href: pedagogical.qmd
-        text: Pedagogical Approach
+      # - href: pedagogical.qmd
+      #   text: Pedagogical Approach
       # - href: followon/index.qmd
       #   text: About Follow-Ons
 
@@ -157,9 +125,9 @@ website:
     left: |
       © 2026 Goldsmiths, University of London
     center: |
-      Crafted with 💛 using [R](https://posit.co/products/open-source/rstudio/?sid=1) and [Quarto](https://quarto.org)
+      Made with 💛 using [R](https://posit.co/products/open-source/rstudio/?sid=1) and [Quarto](https://quarto.org)
     right: |
-      [Report an issue](https://github.com/LittleMonkeyLab/GoldPsychR/issues)
+      A LittleMonkeyLab caper | [Report an issue](https://github.com/LittleMonkeyLab/GoldPsychR/issues)
 
 format:
   html:
@@ -183,7 +151,7 @@ filters:
   - webr
 
 webr:
-  packages: ['tidyverse', 'GoldPsychData']
+  packages: ['tidyverse']
   autoload-packages: false
   show-startup-message: false
   channel-type: "automatic"

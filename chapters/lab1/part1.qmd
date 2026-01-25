@@ -18,7 +18,13 @@ knitr::opts_chunk$set(echo = FALSE)
 Follow along with the slides below. You can advance slides with the arrow keys or click the arrows.
 
 ```{=html}
-<iframe src="part1-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+<div style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border: 1px solid #ccc; border-radius: 8px;">
+  <iframe
+    src="part1-slides.html"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+    allowfullscreen>
+  </iframe>
+</div>
 ```
 
 ::: {.callout-tip}
@@ -30,24 +36,26 @@ Click inside the slide area first, then use arrow keys to navigate.
 
 ## Try It Yourself
 
-Now practice what you just learned! Run each code cell below.
+Now practice what you just learned! The code cells below are **interactive** - you can edit them directly on this page.
 
 ::: {.callout-tip}
 ## How to Practice
-1. **Run the code** by clicking the "Run Code" button
-2. **Edit the code** - change numbers or add new lines, then run again
-3. **Copy to RStudio** - try the same code in your RStudio Server console to see it work there too!
+1. **Click "Run Code"** to execute the code and see the result
+2. **Edit the code directly** - click inside the code box, change numbers or add new lines, then click "Run Code" again
+3. **Experiment freely** - try different values, create your own variables, and see what happens!
+
+You're running R code right here in your browser - no need to switch to RStudio yet!
 :::
 
 ### Basic Calculations
 
-R works like a calculator. Try running this, then try changing the numbers:
+R works like a calculator. **Click "Run Code"** below, then **edit the numbers** and run again:
 
 ```{webr-r}
 1 + 1
 ```
 
-What about more complex maths?
+What about more complex maths? **Try changing the numbers** in this code:
 
 ```{webr-r}
 10 * 5 + 2
@@ -55,7 +63,7 @@ What about more complex maths?
 
 ### Creating Variables
 
-Use the assignment operator `<-` to store values. Try changing the values and see what happens:
+Use the assignment operator `<-` to store values. **Edit the values** below and see what happens:
 
 ```{webr-r}
 x <- 5
@@ -65,12 +73,12 @@ x + y
 
 ::: {.callout-note}
 ## Challenge
-Can you create a variable called `age` and set it to your age? Then create `next_year` that adds 1 to it?
+**Edit the code above** to create a variable called `age` and set it to your age. Then add a line to create `next_year` that adds 1 to it. Click "Run Code" to see your results!
 :::
 
 ### Creating Vectors
 
-A vector holds multiple values. Create one with `c()`. Try adding more numbers:
+A vector holds multiple values. Create one with `c()`. **Try adding more numbers** to the vector:
 
 ```{webr-r}
 scores <- c(4, 5, 3, 2, 5)
@@ -79,7 +87,7 @@ scores
 
 ### Using Functions
 
-Calculate descriptive statistics. Copy these to RStudio and try with your own data:
+Calculate descriptive statistics. **Edit the scores** in the code below and run again:
 
 ```{webr-r}
 scores <- c(4, 5, 3, 2, 5)
@@ -128,7 +136,11 @@ Check your understanding before moving on.
 
 ## Download Exercise
 
-Ready to practice in RStudio? Download the exercise file and open it in RStudio Server:
+Ready to practice in RStudio? Follow these steps carefully:
+
+### ![](/assets/images/svg/download.svg){width=24} Step 1: Download the File
+
+Click the button below to download the exercise notebook:
 
 ```{r}
 #| echo: false
@@ -141,6 +153,162 @@ downloadthis::download_file(
   class = "btn-lg"
 )
 ```
+
+::: {.callout-important}
+## Where Did It Go?
+
+The file `lab1-exercise.qmd` will download to your **Downloads folder** (or wherever your browser saves downloads).
+
+**Can't find it?**
+- Check your browser's download bar (usually at the bottom)
+- Look in your Downloads folder: `~/Downloads/` (Mac) or `C:\Users\YourName\Downloads\` (Windows)
+- Check your browser settings to see where downloads are saved
+:::
+
+### Step 2: Open RStudio Server
+
+1. Go to [RStudio Server](https://psy909.gold.ac.uk/rstudioserver/)
+2. Log in with your Goldsmiths credentials
+
+::: {.callout-important}
+## Login Format
+
+**Important:** Use your full campus email address format:
+
+- Format: `yourusername@campus.goldsmiths.ac.uk`
+- Example: `jbond007@campus.goldsmiths.ac.uk`
+- **Not** just `jbond007` or `jbond007@gold.ac.uk`
+
+Use the same username and password you use for other Goldsmiths systems.
+:::
+
+3. Wait for RStudio to load (this may take 10-30 seconds)
+
+::: {.callout-warning}
+## Troubleshooting RStudio Access
+
+**Can't log in?**
+
+- Make sure you're using the full `@campus.goldsmiths.ac.uk` format
+- Double-check your username and password
+- Try clearing your browser cache
+- Contact IT support if login issues persist
+
+**Page won't load?**
+
+- Check your internet connection
+- Try a different browser (Chrome or Firefox work best)
+- Disable browser extensions that might interfere
+:::
+
+### Step 3: Create a Project Folder
+
+1. In RStudio, look at the **Files** tab in the bottom-right pane
+2. Click **New Folder** (or right-click and select "New Folder")
+3. Name it `RLab1` (or `Lab1` - choose something you'll remember)
+4. **Double-click** the folder to open it
+
+::: {.callout-tip}
+## Why Create a Folder?
+
+Keeping your work organized helps you:
+
+- Find files easily
+- Avoid confusion between different labs
+- Keep your workspace tidy
+- Submit assignments correctly
+:::
+
+### Step 4: Upload the File
+
+1. Make sure you're **inside** your `RLab1` folder (check the path at the top of the Files pane)
+2. Click the **Upload** button (looks like an arrow pointing up)
+3. Click **Choose File** and navigate to your Downloads folder
+4. Select `lab1-exercise.qmd`
+5. Click **OK** to upload
+
+::: {.callout-warning}
+## Upload Problems?
+
+**File won't upload?**
+- Check the file size (should be small, < 50KB)
+- Make sure you selected the `.qmd` file (not a `.html` or other file)
+- Try refreshing the page and uploading again
+- Check your internet connection
+
+**File uploaded but can't see it?**
+- Make sure you're in the correct folder (check the path)
+- Click the refresh button (circular arrow) in the Files pane
+- Look for `lab1-exercise.qmd` - it should appear in the file list
+:::
+
+### Step 5: Open the File
+
+1. In the Files pane, **click** on `lab1-exercise.qmd`
+2. The file will open in the **Source** pane (top-left)
+3. You're ready to start working!
+
+::: {.callout-tip}
+## What You'll See
+
+When you open the `.qmd` file, you'll see:
+
+- **YAML header** at the top (between `---` lines) - metadata about the document
+- **Markdown text** explaining what to do
+- **Code chunks** (gray boxes) with R code
+- Green "play" buttons to run each code chunk
+
+**Next:** Complete your first task below!
+:::
+
+---
+
+## Your First Task: Change Your Name and Render
+
+Now that you have the notebook open, let's do something **really simple** to make sure everything works:
+
+### Step 1: Find Your Name
+
+1. Look at the **very top** of the file (lines 1-5)
+2. You'll see something like this:
+   ```yaml
+   ---
+   title: "Lab 1: Descriptive Statistics"
+   subtitle: "Grit & The Short Grit Scale"
+   author: "YOUR NAME HERE"
+   date: today
+   ```
+3. **Find line 4** where it says `author: "YOUR NAME HERE"`
+
+### Step 2: Replace with Your Name
+
+1. **Click** on `"YOUR NAME HERE"` 
+2. **Type** your actual name (keep the quotation marks!)
+3. For example: `author: "Jane Smith"` or `author: "Alex Johnson"`
+
+### Step 3: Render Your Notebook
+
+1. **Look at the top toolbar** in RStudio Server
+2. **Find the Render button** - it looks like a knitting needle or ball of yarn 🧶
+3. **Click the Render button**
+4. Wait a few seconds... RStudio will process your file
+5. When it's done, a **preview window** will open showing your rendered HTML document
+6. **Check the top** - you should see your name in the document header!
+
+![Render button location in RStudio Server toolbar](images/Render.png)
+
+::: {.callout-success}
+## Success!
+
+If you see your name in the rendered HTML document, **congratulations!** You've just:
+- ✅ Edited a Quarto document
+- ✅ Rendered it to HTML
+- ✅ Created your first output file
+
+This is exactly how you'll work throughout the lab. Make changes → Render → See results!
+:::
+
+**What happened?** The Render button converted your `.qmd` file into a beautiful HTML document. Every time you make changes and render, you create a new version with your latest work. This is how you'll submit your assignments!
 
 ---
 

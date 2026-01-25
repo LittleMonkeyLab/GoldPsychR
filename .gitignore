@@ -5,3 +5,10 @@
 
 /.quarto/
 **/*.quarto_ipynb
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# Old Quarto output
+index_files/

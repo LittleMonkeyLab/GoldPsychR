@@ -98,6 +98,7 @@
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="part-slides.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -2044,6 +2045,25 @@ Gordon Wright
 </div>
 
 </section>
+<section id="how-this-lab-works-watch-try-do" class="slide level2">
+<h2>How This Lab Works: Watch → Try → Do</h2>
+<p>Every part of this lab follows the same <strong>3-step cycle</strong>:</p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<h3 id="watch">1️⃣ Watch</h3>
+<p><strong>Instructor Demo</strong></p>
+<p>I’ll show you how R works using interactive slides. Watch and follow along!</p>
+</div><div class="column" style="width:33%;">
+<h3 id="try">2️⃣ Try</h3>
+<p><strong>Practice Here</strong></p>
+<p>On the activity page, edit code directly in your browser. Experiment and learn!</p>
+</div><div class="column" style="width:33%;">
+<h3 id="do">3️⃣ Do</h3>
+<p><strong>Your Notebook</strong></p>
+<p>Download the <code>.qmd</code> file and complete exercises in RStudio Server. This is your work!</p>
+</div></div>
+<p><strong>This cycle repeats for each part. Let’s start!</strong></p>
+</section>
 <section id="the-data-story" class="slide level2">
 <h2>The Data Story</h2>
 <p>Over the next <strong>4 weeks</strong>, we’ll work through a complete research workflow:</p>
@@ -2056,13 +2076,26 @@ Gordon Wright
 </section>
 <section id="todays-dataset" class="slide level2">
 <h2>Today’s Dataset</h2>
-<p>We’ve collected <strong>Big Five personality data</strong> from a training study:</p>
+<p>We’ve collected <strong>Grit Scale data</strong> from university students:</p>
 <ul>
-<li>160 participants completed personality questionnaires</li>
-<li>Half received a training intervention, half were controls</li>
-<li>Measured before (pre) and after (post) the intervention</li>
+<li>120 students completed the Short Grit Scale (8 items)</li>
+<li>Participants are either First Year or Final Year students</li>
+<li>The scale measures two subscales: Consistency of Interest and Perseverance of Effort</li>
 </ul>
-<p><strong>Our question</strong>: Did the training affect personality scores?</p>
+<p><strong>Our question</strong>: Do grit scores differ between first-year and final-year students?</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Learn More About the Grit Scale</strong></p>
+</div>
+<div class="callout-content">
+<p>Want to read the original research? <a href="https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290">Access the source article</a> through the Goldsmiths Library.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="what-is-r" class="slide level2">
 <h2>What is R?</h2>
@@ -2147,53 +2180,174 @@ Gordon Wright
 <img data-src="../../labs/images/rstudio.png" style="width:85.0%" class="r-stretch quarto-figure-center"><p class="caption">RStudio IDE</p></section>
 <section id="your-first-code" class="slide level2">
 <h2>Your First Code</h2>
-<p>Try this in the Console:</p>
+<p>Let me show you how R works. I’ll click “Run Code” on this example:</p>
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>R returned the answer! The <code>[1]</code> just means “first result”.</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Try changing <code>1 + 1</code> to <code>1 + 2</code>?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="creating-variables" class="slide level2">
 <h2>Creating Variables</h2>
-<p>We store values using the <strong>assignment operator</strong> <code>&lt;-</code></p>
+<p>We store values using the <strong>assignment operator</strong> <code>&lt;-</code>. Watch me create some variables:</p>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Watch the <strong>Environment pane</strong> update when you create variables!</p>
+<p>Variables are stored in memory and can be reused!</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Try changing <code>x &lt;- 5</code> to <code>x &lt;- 10</code>?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="vectors-multiple-values" class="slide level2">
 <h2>Vectors: Multiple Values</h2>
-<p>A <strong>vector</strong> is a collection of values. Create them with <code>c()</code>:</p>
+<p>A <strong>vector</strong> is a collection of values. Create them with <code>c()</code>. Let me demonstrate:</p>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Try adding <code>6</code> to the vector?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="basic-functions" class="slide level2">
 <h2>Basic Functions</h2>
-<p>R has built-in functions for statistics:</p>
+<p>R has built-in functions for statistics. Watch me calculate:</p>
 <div id="qwebr-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Try changing the scores to <code>c(10, 20, 30)</code>?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="common-error-object-not-found" class="slide level2">
 <h2>Common Error: Object Not Found</h2>
+<p>Watch what happens if I try to use a variable that doesn’t exist:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>z <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Error: object 'z' not found</code></pre>
-<p><strong>Fix:</strong> Create the object first!</p>
+<p><strong>Fix:</strong> I need to create the object first! Let me run this:</p>
 <div id="qwebr-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
+<section id="download-the-exercise-notebook" class="slide level2">
+<h2>Download the Exercise Notebook</h2>
+<p>At the end of this part, you will be asked to download the <code>.qmd</code> notebook file for RStudio Server.</p>
+<p><strong>Location:</strong> On the practice page, there’s a download button.</p>
+
+<img data-src="images/download.png" class="quarto-figure quarto-figure-center r-stretch"><p><strong>What happens:</strong> The file <code>lab1-exercise.qmd</code> will download to your Downloads folder.</p>
+</section>
+<section id="rstudio-server-setup" class="slide level2">
+<h2>RStudio Server Setup</h2>
+<p>You will need to:</p>
+<ol type="1">
+<li><strong>Log in</strong> to RStudio Server at <code>https://psy909.gold.ac.uk/rstudioserver/</code></li>
+<li><strong>Use full email format:</strong> <code>username@campus.goldsmiths.ac.uk</code></li>
+<li><strong>Create a folder</strong> called <code>RLab1</code> in the Files pane</li>
+<li><strong>Upload</strong> the downloaded <code>.qmd</code> file</li>
+<li><strong>Open</strong> the file in the Source pane</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Signin.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/exercise.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</section>
+<section id="whats-in-the-notebook" class="slide level2">
+<h2>What’s in the Notebook?</h2>
+<p>When you open <code>lab1-exercise.qmd</code> in RStudio Server, you’ll see:</p>
+<ul>
+<li><strong>YAML header</strong> (between <code>---</code> lines) - metadata at the top</li>
+<li><strong>Markdown text</strong> - instructions and explanations</li>
+<li><strong>Code chunks</strong> - gray boxes with R code</li>
+<li><strong>Green play buttons</strong> - to run each code chunk</li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Your Work Notebook</strong></p>
+</div>
+<div class="callout-content">
+<p>This notebook is where you’ll complete all your work for this lab. You’ll use it across all 5 parts!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="your-first-task-change-your-name" class="slide level2">
+<h2>Your First Task: Change Your Name</h2>
+<p>Once you’ve opened the notebook in RStudio Server, here’s your <strong>very first task</strong>:</p>
+<ol type="1">
+<li><strong>Find line 4</strong> in the YAML header: <code>author: "YOUR NAME HERE"</code></li>
+<li><strong>Replace</strong> <code>"YOUR NAME HERE"</code> with your actual name (keep the quotes!)</li>
+<li><strong>Click the Render button</strong> (top toolbar, looks like a knitting needle)</li>
+</ol>
+<p><img data-src="images/Named.png"></p>
+<p><strong>This is your first success!</strong> You’ve rendered your notebook. The HTML file shows your name in the document header. Now press Render and see what the output looks like!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Render.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</section>
 <section id="summary-part-1" class="slide level2">
 <h2>Summary: Part 1</h2>
-<p>You learned:</p>
+<p>We’ve covered:</p>
 <ul>
 <li>What R and RStudio are</li>
 <li>How to navigate the four panes</li>
 <li>How to create variables with <code>&lt;-</code></li>
 <li>How to create vectors with <code>c()</code></li>
 <li>How to use functions like <code>mean()</code>, <code>sd()</code></li>
+<li>How to download and set up the exercise notebook in RStudio Server</li>
 </ul>
 </section>
-<section id="now-practice" class="slide level2">
-<h2>Now Practice!</h2>
-<p>Scroll down to the <strong>Try It Yourself</strong> section and work through the exercises.</p>
-<countdown-timer id="timer_484c02cf17f3076490aa6fc45aafda67b58b9d8e" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<section id="now-its-your-turn" class="slide level2">
+<h2>Now It’s Your Turn!</h2>
+<p>Open the activity page for Part 1 and work through the <strong>Try It Yourself</strong> exercises.</p>
+<countdown-timer id="timer_f1c54d9cef6e9c0da0ee3b9b359c923214e5f6b8" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="true" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -2205,9 +2359,10 @@ Gordon Wright
 </div>
 <div class="callout-content">
 <ul>
-<li>Edit the code and experiment</li>
-<li>Copy code to your RStudio console</li>
+<li><strong>Edit code directly</strong> in the WebR cells on the page - no need to copy to RStudio yet!</li>
+<li>Experiment with different values and see what happens</li>
 <li>Complete the self-assessment before moving on</li>
+<li><strong>Download the exercise notebook</strong> and set it up in RStudio Server before Part 2</li>
 </ul>
 </div>
 </div>

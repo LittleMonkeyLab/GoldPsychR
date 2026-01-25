@@ -32,6 +32,7 @@
     }
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="part-slides.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -401,7 +402,7 @@
   // Document level settings ----
 
   // Determine if we need to install R packages
-  globalThis.qwebrInstallRPackagesList = ['readr', 'dplyr'];
+  globalThis.qwebrInstallRPackagesList = ['dplyr'];
 
   // Specify possible locations to search for the repository
   globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -423,7 +424,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"library(readr)\nlibrary(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\ndata$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5\n\ndata |>\n  group_by(group, time) |>\n  summarise(\n    M = round(mean(pers_score), 2),\n    SD = round(sd(pers_score), 2),\n    n = n(),\n    .groups = \"drop\"\n  )","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\nlibrary(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\ndata$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5\n\nsummary_table <- data |>\n  group_by(group, time) |>\n  summarise(\n    M = round(mean(pers_score), 2),\n    SD = round(sd(pers_score), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nknitr::kable(summary_table, caption = \"Descriptive Statistics\")","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qwebrCellDetails = [{"code":"library(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse-score items\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Create subscales\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\ndata$Study_Year <- factor(data$Study_Year)\n\ndata |>\n  group_by(Study_Year) |>\n  summarise(\n    M_consistency = round(mean(consistency), 2),\n    SD_consistency = round(sd(consistency), 2),\n    M_perseverance = round(mean(perseverance), 2),\n    SD_perseverance = round(sd(perseverance), 2),\n    n = n(),\n    .groups = \"drop\"\n  )","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read.csv(data_url, stringsAsFactors = FALSE)\n\n# Reverse-score items\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Create subscales\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\ndata$Study_Year <- factor(data$Study_Year)\n\nsummary_table <- data |>\n  group_by(Study_Year) |>\n  summarise(\n    M_consistency = round(mean(consistency), 2),\n    SD_consistency = round(sd(consistency), 2),\n    M_perseverance = round(mean(perseverance), 2),\n    SD_perseverance = round(sd(perseverance), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nknitr::kable(summary_table, \n             caption = \"Descriptive Statistics for Grit Subscales by Study Year\",\n             col.names = c(\"Study Year\", \"M (Consistency)\", \"SD (Consistency)\", \n                          \"M (Perseverance)\", \"SD (Perseverance)\", \"n\"))","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"0.5","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
   </script>
   <script type="module">
@@ -2020,15 +2021,15 @@ Gordon Wright
 <p>A good descriptive results paragraph has:</p>
 <ol type="1">
 <li><strong>Overall description</strong> (M, SD for whole sample)</li>
-<li><strong>Baseline comparison</strong> (were groups similar?)</li>
-<li><strong>Post-intervention comparison</strong> (what changed?)</li>
+<li><strong>Group comparison</strong> (how do study years differ?)</li>
+<li><strong>Subscale comparison</strong> (Consistency vs Perseverance)</li>
 <li><strong>Interpretation</strong> (what does this suggest?)</li>
 </ol>
 </section>
 <section id="example-paragraph" class="slide level2">
 <h2>Example Paragraph</h2>
 <blockquote>
-<p>Participants reported moderate levels of personality overall (<em>M</em> = 15.23, <em>SD</em> = 2.45). At baseline, the control group (<em>M</em> = 15.10, <em>SD</em> = 2.38, <em>n</em> = 40) and training group (<em>M</em> = 15.36, <em>SD</em> = 2.52, <em>n</em> = 40) showed similar scores. Following the intervention, the control group showed little change (<em>M</em> = 15.15, <em>SD</em> = 2.41), whereas the training group showed an increase (<em>M</em> = 16.89, <em>SD</em> = 2.21). These descriptive patterns suggest a potential training effect.</p>
+<p>Participants reported moderate levels of Consistency of Interest overall (<em>M</em> = 12.45, <em>SD</em> = 2.38) and Perseverance of Effort (<em>M</em> = 13.21, <em>SD</em> = 2.15). First-year students showed lower Consistency of Interest scores (<em>M</em> = 11.89, <em>SD</em> = 2.41, <em>n</em> = 60) compared to final-year students (<em>M</em> = 13.01, <em>SD</em> = 2.28, <em>n</em> = 60). For Perseverance of Effort, first-year students (<em>M</em> = 12.95, <em>SD</em> = 2.18) showed similar scores to final-year students (<em>M</em> = 13.47, <em>SD</em> = 2.11). These descriptive patterns suggest that consistency of interest may develop with academic experience, while perseverance remains relatively stable.</p>
 </blockquote>
 </section>
 <section id="common-mistakes" class="slide level2">
@@ -2037,8 +2038,8 @@ Gordon Wright
 <p>✓ “The mean was 3.27”</p>
 <p>❌ “M = 3.27”</p>
 <p>✓ “<em>M</em> = 3.27”</p>
-<p>❌ “Group 1 had higher scores”</p>
-<p>✓ “The training group (<em>M</em> = 16.89) had higher scores than the control group (<em>M</em> = 15.15)”</p>
+<p>❌ “First-year students had higher scores”</p>
+<p>✓ “First-year students (<em>M</em> = 11.89) had lower Consistency of Interest scores than final-year students (<em>M</em> = 13.01)”</p>
 </section>
 <section id="using-knitrkable" class="slide level2">
 <h2>Using knitr::kable()</h2>
@@ -2070,8 +2071,8 @@ Gordon Wright
 </section>
 <section id="now-practice" class="slide level2">
 <h2>Now Practice!</h2>
-<p>Complete the write-up in your exercise file.</p>
-<countdown-timer id="timer_c13f3f443e5707317cb6c226ffbb1f0c770921db" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="false" tabindex="0" style="right: 0;bottom: 0;">
+<p>Open the activity page for Part 5 and complete the write-up in your exercise file.</p>
+<countdown-timer id="timer_bd95dcef4966563f385ba806213f92c8101b311a" minutes="10" seconds="00" class="countdown" warn-when="0" update-every="1" play-sound="false" blink-colon="false" start-immediately="true" tabindex="0" style="right: 0;bottom: 0;">
  </countdown-timer>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">

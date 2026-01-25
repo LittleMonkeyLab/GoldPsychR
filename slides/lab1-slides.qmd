@@ -1,6 +1,6 @@
 ---
 title: "Lab 1: Descriptive Statistics"
-subtitle: "Personality & The Big Five"
+subtitle: "Grit & The Short Grit Scale"
 author: "Gordon Wright"
 date: "2026"
 format:
@@ -15,7 +15,7 @@ format:
     width: 1280
     height: 720
     logo: ../assets/images/GoldLogo.png
-    footer: "GoldPsychR - 4-Week Intensive"
+    footer: "GoldPsychR - Lab 1"
 filters:
   - webr
   - countdown
@@ -28,28 +28,30 @@ webr:
 
 ## The Data Story
 
-Over the next **4 weeks**, we'll work through a complete research workflow:
+Today we'll work with **Grit Scale data** to learn descriptive statistics:
 
-::: {.incremental}
-- **Week 1**: Describe and visualise your data
-- **Week 2**: Compare groups with t-tests
-- **Week 3**: Compare multiple groups with ANOVA
-- **Week 4**: Explore relationships with correlation & regression
-:::
-
-::: {.fragment}
-We'll use the same dataset throughout, plus **similar datasets** for extra practice.
-:::
+- Load and inspect data
+- Reverse-score questionnaire items
+- Calculate subscale scores
+- Compare groups with descriptive statistics
+- Visualise differences with boxplots
+- Write up results in APA style
 
 ## Today's Dataset
 
-We've collected **Big Five personality data** from a training study:
+We've collected **Grit Scale data** from university students:
 
-- 160 participants completed personality questionnaires
-- Half received a training intervention, half were controls
-- Measured before (pre) and after (post) the intervention
+- 120 students completed the Short Grit Scale (8 items)
+- Participants are either First Year or Final Year students
+- The scale measures two subscales: Consistency of Interest and Perseverance of Effort
 
-**Our question**: Did the training affect personality scores?
+**Our question**: Do grit scores differ between first-year and final-year students?
+
+::: {.callout-note}
+## Learn More About the Grit Scale
+
+Want to read the original research? [Access the source article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
+:::
 
 ## Today's Goals
 
@@ -76,17 +78,19 @@ Each cycle reinforces the same skill before moving on!
 
 ## Today's Schedule
 
+**Lab Time: 13:00 - 15:00**
+
 | Time | Activity |
 |------|----------|
-| 0:00-0:10 | Part 1: What is R? + RStudio Tour |
-| 0:10-0:20 | **Practice: WebR basics** |
-| 0:20-0:35 | Part 2: Loading Data |
-| 0:35-0:50 | **Practice: Data loading** |
-| 0:50-1:05 | Part 3: Reverse Scoring |
-| 1:05-1:20 | **Practice: Scoring** |
-| 1:20-1:40 | Part 4: Descriptives & Visualisation |
-| 1:40-1:55 | **Practice: Analysis + Write-Up** |
-| 1:55-2:00 | Wrap-up |
+| 13:00-13:10 | Part 1: What is R? + RStudio Tour |
+| 13:10-13:20 | **Practice: WebR basics** |
+| 13:20-13:35 | Part 2: Loading Data |
+| 13:35-13:50 | **Practice: Data loading** |
+| 13:50-14:05 | Part 3: Reverse Scoring |
+| 14:05-14:20 | **Practice: Scoring** |
+| 14:20-14:40 | Part 4: Descriptives & Visualisation |
+| 14:40-14:55 | **Practice: Analysis + Write-Up** |
+| 14:55-15:00 | Wrap-up |
 
 # Part 1: What is R? {.center background-color="#2d3436"}
 
@@ -265,16 +269,16 @@ Open the **WebR Practice** chapter and complete:
 
 # Part 2: Loading Data {.center background-color="#2d3436"}
 
-## The Personality Dataset
+## The Grit Scale Dataset
 
 Our study collected data on:
 
-- **160 participants**
-- **5 personality items** (p1-p5) on a 1-5 scale
-- **Group**: control vs training
-- **Time**: pre vs post intervention
+- **120 university students**
+- **8 Grit Scale items** (G1-G8) on a 1-5 scale
+- **Study_Year**: First Year (1) or Final Year (2)
+- **Demographics**: Age, Gender
 
-Items p4 and p5 are negatively worded (we'll deal with that later!).
+Items G1, G3, G5, and G6 are negatively worded (we'll reverse-score them!).
 
 ## Loading a CSV File
 
@@ -284,7 +288,8 @@ Items p4 and p5 are negatively worded (we'll deal with that later!).
 #| code-annotations: hover
 
 library(readr)
-data <- read_csv("personality_lab.csv")
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
 ```
 
 1. Load the `readr` package
@@ -301,26 +306,9 @@ Make sure your CSV is in the right folder, or use the full file path.
 #| context: setup
 #| autorun: true
 
-# Simulate the personality dataset
-set.seed(42)
-n <- 160
-
-data <- data.frame(
-  id = 1:n,
-  group = rep(c("control", "training"), each = n/2),
-  time = rep(rep(c("pre", "post"), each = n/4), 2),
-  p1 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
-  p2 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.15, 0.35, 0.25, 0.15)),
-  p3 = sample(1:5, n, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
-  p4 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.25, 0.3, 0.2, 0.1)),
-  p5 = sample(1:5, n, replace = TRUE, prob = c(0.15, 0.2, 0.35, 0.2, 0.1))
-)
-
-# Add training effect
-training_post <- data$group == "training" & data$time == "post"
-data$p1[training_post] <- pmin(5, data$p1[training_post] + sample(0:1, sum(training_post), replace = TRUE))
-data$p2[training_post] <- pmin(5, data$p2[training_post] + sample(0:1, sum(training_post), replace = TRUE))
-data$p3[training_post] <- pmin(5, data$p3[training_post] + sample(0:1, sum(training_post), replace = TRUE))
+# Load the Grit Scale data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 ```
 
 ```{webr-r}
@@ -346,7 +334,7 @@ names(data)
 #| echo: true
 #| eval: false
 
-read_csv("personality_lab.csv")
+read_csv("Y1_Week13_Lab1_grit_data.csv")
 ```
 
 ```
@@ -361,7 +349,7 @@ Error: could not find function "read_csv"
 #| eval: false
 
 library(readr)
-read_csv("personality_lab.csv")
+read_csv("Y1_Week13_Lab1_grit_data.csv")
 ```
 :::
 
@@ -392,15 +380,15 @@ read_csv("personality_lab.csv")
 
 ## Why Reverse Score?
 
-Some questionnaire items are **negatively worded**:
+The Grit Scale has **negatively worded items**:
 
-- "I rarely feel anxious" (reversed)
-- "I often feel anxious" (normal)
+- **G1**: "New ideas and projects sometimes distract me from previous ones" (reversed)
+- **G2**: "Setbacks don't discourage me" (normal)
 
-If someone is anxious, they'd score **low** on the first but **high** on the second.
+If someone is gritty, they'd score **low** on G1 but **high** on G2.
 
 ::: {.fragment}
-To create a valid total score, we must **reverse** the negatively-worded items.
+To create valid subscale scores, we must **reverse** items G1, G3, G5, and G6.
 :::
 
 ## The Formula
@@ -420,28 +408,47 @@ $$\text{reversed} = 6 - \text{original}$$
 ## Reverse Scoring in R
 
 ```{webr-r}
-# Reverse-score p4 and p5
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
+# Load data first
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Reverse-score G1, G3, G5, and G6
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
 
 # Check it worked
-head(data[, c("p4", "rev_p4", "p5", "rev_p5")])
+head(data[, c("G1", "rev_G1", "G3", "rev_G3")])
 ```
 
-## Creating the Total Score
+## Creating Subscale Scores
+
+The Grit Scale has two subscales:
 
 ```{webr-r}
-# Sum all items using REVERSED versions for p4 and p5
-data$pers_score <- data$p1 + data$p2 + data$p3 +
-                   data$rev_p4 + data$rev_p5
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+
+# Consistency of Interest (4 items: G1, G3, G5, G6 - all reversed)
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+
+# Perseverance of Effort (4 items: G2, G4, G7, G8 - forward scored)
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
 
 # View result
-head(data[, c("id", "group", "time", "pers_score")])
+head(data[, c("ID", "Study_Year", "consistency", "perseverance")])
 ```
 
 ::: {.callout-important}
 ## Critical Check
-Use the **reversed** versions (rev_p4, rev_p5), not the originals!
+Use the **reversed** versions (rev_G1, rev_G3, rev_G5, rev_G6) for Consistency subscale!
 :::
 
 ## Common Error: Wrong Items in Sum
@@ -451,8 +458,7 @@ Use the **reversed** versions (rev_p4, rev_p5), not the originals!
 #| eval: false
 
 # WRONG - using unreversed items!
-data$pers_score <- data$p1 + data$p2 + data$p3 +
-                   data$p4 + data$p5
+data$consistency <- data$G1 + data$G3 + data$G5 + data$G6
 ```
 
 ::: {.fragment .fade-up}
@@ -463,8 +469,11 @@ data$pers_score <- data$p1 + data$p2 + data$p3 +
 #| eval: false
 
 # CORRECT
-data$pers_score <- data$p1 + data$p2 + data$p3 +
-                   data$rev_p4 + data$rev_p5
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
 ```
 :::
 
@@ -478,15 +487,15 @@ data$pers_score <- data$p1 + data$p2 + data$p3 +
 
 **RStudio Exercise:**
 
-- Section 2: Reverse Scoring
-- Complete Exercise 2.1
+- Section 3: Reverse Scoring
+- Complete Exercise 3.1
 
 ::: {.callout-tip}
 ## What to do
 
 1. Apply the formula: `6 - original`
-2. Create reversed items for p4 and p5
-3. Sum all items (using reversed versions!)
+2. Create reversed items for G1, G3, G5, and G6
+3. Create both subscales (Consistency and Perseverance)
 4. Verify your reversal worked
 :::
 
@@ -497,10 +506,24 @@ data$pers_score <- data$p1 + data$p2 + data$p3 +
 ## Overall Descriptives
 
 ```{webr-r}
+# Load and prepare data
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
+
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+
 # Calculate overall statistics
-mean(data$pers_score, na.rm = TRUE)
-sd(data$pers_score, na.rm = TRUE)
-length(data$pers_score)
+mean(data$consistency, na.rm = TRUE)
+sd(data$consistency, na.rm = TRUE)
+length(data$consistency)
 ```
 
 ::: {.callout-important}
@@ -514,11 +537,16 @@ Always include `na.rm = TRUE` to ignore missing values. Without it, a single `NA
 ```{webr-r}
 library(dplyr)
 
+# Convert Study_Year to factor for grouping
+data$Study_Year <- factor(data$Study_Year, levels = c(1, 2), labels = c("First Year", "Final Year"))
+
 data |>
-  group_by(group, time) |>
+  group_by(Study_Year) |>
   summarise(
-    mean = mean(pers_score, na.rm = TRUE),
-    sd = sd(pers_score, na.rm = TRUE),
+    M_consistency = mean(consistency, na.rm = TRUE),
+    SD_consistency = sd(consistency, na.rm = TRUE),
+    M_perseverance = mean(perseverance, na.rm = TRUE),
+    SD_perseverance = sd(perseverance, na.rm = TRUE),
     n = n(),
     .groups = "drop"
   )
@@ -532,14 +560,17 @@ data |>
 
 library(ggplot2)
 
-ggplot(data, aes(x = group, y = pers_score, fill = time)) +
+# Convert Study_Year to factor
+data$Study_Year <- factor(data$Study_Year, levels = c(1, 2), labels = c("First Year", "Final Year"))
+
+ggplot(data, aes(x = Study_Year, y = consistency, fill = Study_Year)) +
   geom_boxplot(alpha = 0.7) +
   theme_minimal() +
+  theme(legend.position = "none") +
   labs(
-    title = "Personality Scores by Group and Time",
-    x = "Group",
-    y = "Personality Score",
-    fill = "Time"
+    title = "Consistency of Interest by Study Year",
+    x = "Study Year",
+    y = "Consistency of Interest Score"
   )
 ```
 
@@ -557,9 +588,9 @@ ggplot(data, aes(x = group, y = pers_score, fill = time)) +
 ::: {.column width="50%"}
 **Questions to ask:**
 
-- Do groups differ at baseline?
-- Is there change over time?
-- Which group changed more?
+- Do first-year and final-year students differ?
+- Which group has higher consistency?
+- Is the difference meaningful?
 :::
 ::::
 
@@ -569,7 +600,7 @@ ggplot(data, aes(x = group, y = pers_score, fill = time)) +
 #| echo: true
 #| eval: false
 
-mean(data$pers_score)
+mean(data$consistency)
 ```
 
 If any value is `NA`, the result is `NA`!
@@ -581,7 +612,7 @@ If any value is `NA`, the result is `NA`!
 #| echo: true
 #| eval: false
 
-mean(data$pers_score, na.rm = TRUE)
+mean(data$consistency, na.rm = TRUE)
 ```
 :::
 
@@ -589,11 +620,11 @@ mean(data$pers_score, na.rm = TRUE)
 
 ## Template
 
-> Participants reported moderate levels of [TRAIT] overall (M = ___, SD = ___). At baseline, the control group (M = ___, SD = ___, n = ___) and training group (M = ___, SD = ___, n = ___) were similar. Following the intervention, the control group showed [minimal change / a decrease / an increase] (M = ___, SD = ___), whereas the training group showed [change description] (M = ___, SD = ___).
+> Participants reported moderate levels of [SUBSCALE] overall (M = ___, SD = ___). First-year students (M = ___, SD = ___, n = ___) and final-year students (M = ___, SD = ___, n = ___) showed [similar/different] levels of grit. Specifically, first-year students scored [higher/lower] on Consistency of Interest (M = ___, SD = ___) compared to final-year students (M = ___, SD = ___).
 
 ## Example Write-Up
 
-> Participants reported moderate levels of personality overall (M = 15.42, SD = 2.31). At baseline, the control group (M = 15.10, SD = 2.25, n = 40) and training group (M = 15.33, SD = 2.18, n = 40) were similar. Following the intervention, the control group showed minimal change (M = 15.28, SD = 2.41), whereas the training group showed an increase (M = 16.95, SD = 2.15).
+> Participants reported moderate levels of grit overall. First-year students (M = 12.45, SD = 2.31, n = 60) and final-year students (M = 13.82, SD = 2.15, n = 60) showed different levels of Consistency of Interest. Specifically, final-year students scored higher on Consistency of Interest (M = 13.82, SD = 2.15) compared to first-year students (M = 12.45, SD = 2.31), suggesting that students may develop greater consistency in their interests as they progress through their degree.
 
 # Final Practice {.center background-color="#27ae60"}
 
@@ -607,8 +638,8 @@ mean(data$pers_score, na.rm = TRUE)
 
 **RStudio Exercise:**
 
-- Section 3-4: Descriptives & Visualisation
-- Section 5-6: APA Write-Up & Reflection
+- Section 4: Descriptives & Visualisation
+- Section 5: APA Write-Up & Reflection
 
 {{< countdown "15:00" >}}
 

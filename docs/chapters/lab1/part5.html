@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-18db222f28881d4132facbdb14ecb01b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6529d29eea736bbbb27199f37ff05282.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f24dc6a7a73b9930afd11d9ee3cf7076.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -406,7 +406,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"library(readr)\nlibrary(dplyr)\n\n# Load and prepare data\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\ndata$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5\n\n# Overall statistics\ncat(\"=== OVERALL ===\\n\")\ncat(\"M =\", round(mean(data$pers_score), 2), \"\\n\")\ncat(\"SD =\", round(sd(data$pers_score), 2), \"\\n\")\ncat(\"N =\", length(data$pers_score), \"\\n\\n\")\n\n# By group and time\ncat(\"=== BY GROUP AND TIME ===\\n\")\nsummary_stats <- data |>\n  group_by(group, time) |>\n  summarise(\n    M = round(mean(pers_score), 2),\n    SD = round(sd(pers_score), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nprint(summary_stats)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\nlibrary(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\ndata$rev_p4 <- 6 - data$p4\ndata$rev_p5 <- 6 - data$p5\ndata$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5\n\nsummary_stats <- data |>\n  group_by(group, time) |>\n  summarise(\n    M = round(mean(pers_score), 2),\n    SD = round(sd(pers_score), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nknitr::kable(summary_stats,\n             caption = \"Table 1. Descriptive Statistics by Group and Time\",\n             col.names = c(\"Group\", \"Time\", \"M\", \"SD\", \"n\"))","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qwebrCellDetails = [{"code":"library(readr)\nlibrary(dplyr)\n\n# Load and prepare data\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\n\n# Reverse-score items\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\n\n# Create subscales\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\ndata$Study_Year <- factor(data$Study_Year)\n\n# Overall statistics\ncat(\"=== OVERALL ===\\n\")\ncat(\"Consistency of Interest:\\n\")\ncat(\"M =\", round(mean(data$consistency), 2), \"\\n\")\ncat(\"SD =\", round(sd(data$consistency), 2), \"\\n\\n\")\ncat(\"Perseverance of Effort:\\n\")\ncat(\"M =\", round(mean(data$perseverance), 2), \"\\n\")\ncat(\"SD =\", round(sd(data$perseverance), 2), \"\\n\")\ncat(\"N =\", length(data$consistency), \"\\n\\n\")\n\n# By Study Year\ncat(\"=== BY STUDY YEAR ===\\n\")\nsummary_stats <- data |>\n  group_by(Study_Year) |>\n  summarise(\n    M_consistency = round(mean(consistency), 2),\n    SD_consistency = round(sd(consistency), 2),\n    M_perseverance = round(mean(perseverance), 2),\n    SD_perseverance = round(sd(perseverance), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nprint(summary_stats)","id":1,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-1","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"library(readr)\nlibrary(dplyr)\n\ndata_url <- \"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv\"\ndata <- read_csv(data_url, show_col_types = FALSE)\ndata$rev_G1 <- 6 - data$G1\ndata$rev_G3 <- 6 - data$G3\ndata$rev_G5 <- 6 - data$G5\ndata$rev_G6 <- 6 - data$G6\ndata$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6\ndata$perseverance <- data$G2 + data$G4 + data$G7 + data$G8\ndata$Study_Year <- factor(data$Study_Year)\n\nsummary_stats <- data |>\n  group_by(Study_Year) |>\n  summarise(\n    M_consistency = round(mean(consistency), 2),\n    SD_consistency = round(sd(consistency), 2),\n    M_perseverance = round(mean(perseverance), 2),\n    SD_perseverance = round(sd(perseverance), 2),\n    n = n(),\n    .groups = \"drop\"\n  )\n\nknitr::kable(summary_stats,\n             caption = \"Table 1. Descriptive Statistics for Grit Subscales by Study Year\",\n             col.names = c(\"Study Year\", \"M (Consistency)\", \"SD (Consistency)\", \n                          \"M (Perseverance)\", \"SD (Perseverance)\", \"n\"))","id":2,"options":{"autorun":"false","classes":"","comment":"","context":"interactive","dpi":72,"editor-font-scale":"1","editor-max-height":"","editor-quick-suggestions":"false","editor-word-wrap":"true","fig-cap":"","fig-height":5,"fig-width":7,"label":"unnamed-chunk-2","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 </script>
 <script type="module">
@@ -1672,8 +1672,8 @@ globalThis.qwebrExecuteCode = async function (
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../assets/images/GoldLogo.png" alt="" class="navbar-logo light-content">
-    <img src="../../assets/images/GoldLogo.png" alt="" class="navbar-logo dark-content">
+    <img src="../../assets/images/svg/goldpsychr-logo-animated.svg" alt="" class="navbar-logo light-content">
+    <img src="../../assets/images/svg/goldpsychr-logo-animated.svg" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -1693,10 +1693,6 @@ globalThis.qwebrExecuteCode = async function (
   <li class="nav-item">
     <a class="nav-link" href="../../toolbox/index.html"> 
 <span class="menu-text">R Toolbox</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../pedagogical.html"> 
-<span class="menu-text">Pedagogical Approach</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -1732,29 +1728,10 @@ globalThis.qwebrExecuteCode = async function (
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="quarto-sidebar-header"><div class="sidebar-header-item">
-<p><strong>GoldPsychR</strong></p>
-</div></div>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
       <a href="../../index.html" class="sidebar-logo-link">
       </a>
-      <div class="sidebar-tools-main">
-    <div class="dropdown">
-      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-github"></i></a>
-      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-          <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/LittleMonkeyLab/GoldPsychR">
-            Source Code
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/LittleMonkeyLab/datarepo">
-            Data Repository
-            </a>
-          </li>
-      </ul>
-    </div>
-</div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -1793,67 +1770,16 @@ globalThis.qwebrExecuteCode = async function (
 </li>
       </ul>
   </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Lab 2: Comparing Groups (t-tests)</span></a>
+ <span class="menu-text">R Toolbox</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../labs/lab02.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab Materials</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Lab 3: ANOVA</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../labs/lab03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab Materials</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Lab 4: Linear Models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../labs/lab04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab Materials</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">R Toolbox</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../toolbox/index.html" class="sidebar-item-text sidebar-link">
@@ -1871,58 +1797,22 @@ globalThis.qwebrExecuteCode = async function (
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Demos &amp; Examples</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../demos/codeoptions-demo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Code Options</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../demos/revealjs-code-animation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Code Animation</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../demos/webex_general.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">WebExercises</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../demos/webex_explain_these_answers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Explain Answers</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../demos/embedded_slides-demo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Embedded Slides</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../demos/webr_slides-demo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">WebR Slides</span></a>
+  <a href="../../demos/week12-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Week 12 Data</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../pedagogical.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Pedagogical Approach</span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>
@@ -1945,7 +1835,6 @@ globalThis.qwebrExecuteCode = async function (
   </ul></li>
   <li><a href="#self-assessment" id="toc-self-assessment" class="nav-link" data-scroll-target="#self-assessment">Self-Assessment</a></li>
   <li><a href="#lab-1-complete" id="toc-lab-1-complete" class="nav-link" data-scroll-target="#lab-1-complete">Lab 1 Complete!</a></li>
-  <li><a href="#download-final-exercise" id="toc-download-final-exercise" class="nav-link" data-scroll-target="#download-final-exercise">Download Final Exercise</a></li>
   <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a></li>
   <li><a href="#extra-practice" id="toc-extra-practice" class="nav-link" data-scroll-target="#extra-practice">Extra Practice</a></li>
   <li><a href="#navigation" id="toc-navigation" class="nav-link" data-scroll-target="#navigation">Navigation</a></li>
@@ -2260,7 +2149,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 14, 2026</p>
+      <p class="date-modified">January 25, 2026</p>
     </div>
   </div>
     
@@ -2335,7 +2224,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Participants reported [describe level] levels of personality overall (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>). At baseline, the control group (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>, <em>n</em> = <strong><em>) and training group (<em>M</em> = </em></strong>, <em>SD</em> = <strong><em>, <em>n</em> = </em></strong>) showed [similar/different] scores. Following the intervention, the control group showed [description] (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>), whereas the training group showed [description] (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>). These descriptive patterns suggest [your interpretation].</p>
+<p>Participants reported [describe level] levels of Consistency of Interest overall (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>) and Perseverance of Effort (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>). First-year students showed [description] Consistency of Interest scores (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>, <em>n</em> = <strong><em>) compared to second-year students (<em>M</em> = </em></strong>, <em>SD</em> = <strong><em>, <em>n</em> = </em></strong>). For Perseverance of Effort, first-year students (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>) [similar/different] compared to second-year students (<em>M</em> = <strong><em>, <em>SD</em> = </em></strong>). These descriptive patterns suggest [your interpretation].</p>
 </div>
 </div>
 <section id="your-write-up" class="level3">
@@ -2353,9 +2242,9 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <div class="callout-body-container callout-body">
 <p>Look at your summary statistics above and fill in the template. Think about:</p>
 <ul>
-<li>Are the groups similar at baseline?</li>
-<li>Which group changed more from pre to post?</li>
-<li>What does this pattern suggest about the training?</li>
+<li>Which subscale shows larger differences between study years?</li>
+<li>Are first-year or second-year students higher on Consistency of Interest?</li>
+<li>What might explain differences in Perseverance of Effort?</li>
 </ul>
 </div>
 </div>
@@ -2391,7 +2280,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <tbody>
 <tr class="odd">
 <td>1</td>
-<td>R basics, variables, vectors</td>
+<td>R basics, downloading notebook</td>
 </tr>
 <tr class="even">
 <td>2</td>
@@ -2399,11 +2288,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </tr>
 <tr class="odd">
 <td>3</td>
-<td>Reverse scoring questionnaires</td>
+<td>Reverse scoring Grit Scale items</td>
 </tr>
 <tr class="even">
 <td>4</td>
-<td>Grouped descriptives, boxplots</td>
+<td>Calculating subscales, grouped descriptives, boxplots</td>
 </tr>
 <tr class="odd">
 <td>5</td>
@@ -2411,41 +2300,6 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </tr>
 </tbody>
 </table>
-<hr>
-</section>
-<section id="download-final-exercise" class="level2">
-<h2 class="anchored" data-anchor-id="download-final-exercise">Download Final Exercise</h2>
-<p>Complete and submit your exercise in RStudio:</p>
-<div class="cell">
-<div class="cell-output-display">
-<button class="btn btn-warning btn-lg" onclick="
-    async function downloadFile(event) {
-      event.preventDefault();
-      try {
-        const response = await fetch('data:application/octet-stream;base64,LS0tCnRpdGxlOiAiTGFiIDE6IERlc2NyaXB0aXZlIFN0YXRpc3RpY3MiCnN1YnRpdGxlOiAiUGVyc29uYWxpdHkgJiBUaGUgQmlnIEZpdmUiCmF1dGhvcjogIllPVVIgTkFNRSBIRVJFIgpkYXRlOiB0b2RheQpmb3JtYXQ6CiAgaHRtbDoKICAgIHRvYzogdHJ1ZQogICAgdG9jLWRlcHRoOiAyCiAgICBudW1iZXItc2VjdGlvbnM6IHRydWUKICAgIGNvZGUtZm9sZDogZmFsc2UKICAgIGNvZGUtYW5ub3RhdGlvbnM6IGJlbG93CiAgICB0aGVtZTogY29zbW8KICAgIGVtYmVkLXJlc291cmNlczogdHJ1ZQotLS0KCmBgYHtyfQojfCBsYWJlbDogc2V0dXAKI3wgbWVzc2FnZTogZmFsc2UKI3wgd2FybmluZzogZmFsc2UKCiMgTG9hZCByZXF1aXJlZCBwYWNrYWdlcwpsaWJyYXJ5KHJlYWRyKQpsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KGdncGxvdDIpCmBgYAoKIyBJbnRyb2R1Y3Rpb24KCkluIHRoaXMgbGFiLCB5b3Ugd2lsbCBhbmFseXNlIEJpZyBGaXZlIHBlcnNvbmFsaXR5IGRhdGEgdG8gcHJhY3RpY2U6CgotIExvYWRpbmcgYW5kIGluc3BlY3RpbmcgZGF0YQotIFJldmVyc2Utc2NvcmluZyBxdWVzdGlvbm5haXJlIGl0ZW1zCi0gQ2FsY3VsYXRpbmcgZGVzY3JpcHRpdmUgc3RhdGlzdGljcwotIENyZWF0aW5nIHZpc3VhbGlzYXRpb25zCi0gV3JpdGluZyBBUEEtc3R5bGUgcmVzdWx0cwoKOjo6IHsuY2FsbG91dC1pbXBvcnRhbnR9CiMjIEJlZm9yZSBZb3UgU3RhcnQKCjEuIFJlcGxhY2UgIllPVVIgTkFNRSBIRVJFIiBpbiB0aGUgWUFNTCBoZWFkZXIgd2l0aCB5b3VyIG5hbWUKMi4gUnVuIGVhY2ggY29kZSBjaHVuayBhbmQgY29tcGxldGUgdGhlIGV4ZXJjaXNlcwozLiBSZW5kZXIgdG8gSFRNTCB3aGVuIGZpbmlzaGVkCgpUaGUgZGF0YSB3aWxsIGJlIGRvd25sb2FkZWQgYXV0b21hdGljYWxseSBmcm9tIEdpdEh1YiB3aGVuIHlvdSBydW4gdGhlIGZpcnN0IGNvZGUgY2h1bmsuCjo6OgoKOjo6IHsuY2FsbG91dC1ub3RlfQojIyBDeWNsaW5nIHdpdGggU2xpZGVzCgpUaGlzIGV4ZXJjaXNlIGlzIGRlc2lnbmVkIHRvIGJlIGNvbXBsZXRlZCAqKmFsb25nc2lkZSoqIHRoZSBMYWIgMSBzbGlkZXM6Cgp8IFNsaWRlcyBQYXJ0IHwgRXhlcmNpc2UgU2VjdGlvbiB8CnwtLS0tLS0tLS0tLS0tLXwtLS0tLS0tLS0tLS0tLS0tLS18CnwgUGFydCAyOiBMb2FkaW5nIERhdGEgfCBTZWN0aW9uIDE6IExvYWQgYW5kIEluc3BlY3QgRGF0YSB8CnwgUGFydCAzOiBSZXZlcnNlIFNjb3JpbmcgfCBTZWN0aW9uIDI6IFJldmVyc2UgU2NvcmluZyB8CnwgUGFydCA0OiBBbmFseXNpcyB8IFNlY3Rpb25zIDMtNDogRGVzY3JpcHRpdmVzICYgVmlzdWFsaXNhdGlvbiB8CnwgUGFydCA1OiBXcml0ZS1VcCB8IFNlY3Rpb25zIDUtNjogQVBBIFdyaXRlLVVwICYgUmVmbGVjdGlvbiB8Cjo6OgoKIyBMb2FkIGFuZCBJbnNwZWN0IERhdGEKCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgU2xpZGVzIFBhcnQgMgpDb21wbGV0ZSB0aGlzIHNlY3Rpb24gZHVyaW5nICoqUGFydCAyOiBMb2FkaW5nIERhdGEqKiBwcmFjdGljZSB0aW1lLgo6OjoKCiMjIExvYWQgdGhlIERhdGFzZXQKCmBgYHtyfQojfCBsYWJlbDogbG9hZC1kYXRhCgojIExvYWQgdGhlIHBlcnNvbmFsaXR5IGRhdGEgZnJvbSBHaXRIdWIKZGF0YV91cmwgPC0gImh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9MaXR0bGVNb25rZXlMYWIvZGF0YXJlcG8vbWFpbi9wZXJzb25hbGl0eV9sYWIuY3N2IgpkYXRhIDwtIHJlYWRfY3N2KGRhdGFfdXJsLCBzaG93X2NvbF90eXBlcyA9IEZBTFNFKQpgYGAKCiMjIEluc3BlY3QgdGhlIERhdGEKCmBgYHtyfQojfCBsYWJlbDogaW5zcGVjdC1oZWFkCgojIFZpZXcgdGhlIGZpcnN0IDYgcm93cwpoZWFkKGRhdGEpCmBgYAoKYGBge3J9CiN8IGxhYmVsOiBpbnNwZWN0LXN0cnVjdHVyZQoKIyBDaGVjayB0aGUgc3RydWN0dXJlCnN0cihkYXRhKQpgYGAKCmBgYHtyfQojfCBsYWJlbDogaW5zcGVjdC1kaW1lbnNpb25zCgojIENoZWNrIGRpbWVuc2lvbnMKZGltKGRhdGEpCmBgYAoKOjo6IHsuY2FsbG91dC1ub3RlfQojIyBFeGVyY2lzZSAxLjEKCkFuc3dlciB0aGUgZm9sbG93aW5nIHF1ZXN0aW9ucyBiYXNlZCBvbiB5b3VyIGluc3BlY3Rpb246CgoxLiBIb3cgbWFueSBwYXJ0aWNpcGFudHMgYXJlIGluIHRoZSBkYXRhc2V0PyAqKltZT1VSIEFOU1dFUl0qKgoyLiBIb3cgbWFueSB2YXJpYWJsZXMgYXJlIHRoZXJlPyAqKltZT1VSIEFOU1dFUl0qKgozLiBXaGF0IGFyZSB0aGUgdHdvIGxldmVscyBvZiB0aGUgYGdyb3VwYCB2YXJpYWJsZT8gKipbWU9VUiBBTlNXRVJdKioKOjo6CgojIFJldmVyc2UgU2NvcmluZwoKOjo6IHsuY2FsbG91dC1ub3RlfQojIyBTbGlkZXMgUGFydCAzCkNvbXBsZXRlIHRoaXMgc2VjdGlvbiBkdXJpbmcgKipQYXJ0IDM6IFJldmVyc2UgU2NvcmluZyoqIHByYWN0aWNlIHRpbWUuCjo6OgoKIyMgVW5kZXJzdGFuZGluZyB0aGUgSXRlbXMKCkl0ZW1zIGBwNGAgYW5kIGBwNWAgYXJlIG5lZ2F0aXZlbHkgd29yZGVkIGFuZCBuZWVkIHRvIGJlIHJldmVyc2Utc2NvcmVkIGJlZm9yZSBjcmVhdGluZyBhIHRvdGFsIHNjb3JlLgoKRm9yIGEgMS01IExpa2VydCBzY2FsZSwgd2UgdXNlIHRoZSBmb3JtdWxhOiBgcmV2ZXJzZWQgPSA2IC0gb3JpZ2luYWxgCgojIyBDcmVhdGUgUmV2ZXJzZWQgSXRlbXMKCmBgYHtyfQojfCBsYWJlbDogcmV2ZXJzZS1zY29yZQojfCBjb2RlLWFubm90YXRpb25zOiBiZWxvdwoKIyBSZXZlcnNlLXNjb3JlIGl0ZW1zIHA0IGFuZCBwNQpkYXRhJHJldl9wNCA8LSA2IC0gZGF0YSRwNApkYXRhJHJldl9wNSA8LSA2IC0gZGF0YSRwNQoKIyBWZXJpZnkgdGhlIHJldmVyc2FsIHdvcmtlZCBjb3JyZWN0bHkKaGVhZChkYXRhWywgYygicDQiLCAicmV2X3A0IiwgInA1IiwgInJldl9wNSIpXSkKYGBgCgoxLiBBcHBseSB0aGUgcmV2ZXJzZSBmb3JtdWxhIHRvIHA0CjIuIEFwcGx5IHRoZSByZXZlcnNlIGZvcm11bGEgdG8gcDUKCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgRXhlcmNpc2UgMi4xCgpMb29rIGF0IHRoZSBvdXRwdXQgYWJvdmUuIEZvciB0aGUgZmlyc3QgcGFydGljaXBhbnQ6CgotIE9yaWdpbmFsIHA0IHNjb3JlOiAqKltZT1VSIEFOU1dFUl0qKgotIFJldmVyc2VkIHA0IHNjb3JlOiAqKltZT1VSIEFOU1dFUl0qKgotIERvIHRoZXkgc3VtIHRvIDY/ICoqW1lPVVIgQU5TV0VSXSoqCjo6OgoKIyMgQ3JlYXRlIFRvdGFsIFNjb3JlCgpgYGB7cn0KI3wgbGFiZWw6IHRvdGFsLXNjb3JlCiN8IGNvZGUtYW5ub3RhdGlvbnM6IGJlbG93CgojIENyZWF0ZSBwZXJzb25hbGl0eSB0b3RhbCBzY29yZQojIFN1bSBhbGwgaXRlbXMsIHVzaW5nIFJFVkVSU0VEIHZlcnNpb25zIGZvciBwNCBhbmQgcDUKZGF0YSRwZXJzX3Njb3JlIDwtIGRhdGEkcDEgKyBkYXRhJHAyICsgZGF0YSRwMyArCiAgICAgICAgICAgICAgICAgICBkYXRhJHJldl9wNCArIGRhdGEkcmV2X3A1CgojIFZpZXcgdGhlIG5ldyBjb2x1bW4KaGVhZChkYXRhWywgYygiZ3JvdXAiLCAidGltZSIsICJwZXJzX3Njb3JlIildKQpgYGAKCjEuIFN1bSBpdGVtcyBwMSwgcDIsIHAzIHBsdXMgdGhlIHJldmVyc2VkIHA0IGFuZCBwNQoKIyBEZXNjcmlwdGl2ZSBTdGF0aXN0aWNzCgo6Ojogey5jYWxsb3V0LW5vdGV9CiMjIFNsaWRlcyBQYXJ0IDQgKFBhcnQgMSkKQ29tcGxldGUgdGhpcyBzZWN0aW9uIGR1cmluZyAqKlBhcnQgNDogQW5hbHlzaXMqKiBwcmFjdGljZSB0aW1lLgo6OjoKCiMjIE92ZXJhbGwgRGVzY3JpcHRpdmVzCgpgYGB7cn0KI3wgbGFiZWw6IG92ZXJhbGwtZGVzY3JpcHRpdmVzCgojIENhbGN1bGF0ZSBvdmVyYWxsIG1lYW4sIFNELCBhbmQgbgptZWFuX292ZXJhbGwgPC0gbWVhbihkYXRhJHBlcnNfc2NvcmUsIG5hLnJtID0gVFJVRSkKc2Rfb3ZlcmFsbCA8LSBzZChkYXRhJHBlcnNfc2NvcmUsIG5hLnJtID0gVFJVRSkKbl9vdmVyYWxsIDwtIGxlbmd0aChkYXRhJHBlcnNfc2NvcmUpCgojIERpc3BsYXkgcmVzdWx0cwpjYXQoIk92ZXJhbGwgU3RhdGlzdGljczpcbiIpCmNhdCgiTSA9Iiwgcm91bmQobWVhbl9vdmVyYWxsLCAyKSwgIlxuIikKY2F0KCJTRCA9Iiwgcm91bmQoc2Rfb3ZlcmFsbCwgMiksICJcbiIpCmNhdCgibiA9Iiwgbl9vdmVyYWxsLCAiXG4iKQpgYGAKCiMjIERlc2NyaXB0aXZlcyBieSBHcm91cCBhbmQgVGltZQoKYGBge3J9CiN8IGxhYmVsOiBncm91cGVkLWRlc2NyaXB0aXZlcwojfCBjb2RlLWFubm90YXRpb25zOiBiZWxvdwoKIyBDYWxjdWxhdGUgZGVzY3JpcHRpdmVzIGJ5IGdyb3VwIGFuZCB0aW1lCmRhdGFfc3VtbWFyeSA8LSBkYXRhIHw+CiAgZ3JvdXBfYnkoZ3JvdXAsIHRpbWUpIHw+CiAgc3VtbWFyaXNlKAogICAgbWVhbiA9IG1lYW4ocGVyc19zY29yZSwgbmEucm0gPSBUUlVFKSwKICAgIHNkID0gc2QocGVyc19zY29yZSwgbmEucm0gPSBUUlVFKSwKICAgIG4gPSBuKCksCiAgICAuZ3JvdXBzID0gImRyb3AiCiAgKQoKIyBEaXNwbGF5IHRoZSBzdW1tYXJ5IHRhYmxlCmRhdGFfc3VtbWFyeQpgYGAKCjEuIFBpcGUgZGF0YSBmb3J3YXJkCjIuIEdyb3VwIGJ5IGJvdGggZmFjdG9ycwozLiBDYWxjdWxhdGUgbWVhbiwgU0QsIGFuZCBuIGZvciBlYWNoIGdyb3VwCjQuIFJlbW92ZSBncm91cGluZyBzdHJ1Y3R1cmUKCmBgYHtyfQojfCBsYWJlbDogZm9ybWF0dGVkLXRhYmxlCgojIENyZWF0ZSBhIG5pY2VseSBmb3JtYXR0ZWQgdGFibGUKa25pdHI6OmthYmxlKGRhdGFfc3VtbWFyeSwKICAgICAgICAgICAgIGRpZ2l0cyA9IDIsCiAgICAgICAgICAgICBjYXB0aW9uID0gIkRlc2NyaXB0aXZlIFN0YXRpc3RpY3MgYnkgR3JvdXAgYW5kIFRpbWUiLAogICAgICAgICAgICAgY29sLm5hbWVzID0gYygiR3JvdXAiLCAiVGltZSIsICJNZWFuIiwgIlNEIiwgIm4iKSkKYGBgCgo6Ojogey5jYWxsb3V0LW5vdGV9CiMjIEV4ZXJjaXNlIDMuMQoKVXNlIHRoZSBzdW1tYXJ5IHRhYmxlIHRvIGFuc3dlcjoKCjEuIFdoaWNoIGdyb3VwLXRpbWUgY29tYmluYXRpb24gaGFzIHRoZSBoaWdoZXN0IG1lYW4/ICoqW1lPVVIgQU5TV0VSXSoqCjIuIFdoaWNoIGdyb3VwLXRpbWUgY29tYmluYXRpb24gaGFzIHRoZSBsb3dlc3QgbWVhbj8gKipbWU9VUiBBTlNXRVJdKioKMy4gQXJlIHRoZSBzYW1wbGUgc2l6ZXMgZXF1YWwgYWNyb3NzIGdyb3Vwcz8gKipbWU9VUiBBTlNXRVJdKioKOjo6CgojIFZpc3VhbGlzYXRpb24KCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgU2xpZGVzIFBhcnQgNCAoUGFydCAyKQpDb21wbGV0ZSB0aGlzIHNlY3Rpb24gZHVyaW5nICoqUGFydCA0OiBBbmFseXNpcyoqIHByYWN0aWNlIHRpbWUuCjo6OgoKIyMgQm94cGxvdCBieSBHcm91cCBhbmQgVGltZQoKYGBge3J9CiN8IGxhYmVsOiBib3hwbG90CiN8IGZpZy13aWR0aDogOAojfCBmaWctaGVpZ2h0OiA1CiN8IGNvZGUtYW5ub3RhdGlvbnM6IGJlbG93CgojIENyZWF0ZSBhIGJveHBsb3QKZ2dwbG90KGRhdGEsIGFlcyh4ID0gZ3JvdXAsIHkgPSBwZXJzX3Njb3JlLCBmaWxsID0gdGltZSkpICsKICBnZW9tX2JveHBsb3QoYWxwaGEgPSAwLjcpICsKICB0aGVtZV9taW5pbWFsKCkgKwogIGxhYnMoCiAgICB0aXRsZSA9ICJQZXJzb25hbGl0eSBTY29yZXMgYnkgR3JvdXAgYW5kIFRpbWUiLAogICAgeCA9ICJHcm91cCIsCiAgICB5ID0gIlBlcnNvbmFsaXR5IFNjb3JlIiwKICAgIGZpbGwgPSAiVGltZSIKICApCmBgYAoKMS4gU2V0IHVwIHBsb3Qgd2l0aCBhZXN0aGV0aWNzCjIuIEFkZCBib3hwbG90IGdlb21ldHJ5CjMuIEFwcGx5IG1pbmltYWwgdGhlbWUKNC4gQWRkIGluZm9ybWF0aXZlIGxhYmVscwoKOjo6IHsuY2FsbG91dC1ub3RlfQojIyBFeGVyY2lzZSA0LjEKCkRlc2NyaWJlIHdoYXQgeW91IHNlZSBpbiB0aGUgYm94cGxvdDoKCjEuIERvIHRoZSBncm91cHMgYXBwZWFyIHNpbWlsYXIgYXQgYmFzZWxpbmUgKHByZSk/ICoqW1lPVVIgQU5TV0VSXSoqCjIuIFdoaWNoIGdyb3VwIHNob3dzIG1vcmUgY2hhbmdlIGZyb20gcHJlIHRvIHBvc3Q/ICoqW1lPVVIgQU5TV0VSXSoqCjMuIEFyZSB0aGVyZSBhbnkgb3V0bGllcnMgdmlzaWJsZT8gKipbWU9VUiBBTlNXRVJdKioKOjo6CgojIyBZb3VyIEN1c3RvbSBWaXN1YWxpc2F0aW9uCgpDcmVhdGUgeW91ciBvd24gdmlzdWFsaXNhdGlvbiBiZWxvdy4gWW91IG1pZ2h0IHRyeToKCi0gQSBoaXN0b2dyYW0gb2YgdGhlIHRvdGFsIHNjb3JlcwotIFNlcGFyYXRlIGJveHBsb3RzIGZvciBlYWNoIHRpbWUgcG9pbnQKLSBBIGJhciBjaGFydCBvZiBtZWFucyB3aXRoIGVycm9yIGJhcnMKCmBgYHtyfQojfCBsYWJlbDogY3VzdG9tLXBsb3QKI3wgZmlnLXdpZHRoOiA4CiN8IGZpZy1oZWlnaHQ6IDUKCiMgWU9VUiBDT0RFIEhFUkUKIyBDcmVhdGUgeW91ciBvd24gdmlzdWFsaXNhdGlvbgoKCmBgYAoKIyBBUEEgV3JpdGUtVXAKCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgU2xpZGVzIFBhcnQgNQpDb21wbGV0ZSB0aGlzIHNlY3Rpb24gZHVyaW5nICoqUGFydCA1OiBXcml0ZS1VcCoqIHByYWN0aWNlIHRpbWUuCjo6OgoKIyMgV3JpdGUgWW91ciBSZXN1bHRzCgpVc2luZyB0aGUgc3VtbWFyeSBzdGF0aXN0aWNzIGZyb20gU2VjdGlvbiAzLCB3cml0ZSBhbiBBUEEtc3R5bGUgcGFyYWdyYXBoIGRlc2NyaWJpbmcgdGhlIGRlc2NyaXB0aXZlIHN0YXRpc3RpY3MuCgo6Ojogey5jYWxsb3V0LXRpcH0KIyMgVGVtcGxhdGUKClBhcnRpY2lwYW50cyByZXBvcnRlZCBbZGVzY3JpcHRpb25dIGxldmVscyBvZiBwZXJzb25hbGl0eSBvdmVyYWxsIChNID0gX19fLCBTRCA9IF9fXykuIEF0IGJhc2VsaW5lLCB0aGUgY29udHJvbCBncm91cCAoTSA9IF9fXywgU0QgPSBfX18sIG4gPSBfX18pIGFuZCB0cmFpbmluZyBncm91cCAoTSA9IF9fXywgU0QgPSBfX18sIG4gPSBfX18pIHdlcmUgW3NpbWlsYXIvZGlmZmVyZW50XS4gRm9sbG93aW5nIHRoZSBpbnRlcnZlbnRpb24sIHRoZSBjb250cm9sIGdyb3VwIHNob3dlZCBbZGVzY3JpcHRpb24gb2YgY2hhbmdlXSAoTSA9IF9fXywgU0QgPSBfX18pLCB3aGVyZWFzIHRoZSB0cmFpbmluZyBncm91cCBzaG93ZWQgW2Rlc2NyaXB0aW9uIG9mIGNoYW5nZV0gKE0gPSBfX18sIFNEID0gX19fKS4gVGhlc2UgZGVzY3JpcHRpdmUgcGF0dGVybnMgc3VnZ2VzdCBbeW91ciBpbnRlcnByZXRhdGlvbl0uCjo6OgoKKipZT1VSIFdSSVRFLVVQIEhFUkU6KioKCltXcml0ZSB5b3VyIEFQQS1zdHlsZSBwYXJhZ3JhcGggaGVyZSwgZmlsbGluZyBpbiB0aGUgc3RhdGlzdGljcyBmcm9tIHlvdXIgYW5hbHlzaXNdCgojIFJlZmxlY3Rpb24KCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgRXhlcmNpc2UgNi4xCgpBbnN3ZXIgdGhlc2UgcmVmbGVjdGlvbiBxdWVzdGlvbnM6CgoxLiAqKldoYXQgd2FzIHRoZSBtb3N0IGNoYWxsZW5naW5nIHBhcnQgb2YgdGhpcyBsYWI/KioKCltZT1VSIEFOU1dFUl0KCjIuICoqV2hhdCB3b3VsZCB5b3UgZG8gZGlmZmVyZW50bHkgbmV4dCB0aW1lPyoqCgpbWU9VUiBBTlNXRVJdCgozLiAqKldoYXQgcXVlc3Rpb25zIGRvIHlvdSBzdGlsbCBoYXZlPyoqCgpbWU9VUiBBTlNXRVJdCjo6OgoKIyBTZXNzaW9uIEluZm8KCmBgYHtyfQojfCBsYWJlbDogc2Vzc2lvbi1pbmZvCgojIFJlY29yZCB5b3VyIFIgZW52aXJvbm1lbnQgZm9yIHJlcHJvZHVjaWJpbGl0eQpzZXNzaW9uSW5mbygpCmBgYAoKLS0tCgo6Ojogey5jYWxsb3V0LWltcG9ydGFudH0KIyMgU3VibWlzc2lvbiBDaGVja2xpc3QKCkJlZm9yZSBzdWJtaXR0aW5nLCBlbnN1cmUgeW91IGhhdmU6CgotIFsgXSBSZXBsYWNlZCAiWU9VUiBOQU1FIEhFUkUiIHdpdGggeW91ciBuYW1lCi0gWyBdIENvbXBsZXRlZCBhbGwgZXhlcmNpc2VzCi0gWyBdIFdyaXR0ZW4gdGhlIEFQQSByZXN1bHRzIHBhcmFncmFwaAotIFsgXSBDcmVhdGVkIGEgY3VzdG9tIHZpc3VhbGlzYXRpb24KLSBbIF0gQW5zd2VyZWQgdGhlIHJlZmxlY3Rpb24gcXVlc3Rpb25zCi0gWyBdIFJlbmRlcmVkIHRvIEhUTUwgc3VjY2Vzc2Z1bGx5Cjo6Ogo=');
-        if (!response.ok) throw new Error('Network response failed');
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = 'lab1-exercise.qmd';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.dispatchEvent(new MouseEvent('click'));
-        document.body.removeChild(a);
-        setTimeout(() => {
-          window.URL.revokeObjectURL(blobUrl);
-        }, 100);
-        return false;
-      } catch (error) {
-        console.error('Download failed:', error);
-        alert('Download failed. Please try again.');
-      }
-    }
-    downloadFile(event);
-  "><i class="fa fa-download"></i> Download Exercise (.qmd)</button>
-</div>
-</div>
 <hr>
 </section>
 <section id="whats-next" class="level2">
@@ -2473,7 +2327,50 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <section id="extra-practice" class="level2">
 <h2 class="anchored" data-anchor-id="extra-practice">Extra Practice</h2>
 <p>Want more practice? Try the follow-on exercise with a different dataset:</p>
-<p><a href="../../followon/lab1-followon.qmd" class="btn btn-secondary">Follow-On Exercise: Wellbeing Study</a></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Follow-On Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The follow-on exercise is a <strong><code>.qmd</code> notebook file</strong> that you download and run in <strong>RStudio Server</strong> on your own time. It uses a different dataset (Wellbeing Study) to give you extra practice applying the same skills you learned in Lab 1.</p>
+<p><strong>To use it:</strong> 1. Download the <code>.qmd</code> file below 2. Upload it to your RStudio Server workspace (same way you did with the main exercise) 3. Work through it independently to reinforce your learning</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<button class="btn btn-info btn-lg" onclick="
+    async function downloadFile(event) {
+      event.preventDefault();
+      try {
+        const response = await fetch('data:application/octet-stream;base64,LS0tCnRpdGxlOiAiTGFiIDEgRm9sbG93LU9uOiBUcmFuc2ZlciBQcmFjdGljZSIKc3VidGl0bGU6ICJBcHBseWluZyBZb3VyIFNraWxscyB0byBOZXcgRGF0YSIKYXV0aG9yOiAiWU9VUiBOQU1FIEhFUkUiCmRhdGU6IHRvZGF5CmZvcm1hdDoKICBodG1sOgogICAgdG9jOiB0cnVlCiAgICB0b2MtZGVwdGg6IDIKICAgIG51bWJlci1zZWN0aW9uczogdHJ1ZQogICAgY29kZS1mb2xkOiBmYWxzZQogICAgY29kZS1hbm5vdGF0aW9uczogYmVsb3cKICAgIHRoZW1lOiBjb3NtbwogICAgZW1iZWQtcmVzb3VyY2VzOiB0cnVlCi0tLQoKYGBge3J9CiN8IGxhYmVsOiBzZXR1cAojfCBtZXNzYWdlOiBmYWxzZQojfCB3YXJuaW5nOiBmYWxzZQoKIyBMb2FkIHJlcXVpcmVkIHBhY2thZ2VzCmxpYnJhcnkocmVhZHIpCmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoZ2dwbG90MikKYGBgCgojIEludHJvZHVjdGlvbgoKVGhpcyBmb2xsb3ctb24gZXhlcmNpc2UgdXNlcyBhICoqZGlmZmVyZW50IGRhdGFzZXQqKiB0byBoZWxwIHlvdSBjb25zb2xpZGF0ZSB5b3VyIExhYiAxIHNraWxscy4gWW91J2xsIGFwcGx5IHRoZSBzYW1lIHRlY2huaXF1ZXMgdG8gbmV3IGRhdGEgd2l0aCBsZXNzIHNjYWZmb2xkaW5nLgoKOjo6IHsuY2FsbG91dC1ub3RlfQojIyBEYXRhc2V0OiBXZWxsYmVpbmcgU3R1ZHkKClJlc2VhcmNoZXJzIGludmVzdGlnYXRlZCB0aGUgZWZmZWN0IG9mIGEgbWluZGZ1bG5lc3MgaW50ZXJ2ZW50aW9uIG9uIHBzeWNob2xvZ2ljYWwgd2VsbGJlaW5nLiBQYXJ0aWNpcGFudHMgY29tcGxldGVkIGEgNi1pdGVtIHdlbGxiZWluZyBxdWVzdGlvbm5haXJlIGJlZm9yZSBhbmQgYWZ0ZXIgYW4gOC13ZWVrIHByb2dyYW1tZS4KCi0gKipQYXJ0aWNpcGFudHMqKjogMTIwIHVuaXZlcnNpdHkgc3R1ZGVudHMKLSAqKkRlc2lnbioqOiAyIChncm91cDogY29udHJvbCB2cyBtaW5kZnVsbmVzcykgeCAyICh0aW1lOiBwcmUgdnMgcG9zdCkKLSAqKk1lYXN1cmVzKio6IDYgd2VsbGJlaW5nIGl0ZW1zICh3MS13Nikgb24gYSAxLTcgc2NhbGUKLSAqKlJldmVyc2Utc2NvcmVkIGl0ZW1zKio6IHczIGFuZCB3NQo6OjoKCgojIFRhc2sgMTogTG9hZCBhbmQgSW5zcGVjdAoKTG9hZCB0aGUgd2VsbGJlaW5nIGRhdGFzZXQgYW5kIGV4cGxvcmUgaXRzIHN0cnVjdHVyZS4KCmBgYHtyfQojfCBsYWJlbDogbG9hZC1kYXRhCgojIExvYWQgZGF0YSBmcm9tIEdpdEh1YgpkYXRhX3VybCA8LSAiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0xpdHRsZU1vbmtleUxhYi9kYXRhcmVwby9tYWluL3dlbGxiZWluZ19kYXRhLmNzdiIKd2VsbGJlaW5nIDwtIHJlYWRfY3N2KGRhdGFfdXJsLCBzaG93X2NvbF90eXBlcyA9IEZBTFNFKQpgYGAKCmBgYHtyfQojfCBsYWJlbDogaW5zcGVjdAoKIyBZT1VSIENPREU6IFZpZXcgdGhlIGZpcnN0IGZldyByb3dzCgoKIyBZT1VSIENPREU6IENoZWNrIHRoZSBzdHJ1Y3R1cmUKCgojIFlPVVIgQ09ERTogQ2hlY2sgZGltZW5zaW9ucwoKYGBgCgo6Ojogey5jYWxsb3V0LW5vdGV9CiMjIFF1ZXN0aW9ucwoKMS4gSG93IG1hbnkgcGFydGljaXBhbnRzPyBfX18KMi4gSG93IG1hbnkgdmFyaWFibGVzPyBfX18KMy4gV2hhdCBhcmUgdGhlIGNvbmRpdGlvbiBsZXZlbHM/IF9fXwo6OjoKCiMgVGFzayAyOiBSZXZlcnNlIFNjb3JpbmcKCkl0ZW1zIHczIGFuZCB3NSBhcmUgbmVnYXRpdmVseSB3b3JkZWQuIFJldmVyc2Utc2NvcmUgdGhlbS4KCjo6OiB7LmNhbGxvdXQtdGlwfQojIyBIaW50CgpGb3IgYSAxLTcgc2NhbGUsIHRoZSBmb3JtdWxhIGlzOiBgcmV2ZXJzZWQgPSA4IC0gb3JpZ2luYWxgCjo6OgoKYGBge3J9CiN8IGxhYmVsOiByZXZlcnNlLXNjb3JlCgojIFlPVVIgQ09ERTogQ3JlYXRlIHJldmVyc2VkIHZlcnNpb25zIG9mIHczIGFuZCB3NQoKCiMgWU9VUiBDT0RFOiBWZXJpZnkgdGhlIHJldmVyc2FsIHdvcmtlZAoKYGBgCgojIFRhc2sgMzogQ3JlYXRlIFRvdGFsIFNjb3JlCgpTdW0gYWxsIGl0ZW1zICh1c2luZyByZXZlcnNlZCB2ZXJzaW9ucyBmb3IgdzMgYW5kIHc1KSB0byBjcmVhdGUgYHdlbGxiZWluZ190b3RhbGAuCgpgYGB7cn0KI3wgbGFiZWw6IHRvdGFsLXNjb3JlCgojIFlPVVIgQ09ERTogQ3JlYXRlIHRoZSB0b3RhbCB3ZWxsYmVpbmcgc2NvcmUKCgojIFlPVVIgQ09ERTogVmlldyBhIGZldyByb3dzIHRvIGNoZWNrCgpgYGAKCiMgVGFzayA0OiBEZXNjcmlwdGl2ZSBTdGF0aXN0aWNzCgojIyBPdmVyYWxsIFN0YXRpc3RpY3MKCmBgYHtyfQojfCBsYWJlbDogb3ZlcmFsbC1zdGF0cwoKIyBZT1VSIENPREU6IENhbGN1bGF0ZSBvdmVyYWxsIG1lYW4sIFNELCBhbmQgbgoKCmBgYAoKIyMgR3JvdXBlZCBTdGF0aXN0aWNzCgpgYGB7cn0KI3wgbGFiZWw6IGdyb3VwZWQtc3RhdHMKCiMgWU9VUiBDT0RFOiBDYWxjdWxhdGUgbWVhbiwgU0QsIGFuZCBuIGJ5IGNvbmRpdGlvbiBhbmQgdGltZXBvaW50CgoKYGBgCgo6Ojogey5jYWxsb3V0LW5vdGV9CiMjIFF1ZXN0aW9ucwoKRmlsbCBpbiBmcm9tIHlvdXIgb3V0cHV0OgoKfCBDb25kaXRpb24gfCBUaW1lcG9pbnQgfCBNIHwgU0QgfCBuIHwKfC0tLS0tLS0tLS0tfC0tLS0tLS0tLS0tfC0tLXwtLS0tfC0tLS18CnwgY29udHJvbCB8IHByZSB8IF9fXyB8IF9fXyB8IF9fXyB8CnwgY29udHJvbCB8IHBvc3QgfCBfX18gfCBfX18gfCBfX18gfAp8IG1pbmRmdWxuZXNzIHwgcHJlIHwgX19fIHwgX19fIHwgX19fIHwKfCBtaW5kZnVsbmVzcyB8IHBvc3QgfCBfX18gfCBfX18gfCBfX18gfAo6OjoKCiMgVGFzayA1OiBWaXN1YWxpc2F0aW9uCgpDcmVhdGUgYSBib3hwbG90IHNob3dpbmcgd2VsbGJlaW5nIHNjb3JlcyBieSBjb25kaXRpb24gYW5kIHRpbWVwb2ludC4KCmBgYHtyfQojfCBsYWJlbDogYm94cGxvdAojfCBmaWctd2lkdGg6IDgKI3wgZmlnLWhlaWdodDogNQoKIyBZT1VSIENPREU6IENyZWF0ZSBhIGJveHBsb3QKCgpgYGAKCkNyZWF0ZSBvbmUgYWRkaXRpb25hbCB2aXN1YWxpc2F0aW9uIG9mIHlvdXIgY2hvaWNlOgoKYGBge3J9CiN8IGxhYmVsOiBjdXN0b20tdml6CiN8IGZpZy13aWR0aDogOAojfCBmaWctaGVpZ2h0OiA1CgojIFlPVVIgQ09ERTogQ3JlYXRlIGFub3RoZXIgdmlzdWFsaXNhdGlvbgoKCmBgYAoKIyBUYXNrIDY6IEFQQSBXcml0ZS1VcAoKV3JpdGUgYW4gQVBBLXN0eWxlIHBhcmFncmFwaCBkZXNjcmliaW5nIHlvdXIgZmluZGluZ3MuIEluY2x1ZGU6CgotIE92ZXJhbGwgbWVhbiBhbmQgU0QKLSBNZWFucyBhbmQgU0RzIGJ5IGNvbmRpdGlvbiBhdCBlYWNoIHRpbWVwb2ludAotIERlc2NyaXB0aW9uIG9mIGFueSBhcHBhcmVudCBlZmZlY3RzCgoqKllPVVIgV1JJVEUtVVA6KioKCltXcml0ZSB5b3VyIHBhcmFncmFwaCBoZXJlXQoKIyBUYXNrIDc6IENvbXBhcmlzb24KCjo6OiB7LmNhbGxvdXQtbm90ZX0KIyMgUmVmbGVjdGlvbgoKQ29tcGFyZSB0aGlzIGFuYWx5c2lzIHRvIExhYiAxOgoKMS4gKipXaGF0IHdhcyB0aGUgc2FtZT8qKgoKW1lPVVIgQU5TV0VSXQoKMi4gKipXaGF0IHdhcyBkaWZmZXJlbnQ/KioKCltZT1VSIEFOU1dFUl0KCjMuICoqV2hhdCBmb3JtdWxhIGRpZCB5b3UgdXNlIGZvciByZXZlcnNlLXNjb3JpbmcsIGFuZCB3aHkgd2FzIGl0IGRpZmZlcmVudCBmcm9tIExhYiAxPyoqCgpbWU9VUiBBTlNXRVJdCgo0LiAqKkhvdyBjb25maWRlbnQgZG8geW91IGZlZWwgYXBwbHlpbmcgdGhlc2Ugc2tpbGxzIHRvIG5ldyBkYXRhPyoqCgpbWU9VUiBBTlNXRVJdCjo6OgoKIyBTb2x1dGlvbnMKCjo6OiB7LmNhbGxvdXQtY2F1dGlvbiBjb2xsYXBzZT0idHJ1ZSJ9CiMjIENsaWNrIHRvIHJldmVhbCBzb2x1dGlvbnMgKHRyeSBmaXJzdCEpCgojIyMgVGFzayAyOiBSZXZlcnNlIFNjb3JpbmcKYGBgcgp3ZWxsYmVpbmckcmV2X3czIDwtIDggLSB3ZWxsYmVpbmckdzMKd2VsbGJlaW5nJHJldl93NSA8LSA4IC0gd2VsbGJlaW5nJHc1CmBgYAoKIyMjIFRhc2sgMzogVG90YWwgU2NvcmUKYGBgcgp3ZWxsYmVpbmckd2VsbGJlaW5nX3RvdGFsIDwtIHdlbGxiZWluZyR3MSArIHdlbGxiZWluZyR3MiArCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHdlbGxiZWluZyRyZXZfdzMgKyB3ZWxsYmVpbmckdzQgKwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICB3ZWxsYmVpbmckcmV2X3c1ICsgd2VsbGJlaW5nJHc2CmBgYAoKIyMjIFRhc2sgNDogR3JvdXBlZCBTdGF0aXN0aWNzCmBgYHIKd2VsbGJlaW5nIHw+CiAgZ3JvdXBfYnkoY29uZGl0aW9uLCB0aW1lcG9pbnQpIHw+CiAgc3VtbWFyaXNlKAogICAgbWVhbiA9IG1lYW4od2VsbGJlaW5nX3RvdGFsLCBuYS5ybSA9IFRSVUUpLAogICAgc2QgPSBzZCh3ZWxsYmVpbmdfdG90YWwsIG5hLnJtID0gVFJVRSksCiAgICBuID0gbigpLAogICAgLmdyb3VwcyA9ICJkcm9wIgogICkKYGBgCgojIyMgVGFzayA1OiBCb3hwbG90CmBgYHIKZ2dwbG90KHdlbGxiZWluZywgYWVzKHggPSBjb25kaXRpb24sIHkgPSB3ZWxsYmVpbmdfdG90YWwsIGZpbGwgPSB0aW1lcG9pbnQpKSArCiAgZ2VvbV9ib3hwbG90KGFscGhhID0gMC43KSArCiAgdGhlbWVfbWluaW1hbCgpICsKICBsYWJzKAogICAgdGl0bGUgPSAiV2VsbGJlaW5nIFNjb3JlcyBieSBDb25kaXRpb24gYW5kIFRpbWVwb2ludCIsCiAgICB4ID0gIkNvbmRpdGlvbiIsCiAgICB5ID0gIldlbGxiZWluZyBTY29yZSIsCiAgICBmaWxsID0gIlRpbWVwb2ludCIKICApCmBgYAo6OjoKCiMgU2Vzc2lvbiBJbmZvCgpgYGB7cn0KI3wgbGFiZWw6IHNlc3Npb24taW5mbwoKc2Vzc2lvbkluZm8oKQpgYGAK');
+        if (!response.ok) throw new Error('Network response failed');
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'lab1-followon.qmd';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click'));
+        document.body.removeChild(a);
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return false;
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
+    }
+    downloadFile(event);
+  "><i class="fa fa-download"></i> Download Follow-On Exercise (.qmd)</button>
+</div>
+</div>
 <hr>
 </section>
 <section id="navigation" class="level2">
@@ -3194,174 +3091,198 @@ window.onload = function() {
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="in">library(dplyr)</span></span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="in"># Load and prepare data</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">data_url &lt;- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">data_url &lt;- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"</span></span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">data &lt;- read_csv(data_url, show_col_types = FALSE)</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_p4 &lt;- 6 - data$p4</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_p5 &lt;- 6 - data$p5</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">data$pers_score &lt;- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="in"># Overall statistics</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="in">cat("=== OVERALL ===\n")</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="in">cat("M =", round(mean(data$pers_score), 2), "\n")</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="in">cat("SD =", round(sd(data$pers_score), 2), "\n")</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="in">cat("N =", length(data$pers_score), "\n\n")</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="in"># By group and time</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="in">cat("=== BY GROUP AND TIME ===\n")</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="in">summary_stats &lt;- data |&gt;</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="in">  group_by(group, time) |&gt;</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="in">    M = round(mean(pers_score), 2),</span></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">    SD = round(sd(pers_score), 2),</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="in">    n = n(),</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="in">    .groups = "drop"</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="in">print(summary_stats)</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">### Create a Formatted Table</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{webr-r}</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="in">library(readr)</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="in">library(dplyr)</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">data_url &lt;- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="in">data &lt;- read_csv(data_url, show_col_types = FALSE)</span></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_p4 &lt;- 6 - data$p4</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_p5 &lt;- 6 - data$p5</span></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="in">data$pers_score &lt;- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5</span></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="in">summary_stats &lt;- data |&gt;</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="in">  group_by(group, time) |&gt;</span></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="in">    M = round(mean(pers_score), 2),</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="in">    SD = round(sd(pers_score), 2),</span></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="in">    n = n(),</span></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">    .groups = "drop"</span></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::kable(summary_stats,</span></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="in">             caption = "Table 1. Descriptive Statistics by Group and Time",</span></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="in">             col.names = c("Group", "Time", "M", "SD", "n"))</span></span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## APA Write-Up Template</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in"># Reverse-score items</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G1 &lt;- 6 - data$G1</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G3 &lt;- 6 - data$G3</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G5 &lt;- 6 - data$G5</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G6 &lt;- 6 - data$G6</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="in"># Create subscales</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="in">data$consistency &lt;- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="in">data$perseverance &lt;- data$G2 + data$G4 + data$G7 + data$G8</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="in">data$Study_Year &lt;- factor(data$Study_Year)</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="in"># Overall statistics</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="in">cat("=== OVERALL ===\n")</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="in">cat("Consistency of Interest:\n")</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="in">cat("M =", round(mean(data$consistency), 2), "\n")</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">cat("SD =", round(sd(data$consistency), 2), "\n\n")</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="in">cat("Perseverance of Effort:\n")</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="in">cat("M =", round(mean(data$perseverance), 2), "\n")</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="in">cat("SD =", round(sd(data$perseverance), 2), "\n")</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="in">cat("N =", length(data$consistency), "\n\n")</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="in"># By Study Year</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="in">cat("=== BY STUDY YEAR ===\n")</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="in">summary_stats &lt;- data |&gt;</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="in">  group_by(Study_Year) |&gt;</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="in">    M_consistency = round(mean(consistency), 2),</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="in">    SD_consistency = round(sd(consistency), 2),</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="in">    M_perseverance = round(mean(perseverance), 2),</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">    SD_perseverance = round(sd(perseverance), 2),</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="in">    n = n(),</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="in">    .groups = "drop"</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="in">print(summary_stats)</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Create a Formatted Table</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{webr-r}</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="in">library(readr)</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">library(dplyr)</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="in">data_url &lt;- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="in">data &lt;- read_csv(data_url, show_col_types = FALSE)</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G1 &lt;- 6 - data$G1</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G3 &lt;- 6 - data$G3</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G5 &lt;- 6 - data$G5</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="in">data$rev_G6 &lt;- 6 - data$G6</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="in">data$consistency &lt;- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="in">data$perseverance &lt;- data$G2 + data$G4 + data$G7 + data$G8</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="in">data$Study_Year &lt;- factor(data$Study_Year)</span></span>
 <span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>Use this template for your results paragraph. Fill in the blanks with your statistics:</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="fu">## Template</span></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>Participants reported <span class="co">[</span><span class="ot">describe level</span><span class="co">]</span> levels of personality overall (*M* = ___, *SD* = ___). At baseline, the control group (*M* = ___, *SD* = ___, *n* = ___) and training group (*M* = ___, *SD* = ___, *n* = ___) showed [similar/different] scores. Following the intervention, the control group showed [description] (*M* = ___, *SD* = ___), whereas the training group showed [description] (*M* = ___, *SD* = ___). These descriptive patterns suggest <span class="co">[</span><span class="ot">your interpretation</span><span class="co">]</span>.</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your Write-Up</span></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>Write your paragraph here (or in your RStudio exercise):</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Turn</span></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>Look at your summary statistics above and fill in the template. Think about:</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="in">summary_stats &lt;- data |&gt;</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="in">  group_by(Study_Year) |&gt;</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="in">  summarise(</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="in">    M_consistency = round(mean(consistency), 2),</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="in">    SD_consistency = round(sd(consistency), 2),</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="in">    M_perseverance = round(mean(perseverance), 2),</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="in">    SD_perseverance = round(sd(perseverance), 2),</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="in">    n = n(),</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="in">    .groups = "drop"</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="in">  )</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::kable(summary_stats,</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="in">             caption = "Table 1. Descriptive Statistics for Grit Subscales by Study Year",</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="in">             col.names = c("Study Year", "M (Consistency)", "SD (Consistency)", </span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="in">                          "M (Perseverance)", "SD (Perseverance)", "n"))</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Are the groups similar at baseline?</span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Which group changed more from pre to post?</span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>What does this pattern suggest about the training?</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## Self-Assessment</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## APA Write-Up Template</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>Use this template for your results paragraph. Fill in the blanks with your statistics:</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## Template</span></span>
 <span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Check your understanding before finishing.</span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>::: {.webex-check .webex-box}</span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>**1. In APA style, M stands for:**</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("Maximum", answer = "Mean", "Minimum", "Median"))`</span></span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>**2. How many decimal places should you use for M and SD?**</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Participants reported <span class="co">[</span><span class="ot">describe level</span><span class="co">]</span> levels of Consistency of Interest overall (*M* = ___, *SD* = ___) and Perseverance of Effort (*M* = ___, *SD* = ___). First-year students showed [description] Consistency of Interest scores (*M* = ___, *SD* = ___, *n* = ___) compared to second-year students (*M* = ___, *SD* = ___, *n* = ___). For Perseverance of Effort, first-year students (*M* = ___, *SD* = ___) [similar/different] compared to second-year students (*M* = ___, *SD* = ___). These descriptive patterns suggest <span class="co">[</span><span class="ot">your interpretation</span><span class="co">]</span>.</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your Write-Up</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>Write your paragraph here (or in your RStudio exercise):</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your Turn</span></span>
 <span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("0", "1", answer = "2", "3"))`</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>Look at your summary statistics above and fill in the template. Think about:</span>
 <span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>**3. True or False: You only need to report means, not standard deviations.**</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="in">`r torf(FALSE)`</span></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>**4. Which is correct APA format?**</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("Mean = 3.27", "m = 3.27", answer = "M = 3.27", "MEAN = 3.27"))`</span></span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>**5. A good results paragraph includes M, SD, and `r fitb("n")` (sample size).**</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lab 1 Complete!</span></span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>Congratulations! You've learned:</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Part <span class="pp">|</span> Skills <span class="pp">|</span></span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> R basics, variables, vectors <span class="pp">|</span></span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> Loading data, inspecting structure <span class="pp">|</span></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> Reverse scoring questionnaires <span class="pp">|</span></span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Grouped descriptives, boxplots <span class="pp">|</span></span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> APA-style reporting <span class="pp">|</span></span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Download Final Exercise</span></span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>Complete and submit your exercise in RStudio:</span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>downloadthis<span class="sc">::</span><span class="fu">download_file</span>(</span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"../../templates/lab1-exercise.qmd"</span>,</span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_name =</span> <span class="st">"lab1-exercise"</span>,</span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">button_label =</span> <span class="st">"Download Exercise (.qmd)"</span>,</span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">button_type =</span> <span class="st">"warning"</span>,</span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">icon =</span> <span class="st">"fa fa-download"</span>,</span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"btn-lg"</span></span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a><span class="fu">## What's Next?</span></span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coming Up in Lab 2</span></span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Independent samples t-test** - comparing two groups</span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Paired samples t-test** - comparing pre vs post</span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Effect sizes** - Cohen's d</span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**APA reporting** for inferential statistics</span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extra Practice</span></span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>Want more practice? Try the follow-on exercise with a different dataset:</span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Follow-On Exercise: Wellbeing Study</span><span class="co">](../../followon/lab1-followon.qmd)</span>{.btn .btn-secondary}</span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Which subscale shows larger differences between study years?</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Are first-year or second-year students higher on Consistency of Interest?</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>What might explain differences in Perseverance of Effort?</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## Self-Assessment</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>Check your understanding before finishing.</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>::: {.webex-check .webex-box}</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>**1. In APA style, M stands for:**</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("Maximum", answer = "Mean", "Minimum", "Median"))`</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>**2. How many decimal places should you use for M and SD?**</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("0", "1", answer = "2", "3"))`</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>**3. True or False: You only need to report means, not standard deviations.**</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="in">`r torf(FALSE)`</span></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>**4. Which is correct APA format?**</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="in">`r mcq(c("Mean = 3.27", "m = 3.27", answer = "M = 3.27", "MEAN = 3.27"))`</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>**5. A good results paragraph includes M, SD, and `r fitb("n")` (sample size).**</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lab 1 Complete!</span></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>Congratulations! You've learned:</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Part <span class="pp">|</span> Skills <span class="pp">|</span></span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> R basics, downloading notebook <span class="pp">|</span></span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> Loading data, inspecting structure <span class="pp">|</span></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> Reverse scoring Grit Scale items <span class="pp">|</span></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Calculating subscales, grouped descriptives, boxplots <span class="pp">|</span></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> APA-style reporting <span class="pp">|</span></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## What's Next?</span></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coming Up in Lab 2</span></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Independent samples t-test** - comparing two groups</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Paired samples t-test** - comparing pre vs post</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Effect sizes** - Cohen's d</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**APA reporting** for inferential statistics</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extra Practice</span></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>Want more practice? Try the follow-on exercise with a different dataset:</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Follow-On Exercise</span></span>
 <span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## Navigation</span></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>The follow-on exercise is a **`.qmd` notebook file** that you download and run in **RStudio Server** on your own time. It uses a different dataset (Wellbeing Study) to give you extra practice applying the same skills you learned in Lab 1.</span>
 <span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>::: {.d-flex .justify-content-between}</span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">← Back to Part 4</span><span class="co">](part4.qmd)</span>{.btn .btn-secondary}</span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Lab 1 Overview</span><span class="co">](index.qmd)</span>{.btn .btn-primary}</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>**To use it:**</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Download the <span class="in">`.qmd`</span> file below</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Upload it to your RStudio Server workspace (same way you did with the main exercise)</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Work through it independently to reinforce your learning</span>
 <span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>downloadthis<span class="sc">::</span><span class="fu">download_file</span>(</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"../../followon/lab1-followon.qmd"</span>,</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_name =</span> <span class="st">"lab1-followon"</span>,</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>  <span class="at">button_label =</span> <span class="st">"Download Follow-On Exercise (.qmd)"</span>,</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>  <span class="at">button_type =</span> <span class="st">"info"</span>,</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>  <span class="at">icon =</span> <span class="st">"fa fa-download"</span>,</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"btn-lg"</span></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="fu">## Navigation</span></span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>::: {.d-flex .justify-content-between}</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">← Back to Part 4</span><span class="co">](part4.qmd)</span>{.btn .btn-secondary}</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Back to Lab 1 Overview</span><span class="co">](index.qmd)</span>{.btn .btn-primary}</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
@@ -3371,10 +3292,10 @@ window.onload = function() {
 <p>© 2026 Goldsmiths, University of London</p>
 </div>   
     <div class="nav-footer-center">
-<p>Crafted with 💛 using <a href="https://posit.co/products/open-source/rstudio/?sid=1">R</a> and <a href="https://quarto.org">Quarto</a></p>
+<p>Made with 💛 using <a href="https://posit.co/products/open-source/rstudio/?sid=1">R</a> and <a href="https://quarto.org">Quarto</a></p>
 </div>
     <div class="nav-footer-right">
-<p><a href="https://github.com/LittleMonkeyLab/GoldPsychR/issues">Report an issue</a></p>
+<p>A LittleMonkeyLab caper | <a href="https://github.com/LittleMonkeyLab/GoldPsychR/issues">Report an issue</a></p>
 </div>
   </div>
 </footer>

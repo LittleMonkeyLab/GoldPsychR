@@ -1,0 +1,8 @@
+/* Prevent narrow slides before WebR renders */
+.reveal .slides section {
+  min-width: 1050px;
+}
+
+.webr-code-cell {
+  min-width: 100%;
+}

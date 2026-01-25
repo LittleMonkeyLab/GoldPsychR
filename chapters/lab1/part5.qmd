@@ -46,25 +46,39 @@ library(readr)
 library(dplyr)
 
 # Load and prepare data
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
-data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+data$Study_Year <- factor(data$Study_Year)
 
 # Overall statistics
 cat("=== OVERALL ===\n")
-cat("M =", round(mean(data$pers_score), 2), "\n")
-cat("SD =", round(sd(data$pers_score), 2), "\n")
-cat("N =", length(data$pers_score), "\n\n")
+cat("Consistency of Interest:\n")
+cat("M =", round(mean(data$consistency), 2), "\n")
+cat("SD =", round(sd(data$consistency), 2), "\n\n")
+cat("Perseverance of Effort:\n")
+cat("M =", round(mean(data$perseverance), 2), "\n")
+cat("SD =", round(sd(data$perseverance), 2), "\n")
+cat("N =", length(data$consistency), "\n\n")
 
-# By group and time
-cat("=== BY GROUP AND TIME ===\n")
+# By Study Year
+cat("=== BY STUDY YEAR ===\n")
 summary_stats <- data |>
-  group_by(group, time) |>
+  group_by(Study_Year) |>
   summarise(
-    M = round(mean(pers_score), 2),
-    SD = round(sd(pers_score), 2),
+    M_consistency = round(mean(consistency), 2),
+    SD_consistency = round(sd(consistency), 2),
+    M_perseverance = round(mean(perseverance), 2),
+    SD_perseverance = round(sd(perseverance), 2),
     n = n(),
     .groups = "drop"
   )
@@ -78,24 +92,31 @@ print(summary_stats)
 library(readr)
 library(dplyr)
 
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
-data$pers_score <- data$p1 + data$p2 + data$p3 + data$rev_p4 + data$rev_p5
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+data$Study_Year <- factor(data$Study_Year)
 
 summary_stats <- data |>
-  group_by(group, time) |>
+  group_by(Study_Year) |>
   summarise(
-    M = round(mean(pers_score), 2),
-    SD = round(sd(pers_score), 2),
+    M_consistency = round(mean(consistency), 2),
+    SD_consistency = round(sd(consistency), 2),
+    M_perseverance = round(mean(perseverance), 2),
+    SD_perseverance = round(sd(perseverance), 2),
     n = n(),
     .groups = "drop"
   )
 
 knitr::kable(summary_stats,
-             caption = "Table 1. Descriptive Statistics by Group and Time",
-             col.names = c("Group", "Time", "M", "SD", "n"))
+             caption = "Table 1. Descriptive Statistics for Grit Subscales by Study Year",
+             col.names = c("Study Year", "M (Consistency)", "SD (Consistency)", 
+                          "M (Perseverance)", "SD (Perseverance)", "n"))
 ```
 
 ---
@@ -107,7 +128,7 @@ Use this template for your results paragraph. Fill in the blanks with your stati
 ::: {.callout-note}
 ## Template
 
-Participants reported [describe level] levels of personality overall (*M* = ___, *SD* = ___). At baseline, the control group (*M* = ___, *SD* = ___, *n* = ___) and training group (*M* = ___, *SD* = ___, *n* = ___) showed [similar/different] scores. Following the intervention, the control group showed [description] (*M* = ___, *SD* = ___), whereas the training group showed [description] (*M* = ___, *SD* = ___). These descriptive patterns suggest [your interpretation].
+Participants reported [describe level] levels of Consistency of Interest overall (*M* = ___, *SD* = ___) and Perseverance of Effort (*M* = ___, *SD* = ___). First-year students showed [description] Consistency of Interest scores (*M* = ___, *SD* = ___, *n* = ___) compared to second-year students (*M* = ___, *SD* = ___, *n* = ___). For Perseverance of Effort, first-year students (*M* = ___, *SD* = ___) [similar/different] compared to second-year students (*M* = ___, *SD* = ___). These descriptive patterns suggest [your interpretation].
 :::
 
 ### Your Write-Up
@@ -119,9 +140,9 @@ Write your paragraph here (or in your RStudio exercise):
 
 Look at your summary statistics above and fill in the template. Think about:
 
-- Are the groups similar at baseline?
-- Which group changed more from pre to post?
-- What does this pattern suggest about the training?
+- Which subscale shows larger differences between study years?
+- Are first-year or second-year students higher on Consistency of Interest?
+- What might explain differences in Perseverance of Effort?
 :::
 
 ---
@@ -160,29 +181,11 @@ Congratulations! You've learned:
 
 | Part | Skills |
 |------|--------|
-| 1 | R basics, variables, vectors |
+| 1 | R basics, downloading notebook |
 | 2 | Loading data, inspecting structure |
-| 3 | Reverse scoring questionnaires |
-| 4 | Grouped descriptives, boxplots |
+| 3 | Reverse scoring Grit Scale items |
+| 4 | Calculating subscales, grouped descriptives, boxplots |
 | 5 | APA-style reporting |
-
----
-
-## Download Final Exercise
-
-Complete and submit your exercise in RStudio:
-
-```{r}
-#| echo: false
-downloadthis::download_file(
-  path = "../../templates/lab1-exercise.qmd",
-  output_name = "lab1-exercise",
-  button_label = "Download Exercise (.qmd)",
-  button_type = "warning",
-  icon = "fa fa-download",
-  class = "btn-lg"
-)
-```
 
 ---
 
@@ -203,7 +206,28 @@ downloadthis::download_file(
 
 Want more practice? Try the follow-on exercise with a different dataset:
 
-[Follow-On Exercise: Wellbeing Study](../../followon/lab1-followon.qmd){.btn .btn-secondary}
+::: {.callout-important}
+## Follow-On Exercise
+
+The follow-on exercise is a **`.qmd` notebook file** that you download and run in **RStudio Server** on your own time. It uses a different dataset (Wellbeing Study) to give you extra practice applying the same skills you learned in Lab 1.
+
+**To use it:**
+1. Download the `.qmd` file below
+2. Upload it to your RStudio Server workspace (same way you did with the main exercise)
+3. Work through it independently to reinforce your learning
+:::
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../../followon/lab1-followon.qmd",
+  output_name = "lab1-followon",
+  button_label = "Download Follow-On Exercise (.qmd)",
+  button_type = "info",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
 
 ---
 

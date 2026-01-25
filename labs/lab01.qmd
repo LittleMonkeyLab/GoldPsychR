@@ -1,46 +1,142 @@
 ---
 title: "Lab 1: Descriptive Statistics"
-subtitle: "Personality & The Big Five"
+subtitle: "Grit & The Short Grit Scale"
+---
+
+# Integrated Lab Experience
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Work through the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.
+:::
+
+## Start the Interactive Lab
+
+[**Start Lab 1**](../chapters/lab1/index.qmd){.btn .btn-success .btn-lg}
+
+---
+
+## Quick Navigation to Parts
+
+If you need to jump back to a specific part:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/laptop.svg){width=20} [Part 1: What is R?](../chapters/lab1/part1.qmd)
+- RStudio orientation
+- Variables and vectors
+- Basic functions
+- **Download notebook**
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/table.svg){width=20} [Part 2: Loading Data](../chapters/lab1/part2.qmd)
+- Reading CSV files
+- Exploring data structure
+- Understanding data types
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/code.svg){width=20} [Part 3: Reverse Scoring](../chapters/lab1/part3.qmd)
+- Identifying reverse-scored items
+- Calculating reverse scores
+- Creating subscale scores
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=20} [Part 4: Descriptives & Plots](../chapters/lab1/part4.qmd)
+- Group summaries with dplyr
+- Boxplots with ggplot2
+- Interpreting visualisations
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=20} [Part 5: APA Write-Up](../chapters/lab1/part5.qmd)
+- Reporting M, SD, n
+- Describing group differences
+- Professional formatting
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=20} Extra Practice
+[Follow-On Exercise](../followon/lab1-followon.qmd) - Apply skills to a new dataset
+:::
+
+::::
+
 ---
 
 # Overview
 
-In this lab, you'll learn to analyse Big Five personality data in R. We'll work through loading data, scoring questionnaires, calculating descriptives, creating visualisations, and writing up results.
+In this lab, you'll learn to analyse Grit Scale data in R. We'll work through loading data, reverse-scoring questionnaire items, calculating subscales, creating visualisations, and writing up results.
 
 ## The Data Story
 
-We've collected personality data from a training study:
+We've collected data using the Short Grit Scale (Grit-S):
 
-- **160 participants** completed personality questionnaires
-- Half received a **training intervention**, half were **controls**
-- Measured **before** (pre) and **after** (post) the intervention
+- **120 university students** completed the 8-item Grit Scale
+- Participants are either **First Year** or **Final Year** students
+- The scale measures two subscales: Consistency of Interest and Perseverance of Effort
 
-**Our research question**: Did the training affect personality scores?
+**Our research question**: Do grit scores differ between first-year and final-year students?
 
-## Learning Objectives
+::: {.callout-note}
+![](/assets/images/svg/brain.svg){width=20 style="float: left; margin-right: 10px;"}
+
+## Learn More About the Grit Scale
+
+Want to read the original research? [Access the source article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
+:::
+
+## ![](/assets/images/svg/target.svg){width=24} Learning Objectives
 
 By the end of this lab, you will be able to:
 
 - Navigate RStudio and understand its four panes
 - Load CSV data into R using `read_csv()`
-- Reverse-score negatively worded questionnaire items
+- Reverse-score negatively worded questionnaire items (4 items: G1, G3, G5, G6)
+- Calculate subscale scores (Consistency of Interest, Perseverance of Effort)
 - Calculate descriptive statistics by group using `dplyr`
 - Create boxplots using `ggplot2`
 - Write an APA-style results paragraph
 
-# Lab Resources
+# Schedule
 
-::: {.callout-tip}
-## Recommended Workflow
+**Lab Time: 13:00 - 15:00**
 
-Use the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.
-:::
+| Time | Activity |
+|------|----------|
+| 13:00-13:10 | Part 1: What is R? + RStudio Tour |
+| 13:10-13:20 | **Practice: WebR basics** |
+| 13:20-13:35 | Part 2: Loading Data |
+| 13:35-13:50 | **Practice: Data loading** |
+| 13:50-14:05 | Part 3: Reverse Scoring |
+| 14:05-14:20 | **Practice: Scoring** |
+| 14:20-14:40 | Part 4: Descriptives & Visualisation |
+| 14:40-14:55 | **Practice: Analysis + Write-Up** |
+| 14:55-15:00 | Wrap-up |
 
-## Integrated Lab Experience (Recommended)
+# Key Concepts
 
-Work through embedded slides and interactive practice on each page:
+## The Five Parts
 
-[**Start Lab 1**](../chapters/lab1/index.qmd){.btn .btn-success .btn-lg}
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | RStudio Tour | Variables, vectors, functions, **download notebook** |
+| 2 | Loading Data | `read_csv()`, `head()`, `str()`, `dim()` |
+| 3 | Reverse Scoring | Formula: `6 - original` (4 items: G1, G3, G5, G6) |
+| 4 | Descriptives & Plots | `group_by()`, `summarise()`, `ggplot()` boxplots |
+| 5 | APA Write-Up | Reporting M, SD, n, proactive coding |
 
 ---
 
@@ -50,54 +146,43 @@ Or access individual resources separately:
 
 ### Instructor Slides
 
-[**Open Full Slides**](../slides/lab1-slides.qmd){.btn .btn-primary target="_blank"}
+![](/assets/images/svg/slides.svg){width=20} [**Open Full Slides**](../slides/lab1-slides.qmd){.btn .btn-primary target="_blank"}
 
 ### Browser Practice
 
-[**Open WebR Practice**](../chapters/lab1-webr.qmd){.btn .btn-outline-success}
+![](/assets/images/svg/play.svg){width=20} [**Open WebR Practice**](../chapters/lab1-webr.qmd){.btn .btn-outline-success}
 
 ### RStudio Exercise
 
-[**Download Exercise**](../templates/lab1-exercise.qmd){.btn .btn-warning}
+![](/assets/images/svg/laptop.svg){width=20} Download the exercise notebook to complete in RStudio Server:
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../templates/lab1-exercise.qmd",
+  output_name = "lab1-exercise",
+  button_label = "Download Exercise (.qmd)",
+  button_type = "warning",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
 
 ### Extra Practice
 
-[**Follow-On Exercise**](../followon/lab1-followon.qmd){.btn .btn-secondary}
+![](/assets/images/svg/document.svg){width=20} Download the follow-on exercise for independent practice:
 
-# Schedule
-
-| Time | Activity |
-|------|----------|
-| 0:00-0:10 | Part 1: What is R? + RStudio Tour |
-| 0:10-0:20 | **Practice: WebR basics** |
-| 0:20-0:35 | Part 2: Loading Data |
-| 0:35-0:50 | **Practice: Data loading** |
-| 0:50-1:05 | Part 3: Reverse Scoring |
-| 1:05-1:20 | **Practice: Scoring** |
-| 1:20-1:40 | Part 4: Descriptives & Visualisation |
-| 1:40-1:55 | **Practice: Analysis + Write-Up** |
-| 1:55-2:00 | Wrap-up |
-
-# Key Concepts
-
-## The Five Parts
-
-| Part | Topic | Key Skills |
-|------|-------|------------|
-| 1 | RStudio Tour | Variables, vectors, functions |
-| 2 | Loading Data | `read_csv()`, `head()`, `str()` |
-| 3 | Reverse Scoring | Formula: `6 - original` |
-| 4 | Descriptives & Plots | `group_by()`, `summarise()`, `ggplot()` |
-| 5 | APA Write-Up | Reporting M, SD, n |
-
-## Common Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Object not found | Variable doesn't exist | Create it first |
-| Function not found | Package not loaded | Use `library()` |
-| Result is NA | Missing values | Add `na.rm = TRUE` |
-| Wrong total score | Used unreversed items | Use `rev_` versions |
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../followon/lab1-followon.qmd",
+  output_name = "lab1-followon",
+  button_label = "Download Follow-On Exercise (.qmd)",
+  button_type = "info",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
 
 # Help
 

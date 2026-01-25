@@ -13,11 +13,12 @@ format:
     logo: ../../assets/images/GoldLogo.png
     footer: "GoldPsychR - Lab 1, Part 3"
     embed-resources: false
+    css: part-slides.css
 filters:
   - webr
   - countdown
 webr:
-  packages: ['readr']
+  packages: []
   show-startup-message: false
 ---
 
@@ -75,15 +76,14 @@ For a 1-7 scale: `(7 + 1) - original = 8 - original`
 
 ## In Our Data
 
-Items `p4` and `p5` are negatively worded.
+Items `G1`, `G3`, `G5`, and `G6` are negatively worded and need reverse scoring.
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
-# Look at p4 values
-head(data$p4)
+# Look at G1 values
+head(data$G1)
 ```
 
 ---
@@ -91,16 +91,17 @@ head(data$p4)
 ## Creating Reversed Columns
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
-# Reverse score p4 and p5
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
+# Reverse score G1, G3, G5, and G6
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
 
 # Check it worked
-head(data[, c("p4", "rev_p4")])
+head(data[, c("G1", "rev_G1")])
 ```
 
 ---
@@ -110,35 +111,37 @@ head(data[, c("p4", "rev_p4")])
 The original and reversed should sum to 6:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
-data$rev_p4 <- 6 - data$p4
+data$rev_G1 <- 6 - data$G1
 
 # Check: do they sum to 6?
-head(data$p4 + data$rev_p4)
+head(data$G1 + data$rev_G1)
 ```
 
 ---
 
-## Creating a Total Score
+## Creating Subscale Scores
 
-Sum **all items**, using the **reversed** versions:
+The Grit Scale has two subscales. Sum items using **reversed** versions:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
-data$rev_p4 <- 6 - data$p4
-data$rev_p5 <- 6 - data$p5
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
 
-# Create total score
-data$pers_score <- data$p1 + data$p2 + data$p3 +
-                   data$rev_p4 + data$rev_p5
+# Consistency of Interest (G1, G3, G5, G6 - all reversed)
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
 
-head(data$pers_score)
+# Perseverance of Effort (G2, G4, G7, G8 - no reversing needed)
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+
+head(data[, c("consistency", "perseverance")])
 ```
 
 ---
@@ -148,12 +151,11 @@ head(data$pers_score)
 Using the **original** items instead of **reversed**:
 
 ```r
-# WRONG! Using p4 instead of rev_p4
-data$wrong_score <- data$p1 + data$p2 + data$p3 +
-                    data$p4 + data$p5
+# WRONG! Using G1 instead of rev_G1
+data$wrong_consistency <- data$G1 + data$G3 + data$G5 + data$G6
 ```
 
-Always double-check you're using `rev_` versions!
+Always double-check you're using `rev_` versions for G1, G3, G5, and G6!
 
 ---
 
@@ -164,15 +166,15 @@ You learned:
 - Why we reverse-score items
 - The formula: `6 - original` (for 1-5 scale)
 - How to create reversed columns
-- How to create a total score
+- How to create subscale scores (Consistency of Interest, Perseverance of Effort)
 
 ---
 
 ## Now Practice!
 
-Scroll down to practice reverse scoring.
+Open the activity page for Part 3 and practice reverse scoring.
 
-{{< countdown "10:00" >}}
+{{< countdown "10:00" start_immediately="true" >}}
 
 ::: {.callout-tip}
 ## Tips

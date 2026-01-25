@@ -13,52 +13,50 @@ format:
     logo: ../../assets/images/GoldLogo.png
     footer: "GoldPsychR - Lab 1, Part 2"
     embed-resources: false
+    css: part-slides.css
 filters:
   - webr
   - countdown
 webr:
-  packages: ['readr']
+  packages: []
   show-startup-message: false
 ---
 
 ## Our Dataset
 
-We have **Big Five personality data** from a training study:
+We have **Grit Scale data** from university students:
 
 | Variable | Description |
 |----------|-------------|
-| `id` | Participant ID |
-| `group` | control or training |
-| `time` | pre or post |
-| `p1`-`p5` | Personality items (1-5 scale) |
+| `ID` | Participant ID |
+| `Age`, `Gender` | Demographics |
+| `Study_Year` | First Year (1) or Final Year (2) |
+| `G1`-`G8` | Grit Scale items (1-5 scale) |
 
 ---
 
 ## Loading Packages
 
-Before loading data, we need the `readr` package:
-
-```{webr-r}
-library(readr)
-```
+In RStudio Server, you'll use `read_csv()` from the `readr` package. For WebR slides, we use base R's `read.csv()` for better compatibility.
 
 ::: {.callout-note}
-## Why readr?
-`read_csv()` from readr is faster and creates tidier output than base R's `read.csv()`.
+## Note for RStudio
+
+In your RStudio notebook, use `read_csv()` from `readr` - it's faster and creates tidier output. The slides use `read.csv()` because it works more reliably in WebR.
 :::
 
 ---
 
 ## Loading from a URL
 
-Data can be loaded directly from the internet:
+Data can be loaded directly from the internet. For WebR, we'll use base R's `read.csv()`:
 
 ```{webr-r}
 # The URL where our data lives
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
 
-# Load it!
-data <- read_csv(data_url, show_col_types = FALSE)
+# Load it! (Using base R for WebR compatibility)
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 ```
 
 ---
@@ -68,8 +66,8 @@ data <- read_csv(data_url, show_col_types = FALSE)
 `head()` shows the first few rows:
 
 ```{webr-r}
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
 head(data)
 ```
@@ -81,8 +79,8 @@ head(data)
 `str()` shows the **structure** - column names and types:
 
 ```{webr-r}
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
 str(data)
 ```
@@ -94,8 +92,8 @@ str(data)
 `dim()` tells you **rows** and **columns**:
 
 ```{webr-r}
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
 dim(data)
 ```
@@ -109,11 +107,11 @@ How many participants? How many variables?
 Use `$` to access a single column:
 
 ```{webr-r}
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/personality_lab.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read.csv(data_url, stringsAsFactors = FALSE)
 
-# Access the group column
-data$group
+# Access the Study_Year column
+data$Study_Year
 ```
 
 ---
@@ -150,9 +148,9 @@ You learned:
 
 ## Now Practice!
 
-Scroll down to practice loading and inspecting data.
+Open the activity page for Part 2 and practice loading and inspecting data.
 
-{{< countdown "10:00" >}}
+{{< countdown "10:00" start_immediately="true" >}}
 
 ::: {.callout-tip}
 ## Tips
