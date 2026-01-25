@@ -189,7 +189,7 @@ downloadthis::download_file(
 ::: {.callout-note}
 ## Need Help?
 
-- **During the lab**: Ask your instructor or demonstrators
+- **During the lab**: Ask your instructor
 - **Reference**: Check the [R Toolbox](../toolbox/index.qmd) for code examples
 - **Errors**: See the [Troubleshooting Guide](../toolbox/troubleshooting.qmd)
 :::

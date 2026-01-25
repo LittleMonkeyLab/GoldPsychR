@@ -130,7 +130,7 @@ Keep this page open in one browser tab and RStudio Server in another. That's all
 ::: {.callout-note}
 ![](/assets/images/svg/help.svg){width=20 style="float: left; margin-right: 10px;"}
 
-- **During the lab**: Ask your instructor or demonstrators
+- **During the lab**: Ask your instructor
 - **Reference**: Check the [R Toolbox](../../toolbox/index.qmd) for code examples
 - **Errors**: See the [Troubleshooting Guide](../../toolbox/troubleshooting.qmd)
 :::

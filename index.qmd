@@ -109,7 +109,7 @@ By the end of Lab 1, you will be able to:
 ::: {.callout-note}
 ## Need Help?
 
-- **During labs**: Ask your instructor or demonstrators
+- **During labs**: Ask your instructor
 - **Between labs**: Post on the course discussion forum
 - **Technical issues**: Check the [Troubleshooting Guide](toolbox/troubleshooting.qmd)
 - **Bug reports**: [Report an issue on GitHub](https://github.com/LittleMonkeyLab/GoldPsychR/issues)
