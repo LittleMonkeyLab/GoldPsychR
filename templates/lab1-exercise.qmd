@@ -123,9 +123,29 @@ The Short Grit Scale (Grit-S) measures trait-level perseverance and passion for 
 Want to learn more about the Grit Scale? [Read the original research article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
 :::
 
-Write a brief overview of what you expect to find in this analysis:
+::: {.callout-note}
+## Exercise 1.1: Comprehension Check
 
-**[YOUR BRIEF OVERVIEW - 2-3 sentences about what you'll be analyzing]**
+Before we dive into the analysis, let's check your understanding:
+
+1. **What are the two subscales of the Grit Scale?** 
+   
+   *Hint: Look at the "About the Grit Scale" section above. The subscales measure different aspects of grit.*
+   
+   **[YOUR ANSWER]**
+
+2. **Which items need to be reverse-scored and why?** 
+   
+   *Hint: Check which items belong to the Consistency of Interest subscale. Why might these need to be reversed?* You can always look at the journal article to see if the answer is there.
+   
+   **[YOUR ANSWER]**
+
+3. **What is our main research question for this lab?** 
+   
+   *Hint: Think about what we're comparing. Look at the dataset description - what are the two groups we're comparing?*
+   
+   **[YOUR ANSWER]**
+:::
 
 ---
 
@@ -206,22 +226,21 @@ For a 1-5 Likert scale, we use the formula: `reversed = 6 - original`
 
 ```{r}
 #| label: reverse-score
-#| code-annotations: below
+#| code-annotations: above
 
 # Reverse-score items G1, G3, G5, G6
+#| 1. Apply the reverse formula to G1
 grit_data$rev_G1 <- 6 - grit_data$G1
+#| 2. Apply the reverse formula to G3
 grit_data$rev_G3 <- 6 - grit_data$G3
+#| 3. Apply the reverse formula to G5
 grit_data$rev_G5 <- 6 - grit_data$G5
+#| 4. Apply the reverse formula to G6
 grit_data$rev_G6 <- 6 - grit_data$G6
 
 # Verify the reversal worked correctly
 head(grit_data[, c("G1", "rev_G1", "G3", "rev_G3", "G5", "rev_G5", "G6", "rev_G6")])
 ```
-
-1. Apply the reverse formula to G1
-2. Apply the reverse formula to G3
-3. Apply the reverse formula to G5
-4. Apply the reverse formula to G6
 
 ::: {.callout-note}
 ## Exercise 3.1
@@ -237,27 +256,26 @@ Look at the output above. For the first participant:
 
 ```{r}
 #| label: calculate-subscales
-#| code-annotations: below
+#| code-annotations: above
 
 # Consistency of Interest subscale (use REVERSED versions of G1, G3, G5, G6)
+#| 1. Calculate Consistency of Interest as mean of reversed G1, G3, G5, G6
 grit_data$consistency_interest <- (grit_data$rev_G1 + grit_data$rev_G3 + 
                                     grit_data$rev_G5 + grit_data$rev_G6) / 4
 
 # Perseverance of Effort subscale (forward-scored items G2, G4, G7, G8)
+#| 2. Calculate Perseverance of Effort as mean of G2, G4, G7, G8
 grit_data$perseverance_effort <- (grit_data$G2 + grit_data$G4 + 
                                   grit_data$G7 + grit_data$G8) / 4
 
 # Total Grit score (average of all 8 items after reverse-scoring)
+#| 3. Calculate Total Grit as mean of all 8 items (after reverse-scoring)
 grit_data$total_grit <- (grit_data$rev_G1 + grit_data$rev_G3 + grit_data$rev_G5 + grit_data$rev_G6 +
                          grit_data$G2 + grit_data$G4 + grit_data$G7 + grit_data$G8) / 8
 
 # View the new columns
 head(grit_data[, c("Study_Year", "consistency_interest", "perseverance_effort", "total_grit")])
 ```
-
-1. Calculate Consistency of Interest as mean of reversed G1, G3, G5, G6
-2. Calculate Perseverance of Effort as mean of G2, G4, G7, G8
-3. Calculate Total Grit as mean of all 8 items (after reverse-scoring)
 
 ::: {.callout-note}
 ## Exercise 3.2
@@ -304,11 +322,14 @@ cat("n =", length(grit_data$total_grit), "\n")
 
 ```{r}
 #| label: grouped-descriptives
-#| code-annotations: below
+#| code-annotations: above
 
 # Calculate descriptives by Study_Year
+#| 1. Pipe data forward
 grit_summary <- grit_data |>
+  #| 2. Group by Study_Year
   group_by(Study_Year) |>
+  #| 3. Calculate mean, SD, and n for each subscale and total
   summarise(
     n = n(),
     consistency_M = mean(consistency_interest, na.rm = TRUE),
@@ -317,17 +338,13 @@ grit_summary <- grit_data |>
     perseverance_SD = sd(perseverance_effort, na.rm = TRUE),
     total_M = mean(total_grit, na.rm = TRUE),
     total_SD = sd(total_grit, na.rm = TRUE),
+    #| 4. Remove grouping structure
     .groups = "drop"
   )
 
 # Display the summary table
 grit_summary
 ```
-
-1. Pipe data forward
-2. Group by Study_Year
-3. Calculate mean, SD, and n for each subscale and total
-4. Remove grouping structure
 
 ```{r}
 #| label: formatted-table
@@ -356,14 +373,19 @@ Use the summary table to answer:
 #| label: boxplot-consistency
 #| fig-width: 8
 #| fig-height: 5
-#| code-annotations: below
+#| code-annotations: above
 
 # Create a boxplot for Consistency of Interest
+#| 1. Set up plot with aesthetics (x = Study_Year, y = consistency_interest)
 ggplot(grit_data, aes(x = factor(Study_Year), y = consistency_interest, fill = factor(Study_Year))) +
+  #| 2. Add boxplot geometry
   geom_boxplot(alpha = 0.7) +
+  #| 3. Customize labels and colors
   scale_x_discrete(labels = c("1" = "First Year", "2" = "Final Year")) +
   scale_fill_manual(values = c("#9B1B30", "#2E7D32"), guide = "none") +
+  #| 4. Apply minimal theme
   theme_minimal() +
+  #| 5. Add informative labels
   labs(
     title = "Consistency of Interest by Study Year",
     x = "Study Year",
@@ -371,17 +393,10 @@ ggplot(grit_data, aes(x = factor(Study_Year), y = consistency_interest, fill = f
   )
 ```
 
-1. Set up plot with aesthetics (x = Study_Year, y = consistency_interest)
-2. Add boxplot geometry
-3. Customize labels and colors
-4. Apply minimal theme
-5. Add informative labels
-
 ```{r}
 #| label: boxplot-perseverance
 #| fig-width: 8
 #| fig-height: 5
-#| code-annotations: below
 
 # Create a boxplot for Perseverance of Effort
 ggplot(grit_data, aes(x = factor(Study_Year), y = perseverance_effort, fill = factor(Study_Year))) +
@@ -400,7 +415,6 @@ ggplot(grit_data, aes(x = factor(Study_Year), y = perseverance_effort, fill = fa
 #| label: boxplot-total
 #| fig-width: 8
 #| fig-height: 5
-#| code-annotations: below
 
 # Create a boxplot for Total Grit
 ggplot(grit_data, aes(x = factor(Study_Year), y = total_grit, fill = factor(Study_Year))) +
@@ -476,8 +490,6 @@ Now try creating your own analysis. You might:
 
 [YOUR DESCRIPTION OF YOUR PROACTIVE ANALYSIS]
 
----
-
 # Reflection
 
 ::: {.callout-note}
@@ -515,7 +527,7 @@ sessionInfo()
 Before submitting, ensure you have:
 
 - [ ] Replaced "YOUR NAME HERE" with your name
-- [ ] Completed all exercises (2.1, 3.1, 3.2, 4.1, 4.2, 5.1)
+- [ ] Completed all exercises (1.1, 2.1, 3.1, 3.2, 4.1, 4.2, 5.1)
 - [ ] Written the APA results paragraph
 - [ ] Created a proactive analysis or visualization
 - [ ] Answered the reflection questions
