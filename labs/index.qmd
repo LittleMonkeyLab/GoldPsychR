@@ -8,7 +8,7 @@ Each week's lab includes multiple resources. Use them in order during lab sessio
 
 | Week | Topic | Materials |
 |:----:|-------|-----------|
-| 1 | Descriptive Statistics | Lab Overview |
+| 1 | Descriptive Statistics | [Lab Overview](lab01.qmd) |
 
 # Learning Pathway
 

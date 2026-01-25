@@ -9,9 +9,6 @@ webr:
   show-startup-message: false
 ---
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
 ## Watch the Demo
 
@@ -113,10 +110,8 @@ summary_stats <- data |>
     .groups = "drop"
   )
 
-knitr::kable(summary_stats,
-             caption = "Table 1. Descriptive Statistics for Grit Subscales by Study Year",
-             col.names = c("Study Year", "M (Consistency)", "SD (Consistency)", 
-                          "M (Perseverance)", "SD (Perseverance)", "n"))
+# Display the summary statistics table
+summary_stats
 ```
 
 ---

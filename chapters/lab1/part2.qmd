@@ -18,13 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 Follow along with the slides below.
 
 ```{=html}
-<div style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border: 1px solid #ccc; border-radius: 8px;">
-  <iframe
-    src="part2-slides.html"
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-    allowfullscreen>
-  </iframe>
-</div>
+<iframe src="part2-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
 ```
 
 ::: {.callout-tip}

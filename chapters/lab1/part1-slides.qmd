@@ -7,6 +7,7 @@ format:
     progress: true
     hash: true
     transition: fade
+    scrollable: true
     width: 1050
     height: 700
     theme: default
@@ -56,17 +57,6 @@ Download the `.qmd` file and complete exercises in RStudio Server. This is your 
 
 ------------------------------------------------------------------------
 
-## The Data Story
-
-Over the next **4 weeks**, we'll work through a complete research workflow:
-
--   **Week 1**: Describe and visualise your data
--   **Week 2**: Compare groups with t-tests
--   **Week 3**: Compare multiple groups with ANOVA
--   **Week 4**: Explore relationships with correlation & regression
-
-------------------------------------------------------------------------
-
 ## Today's Dataset
 
 We've collected **Grit Scale data** from university students:
@@ -77,11 +67,7 @@ We've collected **Grit Scale data** from university students:
 
 **Our question**: Do grit scores differ between first-year and final-year students?
 
-::: callout-note
-## Learn More About the Grit Scale
-
-Want to read the original research? [Access the source article](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290) through the Goldsmiths Library.
-:::
+*[Learn more about the Grit Scale](https://librarysearch.gold.ac.uk/permalink/f/igqbsh/TN_cdi_informaworld_taylorfrancis_310_1080_00223890802634290)*
 
 ------------------------------------------------------------------------
 
@@ -248,8 +234,6 @@ z + 1
 ## Download the Exercise Notebook
 
 At the end of this part, you will be asked to download the `.qmd` notebook file for RStudio Server.
-
-**Location:** On the practice page, there's a download button.
 
 ![](images/download.png){fig-align="center"}
 

@@ -7,6 +7,7 @@ format:
     progress: true
     hash: true
     transition: fade
+    scrollable: true
     width: 1050
     height: 700
     theme: default
