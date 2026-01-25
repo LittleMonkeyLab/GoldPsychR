@@ -204,7 +204,7 @@ Check your understanding before moving on.
 
 `r mcq(c("filter()", "mutate()", answer = "summarise()", "select()"))`
 
-**4. In ggplot2, `fill = time` means:**
+**4. In ggplot2, `fill = Study_Year` means:**
 
 `r mcq(c("Fill the plot with time data", answer = "Colour boxes by the time variable", "Remove the time variable", "Create a time axis"))`
 
