@@ -1,0 +1,26 @@
+---
+title: "Lab 4: Correlation & Regression"
+---
+
+## Overview
+
+This lab introduces correlation and linear regression in R.
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Calculate and interpret correlation coefficients
+- Create scatterplots to visualise relationships
+- Build and interpret simple linear regression models
+- Extend to multiple regression
+- Check model assumptions
+- Report results in APA format
+
+## Parts
+
+1. **Introduction** - Relationships between variables
+2. **Correlation** - Measuring associations
+3. **Simple Regression** - Predicting with one variable
+4. **Multiple Regression** - Adding more predictors
+5. **Diagnostics & Reporting** - Checking assumptions and APA format

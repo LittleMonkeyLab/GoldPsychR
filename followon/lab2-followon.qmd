@@ -40,55 +40,34 @@ Researchers investigated whether sleep duration affects academic performance in 
 - **Hypothesis**: Students with adequate sleep will perform better
 :::
 
-```{r}
-#| label: simulate-data
-#| echo: false
-
-# Simulate sleep and performance data
-set.seed(2026)
-n <- 80
-
-sleep_data <- data.frame(
-  student_id = 1:n,
-  sleep_group = rep(c("adequate", "deprived"), each = n/2),
-  exam_score = c(
-    rnorm(n/2, mean = 72, sd = 10),  # adequate sleep
-    rnorm(n/2, mean = 64, sd = 12)   # sleep deprived
-  )
-)
-
-# Ensure scores in valid range
-sleep_data$exam_score <- pmin(100, pmax(30, round(sleep_data$exam_score, 1)))
-
-write_csv(sleep_data, "../data/sleep_performance.csv")
-```
-
 # Task 1: Load and Explore
 
 ```{r}
 #| label: load-data
 
-sleep_data <- read_csv("../data/sleep_performance.csv", show_col_types = FALSE)
+# Load the sleep and performance data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/sleep_performance.csv"
+sleep_data <- read_csv(data_url, show_col_types = FALSE)
 ```
 
 ```{r}
 #| label: explore
 
 # YOUR CODE: View the first few rows
-
+head(sleep_data)
 
 # YOUR CODE: Check the structure
-
+str(sleep_data)
 
 # YOUR CODE: Count participants in each group
-
+table(sleep_data$sleep_group)
 ```
 
 ::: {.callout-note}
 ## Questions
 
-1. How many students in each sleep group? ___
-2. What is the overall mean exam score? ___
+1. How many students in each sleep group? **[YOUR ANSWER]**
+2. What is the overall mean exam score? **[YOUR ANSWER]**
 :::
 
 # Task 2: Descriptive Statistics by Group
@@ -99,16 +78,22 @@ Calculate mean, SD, and n for each sleep group:
 #| label: descriptives
 
 # YOUR CODE: Calculate descriptives for each sleep group
-
-
+sleep_data |>
+  group_by(sleep_group) |>
+  summarise(
+    n = n(),
+    mean = mean(exam_score, na.rm = TRUE),
+    sd = sd(exam_score, na.rm = TRUE),
+    .groups = "drop"
+  )
 ```
 
 ::: {.callout-note}
 ## Questions
 
-1. What is the mean score for the adequate sleep group? ___
-2. What is the mean score for the sleep deprived group? ___
-3. Which group has more variability (higher SD)? ___
+1. What is the mean score for the adequate sleep group? **[YOUR ANSWER]**
+2. What is the mean score for the sleep deprived group? **[YOUR ANSWER]**
+3. Which group has more variability (higher SD)? **[YOUR ANSWER]**
 :::
 
 # Task 3: Visualisation
@@ -121,8 +106,15 @@ Calculate mean, SD, and n for each sleep group:
 #| fig-height: 5
 
 # YOUR CODE: Create a boxplot of exam_score by sleep_group
-
-
+ggplot(sleep_data, aes(x = sleep_group, y = exam_score, fill = sleep_group)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Exam Scores by Sleep Group",
+    x = "Sleep Group",
+    y = "Exam Score"
+  ) +
+  theme(legend.position = "none")
 ```
 
 ## Add individual points
@@ -134,8 +126,16 @@ Calculate mean, SD, and n for each sleep group:
 
 # YOUR CODE: Create a boxplot with jittered points overlaid
 # Hint: Add geom_jitter(width = 0.1, alpha = 0.5)
-
-
+ggplot(sleep_data, aes(x = sleep_group, y = exam_score, fill = sleep_group)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  theme_minimal() +
+  labs(
+    title = "Exam Scores by Sleep Group",
+    x = "Sleep Group",
+    y = "Exam Score"
+  ) +
+  theme(legend.position = "none")
 ```
 
 # Task 4: Independent Samples t-test
@@ -146,17 +146,16 @@ Test whether exam scores differ between sleep groups:
 #| label: t-test
 
 # YOUR CODE: Run an independent samples t-test
-
-
+t.test(exam_score ~ sleep_group, data = sleep_data)
 ```
 
 ::: {.callout-note}
 ## Questions
 
-1. What is the t-statistic? ___
-2. What are the degrees of freedom? ___
-3. What is the p-value? ___
-4. Is the difference statistically significant (p < .05)? ___
+1. What is the t-statistic? **[YOUR ANSWER]**
+2. What are the degrees of freedom? **[YOUR ANSWER]**
+3. What is the p-value? **[YOUR ANSWER]**
+4. Is the difference statistically significant (p < .05)? **[YOUR ANSWER]**
 :::
 
 # Task 5: Effect Size
@@ -169,7 +168,20 @@ Calculate Cohen's d to measure the size of the effect:
 # YOUR CODE: Calculate Cohen's d manually
 # Hint: d = (mean1 - mean2) / pooled_sd
 
+adequate <- sleep_data |> filter(sleep_group == "adequate") |> pull(exam_score)
+deprived <- sleep_data |> filter(sleep_group == "deprived") |> pull(exam_score)
 
+m1 <- mean(adequate)
+m2 <- mean(deprived)
+n1 <- length(adequate)
+n2 <- length(deprived)
+
+# Pooled SD
+pooled_sd <- sqrt(((n1-1)*var(adequate) + (n2-1)*var(deprived)) / (n1+n2-2))
+
+# Cohen's d
+cohens_d <- (m1 - m2) / pooled_sd
+cat("Cohen's d =", round(cohens_d, 3))
 ```
 
 ::: {.callout-tip}
@@ -183,8 +195,8 @@ Calculate Cohen's d to measure the size of the effect:
 ::: {.callout-note}
 ## Questions
 
-1. What is Cohen's d? ___
-2. How would you interpret this effect size? ___
+1. What is Cohen's d? **[YOUR ANSWER]**
+2. How would you interpret this effect size? **[YOUR ANSWER]**
 :::
 
 # Task 6: Confidence Interval
@@ -195,18 +207,18 @@ Extract and interpret the 95% confidence interval:
 #| label: ci
 
 # YOUR CODE: Run t.test and examine the confidence interval
-# result <- t.test(...)
-# result$conf.int
-
-
+result <- t.test(exam_score ~ sleep_group, data = sleep_data)
+cat("95% Confidence Interval:\n")
+cat("Lower:", round(result$conf.int[1], 2), "\n")
+cat("Upper:", round(result$conf.int[2], 2))
 ```
 
 ::: {.callout-note}
 ## Questions
 
-1. What is the 95% CI for the mean difference? [___, ___]
-2. Does the CI include zero? ___
-3. What does this tell us about statistical significance? ___
+1. What is the 95% CI for the mean difference? **[YOUR ANSWER]**
+2. Does the CI include zero? **[YOUR ANSWER]**
+3. What does this tell us about statistical significance? **[YOUR ANSWER]**
 :::
 
 # Task 7: APA Write-Up
@@ -222,6 +234,30 @@ Write an APA-style results paragraph including:
 **YOUR WRITE-UP:**
 
 [Write your paragraph here]
+
+# Task 8: Comparison with Lab 2
+
+::: {.callout-note}
+## Reflection
+
+Compare this analysis to the main Lab 2 exercise:
+
+1. **What was similar about the two analyses?**
+
+[YOUR ANSWER]
+
+2. **What was different?**
+
+[YOUR ANSWER]
+
+3. **Which type of t-test did you use here, and why?**
+
+[YOUR ANSWER]
+
+4. **How confident do you feel running independent samples t-tests now?**
+
+[YOUR ANSWER]
+:::
 
 # Solutions
 
@@ -260,7 +296,7 @@ adequate <- sleep_data |> filter(sleep_group == "adequate") |> pull(exam_score)
 deprived <- sleep_data |> filter(sleep_group == "deprived") |> pull(exam_score)
 
 mean_diff <- mean(adequate) - mean(deprived)
-pooled_sd <- sqrt((sd(adequate)^2 + sd(deprived)^2) / 2)
+pooled_sd <- sqrt((var(adequate) + var(deprived)) / 2)
 cohens_d <- mean_diff / pooled_sd
 cohens_d
 ```

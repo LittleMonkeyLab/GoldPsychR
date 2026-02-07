@@ -1,53 +1,200 @@
 ---
 title: "Lab 3: ANOVA"
-subtitle: "Analysis of Variance"
+subtitle: "Study Techniques & Comparing Multiple Groups"
 ---
 
-# Overview
-
-In this lab, you'll learn to compare three or more groups using ANOVA. We'll run one-way and two-way analyses, conduct post-hoc tests, and calculate effect sizes.
-
-## Learning Objectives
-
-By the end of this lab, you will be able to:
-
-- Run one-way ANOVA
-- Conduct Tukey's HSD post-hoc comparisons
-- Calculate and interpret eta-squared
-- Run two-way (factorial) ANOVA
-- Interpret interaction effects
-- Write APA-style results
-
-# Lab Resources
+# Integrated Lab Experience
 
 ::: {.callout-tip}
 ## Recommended Workflow
 
-Open each resource in a separate browser tab so you can switch between them easily.
+Work through the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.
 :::
 
-## Part 1: Instructor Demo
+## Start the Interactive Lab
 
-[**Open Slides**](../slides/lab3-slides.qmd){.btn .btn-primary target="_blank"}
+[**Start Lab 3**](../chapters/lab3/index.qmd){.btn .btn-success .btn-lg}
 
-## Part 2: Browser Practice
+---
 
-[**Open WebR Practice**](../chapters/lab3-webr.qmd){.btn .btn-success}
+## Quick Navigation to Parts
 
-## Part 3: RStudio Exercise
+If you need to jump back to a specific part:
 
-[**Download Exercise**](../templates/lab3-exercise.qmd){.btn .btn-warning}
+:::: {.columns}
 
-## Extra Practice
+::: {.column width="50%"}
+### ![](/assets/images/svg/brain.svg){width=20} [Part 1: Introduction to ANOVA](../chapters/lab3/part1.qmd)
+- When t-tests aren't enough
+- The logic of ANOVA
+- F-ratio explained
+- **Download notebook**
+:::
 
-[**Follow-On Exercise**](../followon/lab3-followon.qmd){.btn .btn-secondary}
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=20} [Part 2: One-Way ANOVA](../chapters/lab3/part2.qmd)
+- Comparing 3+ groups
+- Using `aov()` function
+- Interpreting output
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/target.svg){width=20} [Part 3: Post-Hoc Tests](../chapters/lab3/part3.qmd)
+- Tukey's HSD
+- Pairwise comparisons
+- Controlling Type I error
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/group.svg){width=20} [Part 4: Two-Way ANOVA](../chapters/lab3/part4.qmd)
+- Factorial designs
+- Main effects
+- Interaction effects
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=20} [Part 5: Effect Sizes & Reporting](../chapters/lab3/part5.qmd)
+- Eta-squared (η²)
+- Partial eta-squared
+- APA-style results
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=20} Extra Practice
+[Follow-On Exercise](../followon/lab3-followon.qmd) - Apply skills to a new dataset
+:::
+
+::::
+
+---
+
+# Overview
+
+In this lab, you'll learn to compare three or more groups using Analysis of Variance (ANOVA). We'll work through one-way and two-way designs, conduct post-hoc comparisons, calculate effect sizes, and write up results in APA format.
+
+## The Data Story
+
+We've collected data from a Study Techniques experiment:
+
+- **120 university students** participated in a memory test
+- Students used one of **three study methods**: Rereading, Self-Testing, or Elaboration
+- Half studied in the **Morning**, half in the **Evening**
+- Outcome: Number of items correctly recalled (0-30)
+
+**Our research questions**:
+1. Do the three study methods differ in effectiveness?
+2. Does time of day affect memory performance?
+3. Is there an interaction between study method and time of day?
+
+::: {.callout-note}
+![](/assets/images/svg/brain.svg){width=20 style="float: left; margin-right: 10px;"}
+
+## Learn More About Study Techniques
+
+The testing effect is one of the most robust findings in cognitive psychology. [Explore the research](https://librarysearch.gold.ac.uk/discovery/search?query=any,contains,testing%20effect%20memory&tab=Everything&search_scope=MyInst_and_CI&vid=44GOL_INST:44GOL_VU1&offset=0) through the Goldsmiths Library.
+:::
+
+## ![](/assets/images/svg/target.svg){width=24} Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Explain when to use ANOVA instead of t-tests
+- Conduct a one-way ANOVA using `aov()`
+- Interpret F-ratios and p-values from ANOVA output
+- Conduct Tukey's HSD post-hoc comparisons
+- Conduct a two-way (factorial) ANOVA
+- Identify and interpret main effects and interactions
+- Calculate and interpret eta-squared (η²)
+- Write APA-style ANOVA results
+
+# Schedule
+
+**Lab Time: 13:00 - 15:00**
+
+| Time | Activity |
+|------|----------|
+| 13:00-13:15 | Part 1: Introduction to ANOVA |
+| 13:15-13:30 | **Practice: ANOVA concepts** |
+| 13:30-13:45 | Part 2: One-Way ANOVA |
+| 13:45-14:00 | **Practice: One-way analysis** |
+| 14:00-14:15 | Part 3: Post-Hoc Tests |
+| 14:15-14:30 | **Practice: Tukey's HSD** |
+| 14:30-14:45 | Part 4: Two-Way ANOVA |
+| 14:45-14:55 | Part 5: Effect Sizes & Write-Up |
+| 14:55-15:00 | Wrap-up |
 
 # Key Concepts
 
+## The Five Parts
+
 | Part | Topic | Key Skills |
 |------|-------|------------|
-| 1 | One-Way ANOVA | `aov(score ~ condition)` |
-| 2 | Post-Hoc Tests | `TukeyHSD(model)` |
-| 3 | Effect Size | Eta-squared (η²) |
-| 4 | Two-Way ANOVA | `aov(score ~ A * B)` |
-| 5 | Interactions | Interaction plots |
+| 1 | Introduction | F-ratio, between/within variance, **download notebook** |
+| 2 | One-Way ANOVA | `aov(y ~ group)`, `summary()` |
+| 3 | Post-Hoc Tests | `TukeyHSD()`, pairwise comparisons |
+| 4 | Two-Way ANOVA | `aov(y ~ A * B)`, interactions |
+| 5 | Effect Sizes & Reporting | η², partial η², APA format |
+
+---
+
+## Alternative Resources
+
+Or access individual resources separately:
+
+### Instructor Slides
+
+![](/assets/images/svg/slides.svg){width=20} [**Open Full Slides**](../slides/lab3-slides.qmd){.btn .btn-primary target="_blank"}
+
+### Browser Practice
+
+![](/assets/images/svg/play.svg){width=20} [**Open WebR Practice**](../chapters/lab3-webr.qmd){.btn .btn-outline-success}
+
+### RStudio Exercise
+
+![](/assets/images/svg/laptop.svg){width=20} Download the exercise notebook to complete in RStudio Server:
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../templates/lab3-exercise.qmd",
+  output_name = "lab3-exercise",
+  button_label = "Download Exercise (.qmd)",
+  button_type = "warning",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
+
+### Extra Practice
+
+![](/assets/images/svg/document.svg){width=20} Download the follow-on exercise for independent practice:
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../followon/lab3-followon.qmd",
+  output_name = "lab3-followon",
+  button_label = "Download Follow-On Exercise (.qmd)",
+  button_type = "info",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
+
+# Help
+
+::: {.callout-note}
+## Need Help?
+
+- **During the lab**: Ask your instructor
+- **Reference**: Check the [R Toolbox](../toolbox/index.qmd) for code examples
+- **Errors**: See the [Troubleshooting Guide](../toolbox/troubleshooting.qmd)
+:::

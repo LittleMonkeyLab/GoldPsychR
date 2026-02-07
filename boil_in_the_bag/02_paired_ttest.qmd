@@ -1,0 +1,234 @@
+---
+title: "Boil in the Bag: Paired Samples t-test"
+subtitle: "Comparing two related measurements"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have the same participants measured twice, or matched pairs of participants.
+
+**Example scenarios:**
+- Pre-test vs Post-test (same people)
+- Left hand vs Right hand
+- Matched pairs design
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)
+```
+
+
+## Step 2: Load Your Data
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/paired_ttest_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+**CHANGE THESE** to match your variable names:
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+time1_var <- "time1"   # First measurement
+time2_var <- "time2"   # Second measurement
+
+# Calculate difference score
+data <- data |>
+  mutate(difference = .data[[time2_var]] - .data[[time1_var]])
+```
+
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+descriptives <- data |>
+  summarise(
+    # Time 1
+    time1_n = sum(!is.na(.data[[time1_var]])),
+    time1_mean = mean(.data[[time1_var]], na.rm = TRUE),
+    time1_sd = sd(.data[[time1_var]], na.rm = TRUE),
+    # Time 2
+    time2_n = sum(!is.na(.data[[time2_var]])),
+    time2_mean = mean(.data[[time2_var]], na.rm = TRUE),
+    time2_sd = sd(.data[[time2_var]], na.rm = TRUE),
+    # Difference
+    diff_mean = mean(difference, na.rm = TRUE),
+    diff_sd = sd(difference, na.rm = TRUE)
+  )
+
+print(descriptives)
+```
+
+### Visualise the Data
+
+```{r}
+#| label: visualise
+#| fig-cap: "Paired comparison"
+
+# Reshape for plotting
+data_long <- data |>
+  select(id, all_of(c(time1_var, time2_var))) |>
+  pivot_longer(
+    cols = all_of(c(time1_var, time2_var)),
+    names_to = "time",
+    values_to = "score"
+  )
+
+# Paired plot with lines connecting individuals
+ggplot(data_long, aes(x = time, y = score)) +
+  geom_boxplot(alpha = 0.3, width = 0.3) +
+  geom_line(aes(group = id), alpha = 0.3) +
+  geom_point(alpha = 0.5) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 5, color = "red") +
+  labs(
+    x = "Time",
+    y = "Score",
+    title = "Individual Changes Over Time"
+  ) +
+  theme_minimal()
+```
+
+
+## Step 5: Check Assumptions
+
+### Assumption: Normality of Difference Scores
+
+```{r}
+#| label: normality
+
+# Shapiro-Wilk test on difference scores
+shapiro_result <- shapiro.test(data$difference)
+print(shapiro_result)
+```
+
+### Visual Check: Q-Q Plot of Differences
+
+```{r}
+#| label: qq-plot
+#| fig-cap: "Q-Q plot of difference scores"
+
+ggplot(data, aes(sample = difference)) +
+  stat_qq() +
+  stat_qq_line() +
+  labs(title = "Q-Q Plot of Difference Scores") +
+  theme_minimal()
+```
+
+### Histogram of Differences
+
+```{r}
+#| label: histogram
+#| fig-cap: "Distribution of difference scores"
+
+ggplot(data, aes(x = difference)) +
+  geom_histogram(bins = 10, fill = "steelblue", alpha = 0.7, color = "white") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = mean(data$difference), color = "blue", size = 1) +
+  labs(
+    x = "Difference (Time2 - Time1)",
+    y = "Frequency",
+    title = "Distribution of Change Scores"
+  ) +
+  theme_minimal()
+```
+
+
+## Step 6: Run the Paired t-test
+
+```{r}
+#| label: paired-ttest
+
+t_result <- t.test(
+  data[[time1_var]],
+  data[[time2_var]],
+  paired = TRUE
+)
+
+print(t_result)
+```
+
+
+## Step 7: Effect Size
+
+```{r}
+#| label: effect-size
+
+# Cohen's d for paired samples
+d <- cohens_d(
+  data[[time1_var]],
+  data[[time2_var]],
+  paired = TRUE
+)
+
+print(d)
+```
+
+
+## Step 8: Summary of Results
+
+```{r}
+#| label: summary
+
+cat("=== PAIRED SAMPLES T-TEST RESULTS ===\n\n")
+
+cat("DESCRIPTIVES:\n")
+cat(sprintf("  Time 1: M = %.2f, SD = %.2f\n",
+            descriptives$time1_mean,
+            descriptives$time1_sd))
+cat(sprintf("  Time 2: M = %.2f, SD = %.2f\n",
+            descriptives$time2_mean,
+            descriptives$time2_sd))
+cat(sprintf("  Mean difference: %.2f (SD = %.2f)\n",
+            descriptives$diff_mean,
+            descriptives$diff_sd))
+
+cat("\nINFERENTIAL STATISTICS:\n")
+cat(sprintf("  t(%d) = %.2f, p = %.3f\n",
+            t_result$parameter,
+            t_result$statistic,
+            t_result$p.value))
+
+cat(sprintf("  95%% CI for mean difference: [%.2f, %.2f]\n",
+            t_result$conf.int[1],
+            t_result$conf.int[2]))
+
+cat(sprintf("  Cohen's d = %.2f\n", d$Cohens_d))
+```
+
+
+## Step 9: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A paired samples t-test was conducted to compare [OUTCOME] at [TIME 1] and [TIME 2]. There was a [significant/non-significant] difference between [TIME 1] (*M* = XX.XX, *SD* = XX.XX) and [TIME 2] (*M* = XX.XX, *SD* = XX.XX), *t*(XX) = XX.XX, *p* = .XXX, *d* = X.XX. On average, scores [increased/decreased] by XX.XX units (95% CI [X.XX, X.XX]).
+:::
+
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Variables renamed to match your data
+- [ ] Difference scores calculated
+- [ ] Normality of differences checked
+- [ ] Paired t-test run
+- [ ] Effect size calculated
+- [ ] Results interpreted

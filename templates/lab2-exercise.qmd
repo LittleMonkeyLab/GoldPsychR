@@ -1,117 +1,590 @@
 ---
-title: "Lab 2: Comparing Groups"
-author: "Your Name"
-date: "`r format(Sys.Date(), '%d %B %Y')`"
+title: "Lab 2: T-Tests"
+subtitle: "Test Anxiety & Statistical Inference"
+author: "YOUR NAME HERE"
+date: today
 format:
   html:
     toc: true
+    toc-depth: 2
+    number-sections: true
     code-fold: false
     code-annotations: below
     theme: cosmo
+    embed-resources: true
 ---
 
-## 1. Load Packages
-
 ```{r}
+#| label: setup
 #| message: false
 #| warning: false
 
+# Load required packages
+library(readr)
 library(dplyr)
 library(ggplot2)
-library(readr)
 ```
+
+# Introduction
+
+In this lab, you will learn to perform and interpret t-tests to:
+
+- Compare a sample mean to a known population value (one-sample t-test)
+- Compare two independent groups (independent samples t-test)
+- Compare two related measurements (paired samples t-test)
+- Calculate and interpret Cohen's d effect sizes
+- Write APA-style results
+
+::: {.callout-important}
+## How This Lab Works: Watch → Try → Do
+
+Every part follows the same **3-step cycle**:
+
+1. **Watch** - Follow along with the instructor slides
+2. **Try** - Practice with interactive code on the activity page
+3. **Do** - Complete exercises in this notebook (that's this file!)
+
+You'll work through this notebook across all 5 parts. Let's start with your first task!
+:::
 
 ---
 
-## 2. Load and Inspect Data
+# Your First Task: Change Your Name and Render
+
+::: {.callout-note}
+## Slides Part 1
+Complete this task during **Part 1: Introduction to T-Tests** practice time.
+:::
+
+## Step 1: Find Your Name
+
+Look at the **very top** of this file (lines 1-5). You'll see:
+
+```yaml
+---
+title: "Lab 2: T-Tests"
+subtitle: "Test Anxiety & Statistical Inference"
+author: "YOUR NAME HERE"
+date: today
+```
+
+**Find line 4** where it says `author: "YOUR NAME HERE"`
+
+## Step 2: Replace with Your Name
+
+1. **Click** on `"YOUR NAME HERE"`
+2. **Type** your actual name (keep the quotation marks!)
+3. For example: `author: "Jane Smith"` or `author: "Alex Johnson"`
+
+## Step 3: Render Your Notebook
+
+1. **Look at the top toolbar** in RStudio Server
+2. **Find the Render button** - it looks like a knitting needle
+3. **Click the Render button**
+4. Check that your name appears in the output!
+
+::: {.callout-success}
+## Success!
+
+If you see your name in the rendered HTML document, you're ready to continue!
+:::
+
+---
+
+# Part 1: About T-Tests
+
+::: {.callout-note}
+## Slides Part 1
+Continue with this section during **Part 1: Introduction to T-Tests** practice time.
+:::
+
+## About the Study
+
+We are analysing data from a Test Anxiety intervention study:
+
+- **80 university students** completed the Test Anxiety Inventory
+- Participants were assigned to **Control** or **Intervention** groups
+- Anxiety was measured **before and after** the intervention
+- The population mean for this scale is **50**
+
+::: {.callout-note}
+## Exercise 1.1: Comprehension Check
+
+Before we dive into the analysis, answer these questions:
+
+1. **What are the three types of t-tests we'll learn?**
+
+   **[YOUR ANSWER]**
+
+2. **What does a p-value less than 0.05 tell us?**
+
+   **[YOUR ANSWER]**
+
+3. **What are our three research questions for this lab?**
+
+   **[YOUR ANSWER]**
+:::
+
+---
+
+# Part 2: Load and Explore Data
+
+::: {.callout-note}
+## Slides Part 2
+Complete this section during **Part 2: One-Sample T-Test** practice time.
+:::
+
+## Load the Dataset
 
 ```{r}
-# TODO: Load your dataset
-# data <- read_csv("your_data.csv")
+#| label: load-data
 
-# Check group sizes
-# data |> count(group)
+# Load the Test Anxiety data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 ```
 
----
-
-## 3. Descriptive Statistics by Group
+## Inspect the Data
 
 ```{r}
-# TODO: Compute descriptives for each group
-# data |>
-#   group_by(group) |>
-#   summarise(
-#     mean = mean(score, na.rm = TRUE),
-#     sd = sd(score, na.rm = TRUE),
-#     n = n()
-#   )
+#| label: inspect-head
+
+# View the first 6 rows
+head(anxiety_data)
 ```
-
----
-
-## 4. Independent Samples t-test
 
 ```{r}
-# TODO: Run independent samples t-test
-# t.test(score ~ group, data = data)
-```
+#| label: inspect-structure
 
-### Effect Size (Cohen's d)
+# Check the structure
+str(anxiety_data)
+```
 
 ```{r}
-# TODO: Calculate Cohen's d
-# group1 <- data |> filter(group == "A") |> pull(score)
-# group2 <- data |> filter(group == "B") |> pull(score)
-#
-# mean_diff <- mean(group2) - mean(group1)
-# pooled_sd <- sqrt((sd(group1)^2 + sd(group2)^2) / 2)
-# cohens_d <- mean_diff / pooled_sd
-# cohens_d
+#| label: inspect-dimensions
+
+# Check dimensions
+dim(anxiety_data)
 ```
-
----
-
-## 5. Paired Samples t-test (if applicable)
 
 ```{r}
-# TODO: Run paired t-test (for repeated measures)
-# t.test(data$pre, data$post, paired = TRUE)
+#| label: group-counts
+
+# Count participants by group
+table(anxiety_data$group)
 ```
 
----
+::: {.callout-note}
+## Exercise 2.1
 
-## 6. Visualisation
+Answer the following questions based on your inspection:
+
+1. How many participants are in the dataset? **[YOUR ANSWER]**
+2. How many variables are there? **[YOUR ANSWER]**
+3. What are the two groups? **[YOUR ANSWER]**
+4. How many participants are in each group? **[YOUR ANSWER]**
+:::
+
+## One-Sample T-Test
+
+Research Question: Is our sample mean different from the population mean of 50?
 
 ```{r}
-# TODO: Create comparison plot
-# ggplot(data, aes(x = group, y = score, fill = group)) +
-#   geom_boxplot() +
-#   geom_jitter(width = 0.1, alpha = 0.5) +
-#   theme_minimal() +
-#   labs(title = "Comparison of Groups")
+#| label: one-sample-descriptives
+
+# Calculate descriptive statistics for pre-test anxiety
+cat("Pre-test Anxiety Descriptives:\n")
+cat("Mean:", round(mean(anxiety_data$anxiety_pre), 2), "\n")
+cat("SD:", round(sd(anxiety_data$anxiety_pre), 2), "\n")
+cat("n:", length(anxiety_data$anxiety_pre), "\n")
+cat("Population mean:", 50)
+```
+
+```{r}
+#| label: one-sample-ttest
+
+# One-sample t-test: Is pre-test mean different from 50?
+t.test(anxiety_data$anxiety_pre, mu = 50)
+```
+
+::: {.callout-note}
+## Exercise 2.2
+
+Based on the one-sample t-test output:
+
+1. What is the t-value? **[YOUR ANSWER]**
+2. What are the degrees of freedom? **[YOUR ANSWER]**
+3. What is the p-value? **[YOUR ANSWER]**
+4. Is the result significant at alpha = .05? **[YOUR ANSWER]**
+5. Write a conclusion in plain English: **[YOUR ANSWER]**
+:::
+
+---
+
+# Part 3: Independent Samples T-Test
+
+::: {.callout-note}
+## Slides Part 3
+Complete this section during **Part 3: Independent Samples T-Test** practice time.
+:::
+
+## Descriptive Statistics by Group
+
+```{r}
+#| label: grouped-descriptives-pre
+
+# Pre-test anxiety by group
+anxiety_data |>
+  group_by(group) |>
+  summarise(
+    n = n(),
+    mean_pre = mean(anxiety_pre, na.rm = TRUE),
+    sd_pre = sd(anxiety_pre, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+## Compare Groups at Baseline (Pre-Test)
+
+```{r}
+#| label: independent-ttest-pre
+
+# Independent samples t-test: Do groups differ at pre-test?
+t.test(anxiety_pre ~ group, data = anxiety_data)
+```
+
+::: {.callout-note}
+## Exercise 3.1
+
+Based on the baseline comparison:
+
+1. What is the t-value? **[YOUR ANSWER]**
+2. What is the p-value? **[YOUR ANSWER]**
+3. Do the groups differ significantly at baseline? **[YOUR ANSWER]**
+4. Why is it important that groups don't differ at baseline? **[YOUR ANSWER]**
+:::
+
+## Compare Groups at Post-Test
+
+```{r}
+#| label: grouped-descriptives-post
+
+# Post-test anxiety by group
+anxiety_data |>
+  group_by(group) |>
+  summarise(
+    n = n(),
+    mean_post = mean(anxiety_post, na.rm = TRUE),
+    sd_post = sd(anxiety_post, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+```{r}
+#| label: independent-ttest-post
+
+# Independent samples t-test: Do groups differ at post-test?
+t.test(anxiety_post ~ group, data = anxiety_data)
+```
+
+::: {.callout-note}
+## Exercise 3.2
+
+Based on the post-test comparison:
+
+1. What is the t-value? **[YOUR ANSWER]**
+2. What is the p-value? **[YOUR ANSWER]**
+3. Do the groups differ significantly at post-test? **[YOUR ANSWER]**
+4. Which group has lower anxiety at post-test? **[YOUR ANSWER]**
+:::
+
+## Visualise Group Differences
+
+```{r}
+#| label: boxplot-groups
+#| fig-width: 8
+#| fig-height: 5
+
+# Create a boxplot comparing groups at post-test
+ggplot(anxiety_data, aes(x = group, y = anxiety_post, fill = group)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("control" = "#E74C3C", "intervention" = "#27AE60")) +
+  theme_minimal() +
+  labs(
+    title = "Post-Test Anxiety by Group",
+    x = "Group",
+    y = "Anxiety Score"
+  ) +
+  theme(legend.position = "none")
 ```
 
 ---
 
-## 7. APA Write-Up
+# Part 4: Paired Samples T-Test
 
-[Write your results in APA format. Example:]
+::: {.callout-note}
+## Slides Part 4
+Complete this section during **Part 4: Paired Samples T-Test** practice time.
+:::
 
-> An independent samples t-test revealed a significant difference between the control group (*M* = ___, *SD* = ___) and treatment group (*M* = ___, *SD* = ___), *t*(___) = ___, *p* = ___, *d* = ___.
+## Pre-Post Change: All Participants
+
+```{r}
+#| label: paired-descriptives-all
+
+# Descriptives for pre and post
+cat("All Participants:\n")
+cat("Pre-test: M =", round(mean(anxiety_data$anxiety_pre), 2),
+    ", SD =", round(sd(anxiety_data$anxiety_pre), 2), "\n")
+cat("Post-test: M =", round(mean(anxiety_data$anxiety_post), 2),
+    ", SD =", round(sd(anxiety_data$anxiety_post), 2), "\n")
+```
+
+```{r}
+#| label: paired-ttest-all
+
+# Paired t-test: Did anxiety change from pre to post (all participants)?
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+```
+
+## Pre-Post Change: Control Group Only
+
+```{r}
+#| label: paired-ttest-control
+
+# Filter to control group
+control <- anxiety_data |> filter(group == "control")
+
+cat("Control Group:\n")
+cat("Pre-test: M =", round(mean(control$anxiety_pre), 2),
+    ", SD =", round(sd(control$anxiety_pre), 2), "\n")
+cat("Post-test: M =", round(mean(control$anxiety_post), 2),
+    ", SD =", round(sd(control$anxiety_post), 2), "\n\n")
+
+# Paired t-test for control group
+t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+```
+
+## Pre-Post Change: Intervention Group Only
+
+```{r}
+#| label: paired-ttest-intervention
+
+# Filter to intervention group
+intervention <- anxiety_data |> filter(group == "intervention")
+
+cat("Intervention Group:\n")
+cat("Pre-test: M =", round(mean(intervention$anxiety_pre), 2),
+    ", SD =", round(sd(intervention$anxiety_pre), 2), "\n")
+cat("Post-test: M =", round(mean(intervention$anxiety_post), 2),
+    ", SD =", round(sd(intervention$anxiety_post), 2), "\n\n")
+
+# Paired t-test for intervention group
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+::: {.callout-note}
+## Exercise 4.1
+
+Compare the paired t-test results:
+
+1. Did the **control group** show significant change? **[YOUR ANSWER]**
+2. Did the **intervention group** show significant change? **[YOUR ANSWER]**
+3. Which group showed more change in anxiety? **[YOUR ANSWER]**
+4. What does this suggest about the intervention? **[YOUR ANSWER]**
+:::
+
+## Visualise Pre-Post Change
+
+```{r}
+#| label: boxplot-prepost
+#| fig-width: 10
+#| fig-height: 5
+
+# Reshape data for plotting
+library(tidyr)
+anxiety_long <- anxiety_data |>
+  select(id, group, anxiety_pre, anxiety_post) |>
+  pivot_longer(cols = c(anxiety_pre, anxiety_post),
+               names_to = "time",
+               values_to = "anxiety") |>
+  mutate(time = ifelse(time == "anxiety_pre", "Pre", "Post"),
+         time = factor(time, levels = c("Pre", "Post")))
+
+# Create plot
+ggplot(anxiety_long, aes(x = time, y = anxiety, fill = group)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("control" = "#E74C3C", "intervention" = "#27AE60")) +
+  theme_minimal() +
+  labs(
+    title = "Anxiety Scores: Pre vs Post by Group",
+    x = "Time Point",
+    y = "Anxiety Score",
+    fill = "Group"
+  )
+```
 
 ---
 
-## 8. Reflection
+# Part 5: Effect Sizes and APA Write-Up
 
-1. Was the difference statistically significant?
+::: {.callout-note}
+## Slides Part 5
+Complete this section during **Part 5: Effect Sizes & Reporting** practice time.
+:::
 
-   [Your answer]
+## Calculate Cohen's d
 
-2. Was the effect size small, medium, or large?
+### One-Sample Effect Size
 
-   [Your answer]
+```{r}
+#| label: effect-size-one-sample
 
-3. What does this mean practically?
+# Cohen's d for one-sample t-test
+sample_mean <- mean(anxiety_data$anxiety_pre)
+sample_sd <- sd(anxiety_data$anxiety_pre)
+pop_mean <- 50
 
-   [Your answer]
+d_one_sample <- (sample_mean - pop_mean) / sample_sd
+cat("One-sample Cohen's d:", round(d_one_sample, 3))
+```
+
+### Independent Samples Effect Size
+
+```{r}
+#| label: effect-size-independent
+
+# Cohen's d for independent samples t-test (post-test comparison)
+control_post <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention_post <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+m1 <- mean(control_post)
+m2 <- mean(intervention_post)
+n1 <- length(control_post)
+n2 <- length(intervention_post)
+
+# Pooled standard deviation
+pooled_sd <- sqrt(((n1-1)*var(control_post) + (n2-1)*var(intervention_post)) / (n1+n2-2))
+
+d_independent <- (m1 - m2) / pooled_sd
+cat("Independent samples Cohen's d:", round(d_independent, 3))
+```
+
+### Paired Samples Effect Size
+
+```{r}
+#| label: effect-size-paired
+
+# Cohen's d for paired samples t-test (intervention group)
+intervention <- anxiety_data |> filter(group == "intervention")
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d_paired <- mean(diff) / sd(diff)
+cat("Paired samples Cohen's d (intervention):", round(d_paired, 3))
+```
+
+::: {.callout-note}
+## Exercise 5.1: Interpret Effect Sizes
+
+Using Cohen's conventions (0.2 = small, 0.5 = medium, 0.8 = large):
+
+1. One-sample effect is a **[YOUR ANSWER]** effect
+2. Independent samples effect is a **[YOUR ANSWER]** effect
+3. Paired samples effect is a **[YOUR ANSWER]** effect
+:::
+
+## Write Your APA Results
+
+::: {.callout-tip}
+## APA Template
+
+[Test type] revealed that [description of comparison]. [Group 1] (M = ___, SD = ___) [showed/did not show] [description] compared to [Group 2/population/baseline] (M = ___, SD = ___), t(___) = ___, p = ___, d = ___.
+:::
+
+**Write your APA results below:**
+
+### One-Sample T-Test Result
+
+**[YOUR APA-STYLE WRITE-UP HERE]**
+
+### Independent Samples T-Test Result (Post-Test)
+
+**[YOUR APA-STYLE WRITE-UP HERE]**
+
+### Paired Samples T-Test Result (Intervention Group)
+
+**[YOUR APA-STYLE WRITE-UP HERE]**
+
+---
+
+## Proactive Coding Challenge
+
+Now try extending your analysis. You might:
+
+- Create a more sophisticated visualisation
+- Calculate and plot difference scores
+- Compare effect sizes across all tests
+- Explore other patterns in the data
+
+```{r}
+#| label: proactive-analysis
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE HERE
+# Create your own analysis or visualization
+# Be creative! What else might be interesting to explore?
+
+
+```
+
+**Describe what you did and what you found:**
+
+[YOUR DESCRIPTION OF YOUR PROACTIVE ANALYSIS]
+
+# Reflection
+
+::: {.callout-note}
+## Exercise 5.2
+
+Answer these reflection questions:
+
+1. **Which type of t-test was most appropriate for testing the intervention effect?**
+
+[YOUR ANSWER]
+
+2. **Why is it important to report effect sizes alongside p-values?**
+
+[YOUR ANSWER]
+
+3. **What would you conclude about the effectiveness of the anxiety intervention?**
+
+[YOUR ANSWER]
+
+4. **What questions do you still have about t-tests?**
+
+[YOUR ANSWER]
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+
+# Record your R environment for reproducibility
+sessionInfo()
+```
+
+---
+
+::: {.callout-important}
+## Submission Checklist
+
+Before submitting, ensure you have:
+
+- [ ] Replaced "YOUR NAME HERE" with your name
+- [ ] Completed all exercises (1.1, 2.1, 2.2, 3.1, 3.2, 4.1, 5.1, 5.2)
+- [ ] Written APA results for all three t-tests
+- [ ] Created a proactive analysis or visualisation
+- [ ] Answered the reflection questions
+- [ ] Rendered to HTML successfully
+:::

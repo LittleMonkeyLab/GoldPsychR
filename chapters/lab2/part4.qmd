@@ -1,0 +1,179 @@
+---
+title: "Part 4: Paired Samples T-Test"
+subtitle: "Lab 2: T-Tests"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part4-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to see how paired samples t-tests work
+2. **Compare** pre and post scores
+3. **Copy to RStudio** and try with your notebook
+:::
+
+### Load the Data
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# View pre and post columns
+head(anxiety_data[, c("id", "group", "anxiety_pre", "anxiety_post")])
+```
+
+### Calculate Descriptives for Pre and Post
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Pre-test:\n")
+cat("  Mean:", round(mean(anxiety_data$anxiety_pre), 2), "\n")
+cat("  SD:", round(sd(anxiety_data$anxiety_pre), 2), "\n\n")
+
+cat("Post-test:\n")
+cat("  Mean:", round(mean(anxiety_data$anxiety_post), 2), "\n")
+cat("  SD:", round(sd(anxiety_data$anxiety_post), 2))
+```
+
+### Paired Samples T-Test (All Participants)
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Paired t-test: pre vs post for everyone
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+```
+
+::: {.callout-note}
+## Key Argument
+`paired = TRUE` tells R these are matched observations (same people)
+:::
+
+### Calculate Difference Scores
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Calculate difference (pre - post)
+anxiety_data$difference <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+
+cat("Mean difference:", round(mean(anxiety_data$difference), 2), "\n")
+cat("SD of differences:", round(sd(anxiety_data$difference), 2), "\n")
+cat("\nPositive = anxiety decreased (improvement)")
+```
+
+### Paired T-Test by Group: Control
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Filter to control group only
+control <- anxiety_data[anxiety_data$group == "control", ]
+
+# Paired t-test for control group
+cat("=== Control Group ===\n")
+t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+```
+
+### Paired T-Test by Group: Intervention
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Filter to intervention group only
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+
+# Paired t-test for intervention group
+cat("=== Intervention Group ===\n")
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+### Visualise Pre-Post Change
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Boxplot of pre and post scores
+boxplot(anxiety_data$anxiety_pre, anxiety_data$anxiety_post,
+        names = c("Pre-Test", "Post-Test"),
+        main = "Anxiety Scores: Pre vs Post",
+        ylab = "Anxiety Score",
+        col = c("lightblue", "lightgreen"))
+```
+
+---
+
+## Self-Assessment
+
+Check your understanding before moving on.
+
+::: {.webex-check .webex-box}
+
+**1. A paired samples t-test is used when:**
+
+`r mcq(c("Comparing two different groups", answer = "Comparing the same people at two times", "Comparing to a population value", "Comparing three groups"))`
+
+**2. The key argument to specify a paired t-test in R is:**
+
+`r mcq(c("matched = TRUE", "same = TRUE", answer = "paired = TRUE", "dependent = TRUE"))`
+
+**3. In a paired t-test, the degrees of freedom is `r fitb("n - 1", width = 10)` where n is the number of pairs.**
+
+**4. True or False: A paired t-test has more statistical power than an independent t-test with the same sample size.**
+
+`r torf(TRUE)`
+
+**5. If pre-test mean is 55 and post-test mean is 50, the mean difference (pre - post) is:**
+
+`r mcq(c("-5", "0", answer = "5", "105"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 3](part3.qmd){.btn .btn-secondary}
+
+[Continue to Part 5: Effect Sizes →](part5.qmd){.btn .btn-primary}
+:::

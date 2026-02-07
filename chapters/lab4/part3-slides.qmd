@@ -1,0 +1,328 @@
+---
+title: "Part 3: Simple Linear Regression"
+subtitle: "Lab 4: Linear Models"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4, Part 3"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Simple Linear Regression {.center background-color="#2C3E50"}
+
+**Predicting One Variable from Another**
+
+---
+
+## When to Use It
+
+Use simple linear regression when:
+
+-   You have **one continuous predictor** (X)
+-   You have **one continuous outcome** (Y)
+-   You want to **predict** Y from X
+
+**Our Question**: Can we predict wellbeing from stress?
+
+---
+
+## The Regression Equation
+
+$$Y = b_0 + b_1X + \epsilon$$
+
+:::: columns
+::: {.column width="50%"}
+**Components:**
+
+-   **Y**: Outcome (wellbeing)
+-   **X**: Predictor (stress)
+-   **b₀**: Intercept
+-   **b₁**: Slope
+-   **ε**: Error
+:::
+
+::: {.column width="50%"}
+**What we estimate:**
+
+-   Intercept: Expected Y when X = 0
+-   Slope: Change in Y for each unit of X
+:::
+::::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+model <- lm(outcome ~ predictor, data = dataframe)
+summary(model)
+```
+
+**lm** = "linear model"
+
+---
+
+## Running the Regression {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+summary(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+summary(model)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+s <- summary(model)
+b0 <- round(coef(model)[1], 2)
+b1 <- round(coef(model)[2], 2)
+r_sq <- round(s$r.squared, 3)
+p_val <- s$coefficients[2, 4]
+p_text <- if(p_val < 0.001) "p < .001" else paste0("p = ", round(p_val, 3))
+
+cat("Your regression equation: Wellbeing =", b0, "+", b1, "× Stress\n\n")
+
+cat("What do these numbers mean?\n\n")
+
+cat("INTERCEPT (b0 =", b0, "):\n")
+cat("  Predicted wellbeing when stress = 0. This is a starting point.\n")
+cat("  Sometimes meaningful, sometimes not (is stress = 0 realistic?)\n\n")
+
+cat("SLOPE (b1 =", b1, "):\n")
+cat("  For every 1-point increase in stress, wellbeing", ifelse(b1 > 0, "increases", "decreases"),
+    "\n")
+cat("  by", abs(b1), "points. This is the key finding!\n\n")
+
+cat("R² =", r_sq, "means stress explains", round(r_sq * 100, 1), "% of variance\n")
+cat("in wellbeing. That's", ifelse(r_sq > 0.25, "substantial", "modest"), "for\n")
+cat("psychological research.\n\n")
+
+cat("Example prediction: A person with stress = 30 would have\n")
+cat("predicted wellbeing =", b0, "+", b1, "× 30 =",
+    round(b0 + b1 * 30, 1), "\n\n")
+
+cat("The", p_text, "confirms the slope is significantly different from 0.")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key sections in regression output:
+
+| Section | What it tells us |
+|---------|------------------|
+| **Coefficients** | Intercept and slope estimates |
+| **Std. Error** | Precision of estimates |
+| **t value, Pr(>|t|)** | Significance tests |
+| **R-squared** | Variance explained |
+| **F-statistic** | Overall model significance |
+
+---
+
+## Interpreting the Coefficients
+
+From our output:
+
+-   **Intercept (b₀)**: Expected wellbeing when stress = 0
+-   **Slope (b₁)**: For each 1-unit increase in stress, wellbeing changes by b₁ units
+
+::: {.callout-note}
+A negative slope means higher stress → lower wellbeing
+:::
+
+---
+
+## Understanding R²
+
+**R-squared** = proportion of variance in Y explained by X
+
+$$R^2 = \frac{SS_{regression}}{SS_{total}}$$
+
+-   R² = 0.30 means stress explains 30% of variance in wellbeing
+-   The remaining 70% is unexplained (other factors, error)
+
+---
+
+## Making Predictions {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+# Predict for specific stress values
+new_data <- data.frame(stress = c(15, 25, 35))
+predict(model, new_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+new_data <- data.frame(stress = c(15, 25, 35))
+predict(model, new_data)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+b0 <- round(coef(model)[1], 2)
+b1 <- round(coef(model)[2], 2)
+
+new_data <- data.frame(stress = c(15, 25, 35))
+predictions <- predict(model, new_data)
+
+cat("Making predictions with your regression equation:\n")
+cat("Wellbeing =", b0, "+", b1, "× Stress\n\n")
+
+for(i in 1:3) {
+  cat("Stress =", new_data$stress[i], ":\n")
+  cat("  Prediction =", b0, "+", b1, "×", new_data$stress[i], "=",
+      round(predictions[i], 1), "\n\n")
+}
+
+cat("Notice the pattern: for every 10-point stress increase, wellbeing\n")
+cat("drops by about", abs(round(b1 * 10, 1)), "points.\n\n")
+
+cat("Important caveats about predictions:\n")
+cat("1. Only valid within your data range (stress ~",
+    round(min(wellbeing$stress)), "-", round(max(wellbeing$stress)), ")\n")
+cat("2. Predictions are AVERAGES - individuals will vary\n")
+cat("3. Assumes the linear relationship holds (check diagnostic plots)\n")
+cat("4. Still correlation, not causation - predicting isn't explaining")
+```
+
+:::
+
+---
+
+## Visualising the Model {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Predicting Wellbeing from Stress",
+     xlab = "Stress", ylab = "Wellbeing",
+     pch = 19, col = "steelblue")
+abline(model, col = "red", lwd = 2)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Predicting Wellbeing from Stress",
+     xlab = "Stress", ylab = "Wellbeing",
+     pch = 19, col = "steelblue")
+abline(model, col = "red", lwd = 2)
+```
+
+:::
+
+---
+
+## Summary: Simple Regression {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Use `lm(y ~ x, data = df)` to fit a model
+-   Use `summary()` to see coefficients and R²
+-   The **slope** tells us the relationship strength and direction
+-   **R²** tells us variance explained
+-   Use `predict()` to make predictions
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Build a regression model predicting wellbeing from sleep
+2. Interpret the coefficients
+3. Calculate R²
+4. Make predictions for 6, 7, and 8 hours of sleep
+:::

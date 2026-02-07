@@ -1,0 +1,644 @@
+---
+title: "Part 4: Paired Samples T-Test"
+subtitle: "Lab 2: T-Tests"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 2, Part 4"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Paired Samples T-Test {.center background-color="#2C3E50"}
+
+**Comparing the Same People at Two Time Points**
+
+---
+
+## When to Use It
+
+Use a paired samples t-test when:
+
+-   **Same people** measured at two time points
+-   **Matched pairs** (e.g., twins, matched controls)
+-   **Two conditions** for each participant (counterbalanced)
+
+:::: columns
+::: {.column width="50%"}
+**Examples:**
+
+- Before vs. After treatment
+- Monday vs. Friday performance
+- Left hand vs. Right hand reaction time
+:::
+
+::: {.column width="50%"}
+**Our Question:**
+
+Did anxiety change from pre to post?
+:::
+::::
+
+---
+
+## Why "Paired"?
+
+Each person has TWO scores that are **paired** together:
+
+| Person | Pre-Test | Post-Test |
+|--------|----------|-----------|
+| 1      | 55       | 48        |
+| 2      | 62       | 58        |
+| 3      | 45       | 42        |
+
+The test analyses **difference scores** for each person.
+
+---
+
+## The Hypotheses
+
+:::: columns
+::: {.column width="50%"}
+**Null Hypothesis (H₀)**
+
+$$\mu_{difference} = 0$$
+
+The mean difference is zero (no change).
+:::
+
+::: {.column width="50%"}
+**Alternative Hypothesis (H₁)**
+
+$$\mu_{difference} \neq 0$$
+
+The mean difference is NOT zero (there IS change).
+:::
+::::
+
+---
+
+## The Formula
+
+A paired t-test is essentially a one-sample t-test on the differences:
+
+$$t = \frac{\bar{d} - 0}{s_d / \sqrt{n}}$$
+
+Where:
+
+-   $\bar{d}$ = mean of the difference scores
+-   $s_d$ = standard deviation of differences
+-   $n$ = number of pairs
+
+---
+
+## Why Is This Powerful?
+
+:::: columns
+::: {.column width="50%"}
+**Between-subjects** (independent t-test):
+
+-   Individual differences add noise
+-   Need large samples
+:::
+
+::: {.column width="50%"}
+**Within-subjects** (paired t-test):
+
+-   Each person is their own control
+-   Individual differences cancel out
+-   **More statistical power**
+:::
+::::
+
+---
+
+## Our Data: Pre and Post Scores {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+head(anxiety_data[, c("id", "group", "anxiety_pre", "anxiety_post")])
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+head(anxiety_data[, c("id", "group", "anxiety_pre", "anxiety_post")])
+```
+
+:::
+
+---
+
+## Descriptive Statistics {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+mean(anxiety_data$anxiety_pre)
+sd(anxiety_data$anxiety_pre)
+mean(anxiety_data$anxiety_post)
+sd(anxiety_data$anxiety_post)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+mean(anxiety_data$anxiety_pre)
+sd(anxiety_data$anxiety_pre)
+mean(anxiety_data$anxiety_post)
+sd(anxiety_data$anxiety_post)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+m_pre <- round(mean(anxiety_data$anxiety_pre), 2)
+m_post <- round(mean(anxiety_data$anxiety_post), 2)
+sd_pre <- round(sd(anxiety_data$anxiety_pre), 2)
+sd_post <- round(sd(anxiety_data$anxiety_post), 2)
+diff <- round(m_pre - m_post, 2)
+
+cat("Comparing scores across time for ALL participants:\n")
+cat("  Pre-test:  M =", m_pre, ", SD =", sd_pre, "\n")
+cat("  Post-test: M =", m_post, ", SD =", sd_post, "\n\n")
+
+cat("The mean dropped by", diff, "points from pre to post. But remember,\n")
+cat("this includes both control AND intervention groups mixed together.\n\n")
+
+cat("For a within-subjects comparison, we care about CHANGE within each\n")
+cat("person. The paired t-test accounts for individual differences by\n")
+cat("looking at each person's change score. Someone who starts at 70 and\n")
+cat("drops to 60 shows the same 10-point improvement as someone going\n")
+cat("from 40 to 30 - the paired test captures this pattern.")
+```
+
+:::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+t.test(time1, time2, paired = TRUE)
+```
+
+The `paired = TRUE` argument is **essential**!
+
+---
+
+## Running the Paired T-Test {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m_diff <- round(mean(anxiety_data$anxiety_pre - anxiety_data$anxiety_post), 2)
+
+cat("The paired t-test asks: is the mean difference significantly different\n")
+cat("from zero? Your mean change is", m_diff, "points.\n\n")
+
+cat("With t(", result$parameter, ") = ", round(result$statistic, 2),
+    " and ", p_text, ",\n", sep = "")
+if(result$p.value < 0.05) {
+  cat("there IS a significant change from pre to post.\n\n")
+} else {
+  cat("there ISN'T a significant change overall.\n\n")
+}
+
+cat("Notice df =", result$parameter, "which is n - 1 (not n1 + n2 - 2 like the\n")
+cat("independent test). That's because you have", result$parameter + 1, "PAIRS\n")
+cat("of observations, not two separate groups.\n\n")
+
+cat("Report as: 'A paired-samples t-test revealed a significant decrease\n")
+cat("in anxiety from pre-test to post-test, t(", result$parameter,
+    ") = ", round(result$statistic, 2), ", ", p_text, ".'", sep = "")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key values to extract:
+
+| Component | What to look for |
+|-----------|------------------|
+| **t** | Test statistic |
+| **df** | Degrees of freedom (n-1) |
+| **p-value** | Is it < .05? |
+| **95% CI** | Does it include 0? |
+| **mean difference** | How much change? |
+
+::: {.callout-note}
+**Decision rule**: If p < .05, reject H₀
+:::
+
+---
+
+## The Difference Score Approach {background-color="#f0f0f0"}
+
+We can also calculate the differences explicitly:
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+
+# One-sample t-test on differences
+t.test(anxiety_data$diff, mu = 0)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+
+# One-sample t-test on differences
+t.test(anxiety_data$diff, mu = 0)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+result <- t.test(anxiety_data$diff, mu = 0)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m_diff <- round(mean(anxiety_data$diff), 2)
+sd_diff <- round(sd(anxiety_data$diff), 2)
+
+cat("Here's a useful insight: a paired t-test is mathematically identical\n")
+cat("to a one-sample t-test on the difference scores!\n\n")
+
+cat("Each person's change: pre - post = difference score\n")
+cat("Mean difference:", m_diff, "(SD =", sd_diff, ")\n")
+cat("One-sample t-test on differences (mu = 0):\n")
+cat("t(", result$parameter, ") = ", round(result$statistic, 2),
+    ", ", p_text, "\n\n", sep = "")
+
+cat("This is exactly what paired = TRUE does automatically. Why does this\n")
+cat("work? Because we're asking: 'Is the average change different from zero?'\n")
+cat("That's a one-sample question about difference scores.\n\n")
+
+cat("This also shows why paired tests are more powerful: we've eliminated\n")
+cat("individual differences. Someone at 70 vs 40 doesn't matter - only\n")
+cat("their CHANGE matters. Less noise = more statistical power.")
+```
+
+:::
+
+::: {.callout-note}
+This gives the **same result** as the paired t-test!
+:::
+
+---
+
+## By Group: Control {background-color="#f0f0f0"}
+
+Did the **control group** show change?
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+control <- anxiety_data[anxiety_data$group == "control", ]
+t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data[anxiety_data$group == "control", ]
+t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data[anxiety_data$group == "control", ]
+result <- t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m_pre <- round(mean(control$anxiety_pre), 2)
+m_post <- round(mean(control$anxiety_post), 2)
+m_diff <- round(mean(control$anxiety_pre - control$anxiety_post), 2)
+
+cat("Control group pre-post change:\n")
+cat("  Pre:  M =", m_pre, "\n")
+cat("  Post: M =", m_post, "\n")
+cat("  Mean change:", m_diff, "points\n\n")
+
+cat("Test result: t(", result$parameter, ") = ", round(result$statistic, 2),
+    ", ", p_text, "\n\n", sep = "")
+
+if(result$p.value < 0.05) {
+  cat("Interesting - even the control group shows significant change!\n")
+  cat("This could be regression to the mean, practice effects, or just\n")
+  cat("time passing. That's why we NEED a control group - to see how much\n")
+  cat("change happens without intervention.\n")
+} else {
+  cat("The control group shows no significant change - exactly what we'd\n")
+  cat("expect if our intervention is specifically responsible for any\n")
+  cat("improvements in the treatment group.\n")
+}
+```
+
+:::
+
+---
+
+## By Group: Intervention {background-color="#f0f0f0"}
+
+Did the **intervention group** show change?
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+control <- anxiety_data[anxiety_data$group == "control", ]
+result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+result_ctrl <- t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m_diff_int <- round(mean(intervention$anxiety_pre - intervention$anxiety_post), 2)
+m_diff_ctrl <- round(mean(control$anxiety_pre - control$anxiety_post), 2)
+
+cat("Intervention group pre-post change:\n")
+cat("  Mean change:", m_diff_int, "points\n")
+cat("  t(", result$parameter, ") = ", round(result$statistic, 2),
+    ", ", p_text, "\n\n", sep = "")
+
+cat("Compare to control group change:", m_diff_ctrl, "points\n")
+cat("  t =", round(result_ctrl$statistic, 2), "\n\n")
+
+if(abs(result$statistic) > abs(result_ctrl$statistic)) {
+  cat("The intervention group shows a larger t-value, suggesting more\n")
+  cat("consistent change. The difference in change between groups\n")
+  cat("(", m_diff_int, "-", m_diff_ctrl, "=", round(m_diff_int - m_diff_ctrl, 2),
+      "points) is what we'd\n")
+  cat("attribute to the intervention itself.\n\n")
+}
+
+cat("For a full analysis, you'd want to compare the CHANGE scores between\n")
+cat("groups using an independent t-test - that directly tests whether the\n")
+cat("intervention produced more change than control.")
+```
+
+:::
+
+::: {.callout-tip}
+## What do you notice?
+Which group showed more change? Does this make sense given the design?
+:::
+
+---
+
+## Visualising Pre-Post Change {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+boxplot(anxiety_data$anxiety_pre, anxiety_data$anxiety_post,
+        names = c("Pre", "Post"),
+        main = "Anxiety: Pre vs Post",
+        ylab = "Anxiety Score",
+        col = c("lightblue", "lightgreen"))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+boxplot(anxiety_data$anxiety_pre, anxiety_data$anxiety_post,
+        names = c("Pre", "Post"),
+        main = "Anxiety: Pre vs Post",
+        ylab = "Anxiety Score",
+        col = c("lightblue", "lightgreen"))
+```
+
+:::
+
+---
+
+## Checking Assumptions {background-color="#f0f0f0"}
+
+**1. Paired observations**: Same people at both times ✓
+
+**2. Continuous data**: Anxiety scores are continuous ✓
+
+**3. Normality of differences**: Check the difference scores
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+shapiro.test(anxiety_data$diff)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+shapiro.test(anxiety_data$diff)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
+result <- shapiro.test(anxiety_data$diff)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+n <- length(anxiety_data$diff)
+
+cat("For paired t-tests, we check normality of the DIFFERENCE scores,\n")
+cat("not the original variables. That's because the test operates on\n")
+cat("the differences.\n\n")
+
+cat("Shapiro-Wilk W =", round(result$statistic, 3), ",", p_text, "\n\n")
+
+if(result$p.value > 0.05) {
+  cat("Since p > .05, the difference scores don't deviate significantly\n")
+  cat("from normality. The assumption is reasonably met.\n\n")
+} else {
+  cat("With p < .05, the differences may not be perfectly normal.\n")
+  cat("But with n =", n, ", the Central Limit Theorem helps us out.\n\n")
+}
+
+cat("Practical note: paired t-tests are quite robust to non-normality,\n")
+cat("especially with larger samples. If you're really concerned, you\n")
+cat("could use the non-parametric alternative: the Wilcoxon signed-rank\n")
+cat("test (wilcox.test with paired = TRUE).")
+```
+
+:::
+
+---
+
+## Summary: Paired Samples T-Test {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Compares **same people** at two time points
+-   Syntax: `t.test(time1, time2, paired = TRUE)`
+-   Tests if mean difference ≠ 0
+-   **More powerful** than independent t-test
+-   Reject H₀ if p < .05
+
+**Next**: Effect sizes and APA reporting!
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+Complete the paired samples t-test section:
+1. Run paired t-test for all participants
+2. Run separate tests for each group
+3. Compare the results
+4. Create a visualisation
+:::

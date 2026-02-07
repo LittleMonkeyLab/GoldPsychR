@@ -1,0 +1,124 @@
+---
+title: "Lab 1: Extended Coding Examples"
+subtitle: "Instructor Reference - Two Example Analyses"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-fold: false
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# Load the Grit Scale data
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+grit_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Reverse-score items G1, G3, G5, G6
+grit_data$rev_G1 <- 6 - grit_data$G1
+grit_data$rev_G3 <- 6 - grit_data$G3
+grit_data$rev_G5 <- 6 - grit_data$G5
+grit_data$rev_G6 <- 6 - grit_data$G6
+
+# Calculate subscale scores
+grit_data$consistency_interest <- (grit_data$rev_G1 + grit_data$rev_G3 + 
+                                    grit_data$rev_G5 + grit_data$rev_G6) / 4
+grit_data$perseverance_effort <- (grit_data$G2 + grit_data$G4 + 
+                                  grit_data$G7 + grit_data$G8) / 4
+grit_data$total_grit <- (grit_data$rev_G1 + grit_data$rev_G3 + grit_data$rev_G5 + grit_data$rev_G6 +
+                         grit_data$G2 + grit_data$G4 + grit_data$G7 + grit_data$G8) / 8
+```
+
+# Extended Coding Examples
+
+This document provides two example analyses that students might create for the "Try Your Own Analysis" section. These examples build on concepts already covered in the lab without introducing major new content.
+
+---
+
+## Example 1: Descriptives by Gender
+
+This example shows how to calculate descriptive statistics grouped by Gender, using the same `group_by()` and `summarise()` approach students learned for Study_Year.
+
+```{r}
+#| label: example-gender-descriptives
+
+# Calculate descriptives by Gender
+grit_by_gender <- grit_data |>
+  group_by(Gender) |>
+  summarise(
+    n = n(),
+    consistency_M = mean(consistency_interest, na.rm = TRUE),
+    consistency_SD = sd(consistency_interest, na.rm = TRUE),
+    perseverance_M = mean(perseverance_effort, na.rm = TRUE),
+    perseverance_SD = sd(perseverance_effort, na.rm = TRUE),
+    total_M = mean(total_grit, na.rm = TRUE),
+    total_SD = sd(total_grit, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Display results
+grit_by_gender
+```
+
+**What this does:** Uses the same `group_by()` and `summarise()` pattern from Part 4, but groups by `Gender` instead of `Study_Year`. This allows students to explore whether grit scores differ by gender.
+
+---
+
+## Example 2: Comparing Subscales with Facet Wrap
+
+This example shows how to create side-by-side boxplots comparing both subscales using `facet_wrap()`. This builds on the boxplot code students already wrote, but shows both subscales together for easier comparison.
+
+```{r}
+#| label: example-facet-wrap
+#| fig-width: 10
+#| fig-height: 5
+
+# Create a combined plot showing both subscales
+# First, create a dataset with both subscales in long format
+grit_comparison <- data.frame(
+  Study_Year = rep(grit_data$Study_Year, 2),
+  Subscale = rep(c("Consistency of Interest", "Perseverance of Effort"), each = nrow(grit_data)),
+  Score = c(grit_data$consistency_interest, grit_data$perseverance_effort)
+)
+
+# Create faceted boxplot
+ggplot(grit_comparison, aes(x = factor(Study_Year), y = Score, fill = factor(Study_Year))) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~ Subscale, ncol = 2) +
+  scale_x_discrete(labels = c("1" = "First Year", "2" = "Final Year")) +
+  scale_fill_manual(values = c("#9B1B30", "#2E7D32"), guide = "none") +
+  theme_minimal() +
+  labs(
+    title = "Grit Subscales by Study Year",
+    x = "Study Year",
+    y = "Score"
+  )
+```
+
+**What this does:** 
+- Creates a simple data frame combining both subscales
+- Uses `facet_wrap()` to create side-by-side panels for each subscale
+- Makes it easy to compare how Consistency of Interest and Perseverance of Effort differ between study years
+
+**Note for students:** The `facet_wrap()` function splits your plot into separate panels based on a categorical variable. This is useful when you want to compare the same relationship across different groups or variables.
+
+---
+
+## How to Use These Examples
+
+These examples can be shared with students who are stuck or looking for inspiration. They demonstrate:
+
+1. **Example 1** shows how to apply the same grouping technique to a different variable
+2. **Example 2** introduces `facet_wrap()` as a way to create multiple panels in a single plot
+
+Both examples use only concepts and functions students have already encountered in the lab, making them accessible extensions rather than completely new material.

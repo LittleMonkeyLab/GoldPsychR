@@ -1,0 +1,619 @@
+---
+title: "Part 3: Independent Samples T-Test"
+subtitle: "Lab 2: T-Tests"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 2, Part 3"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Independent Samples T-Test {.center background-color="#2C3E50"}
+
+**Comparing Two Different Groups**
+
+---
+
+## When to Use It
+
+Use an independent samples t-test when:
+
+-   You have **two groups** of different participants
+-   You want to compare their **means** on a continuous variable
+-   Groups are **independent** (different people)
+
+:::: columns
+::: {.column width="50%"}
+**Examples:**
+
+- Treatment vs. Control
+- Males vs. Females
+- Psychology vs. Business students
+:::
+
+::: {.column width="50%"}
+**Our Question:**
+
+Do control and intervention groups differ in test anxiety?
+:::
+::::
+
+---
+
+## The Hypotheses
+
+:::: columns
+::: {.column width="50%"}
+**Null Hypothesis (H₀)**
+
+$$\mu_1 = \mu_2$$
+
+The two group means are equal.
+:::
+
+::: {.column width="50%"}
+**Alternative Hypothesis (H₁)**
+
+$$\mu_1 \neq \mu_2$$
+
+The two group means are different.
+:::
+::::
+
+---
+
+## The Formula
+
+$$t = \frac{\bar{x}_1 - \bar{x}_2}{SE_{difference}}$$
+
+:::: columns
+::: {.column width="50%"}
+**Welch's T-Test** ✓
+
+- Default in R
+- Does NOT assume equal variances
+- More robust
+- **Recommended**
+:::
+
+::: {.column width="50%"}
+**Student's T-Test**
+
+- Assumes equal variances
+- Use `var.equal = TRUE`
+- Legacy option
+:::
+::::
+
+---
+
+## Loading the Data {background-color="#f0f0f0"}
+
+First, load the dataset from GitHub:
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(anxiety_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(anxiety_data)
+```
+
+:::
+
+---
+
+## Check the Groups {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+table(anxiety_data$group)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+table(anxiety_data$group)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+n_ctrl <- sum(anxiety_data$group == "control")
+n_int <- sum(anxiety_data$group == "intervention")
+
+cat("Before comparing groups, always check your sample sizes:\n")
+cat("  Control:", n_ctrl, "participants\n")
+cat("  Intervention:", n_int, "participants\n\n")
+
+if(n_ctrl == n_int) {
+  cat("Great news - you have a balanced design with equal group sizes!\n")
+  cat("This is ideal because it maximizes statistical power and makes\n")
+  cat("the t-test more robust to violations of assumptions.\n")
+} else {
+  cat("Note: Unequal group sizes aren't a problem for Welch's t-test\n")
+  cat("(which R uses by default), but might reduce your power slightly.\n")
+}
+cat("\nIn your methods section, you'd report: 'Participants were assigned\n")
+cat("to either a control condition (n =", n_ctrl, ") or intervention\n")
+cat("condition (n =", n_int, ").'")
+```
+
+:::
+
+---
+
+## Descriptive Statistics {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+mean(control)
+sd(control)
+mean(intervention)
+sd(intervention)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+mean(control)
+sd(control)
+mean(intervention)
+sd(intervention)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+m_ctrl <- round(mean(control), 2)
+m_int <- round(mean(intervention), 2)
+sd_ctrl <- round(sd(control), 2)
+sd_int <- round(sd(intervention), 2)
+diff <- round(abs(m_ctrl - m_int), 2)
+
+cat("Descriptive statistics by group:\n")
+cat("  Control:      M =", m_ctrl, ", SD =", sd_ctrl, "\n")
+cat("  Intervention: M =", m_int, ", SD =", sd_int, "\n\n")
+
+cat("The raw difference between groups is", diff, "points. But is that\n")
+cat("meaningful? The SDs tell us about variability within each group -\n")
+cat("if they're similar (", sd_ctrl, "vs", sd_int, "), that's good news\n")
+cat("for the equal variances assumption.\n\n")
+
+cat("For your results section, you'd write: 'Pre-test anxiety scores\n")
+cat("were similar between control (M =", m_ctrl, ", SD =", sd_ctrl, ")\n")
+cat("and intervention (M =", m_int, ", SD =", sd_int, ") groups.'")
+```
+
+:::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+t.test(outcome ~ group, data = dataframe)
+```
+
+This reads: **"Test if outcome differs by group"**
+
+---
+
+## Running the Test {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+t.test(anxiety_pre ~ group, data = anxiety_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+t.test(anxiety_pre ~ group, data = anxiety_data)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- t.test(anxiety_pre ~ group, data = anxiety_data)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+
+cat("This is Welch's t-test (R's default), which doesn't assume equal variances.\n")
+cat("The t-value of", round(result$statistic, 2), "represents the difference\n")
+cat("between group means, scaled by the pooled standard error.\n\n")
+
+cat("Notice the degrees of freedom:", round(result$parameter, 2), "- that's a\n")
+cat("decimal! Welch's test adjusts df based on group variances, so you won't\n")
+cat("get a nice round number. This adjustment makes the test more accurate\n")
+cat("when variances differ.\n\n")
+
+if(result$p.value < 0.05) {
+  cat("With", p_text, ", the groups differ significantly at baseline.\n\n")
+} else {
+  cat("With", p_text, ", no significant baseline difference - good for an\n")
+  cat("intervention study! Groups started at similar anxiety levels.\n\n")
+}
+
+cat("Report as: 'An independent-samples t-test showed no significant\n")
+cat("difference in baseline anxiety between groups, t(", round(result$parameter, 2),
+    ") = ", round(result$statistic, 2), ", ", p_text, ".'", sep = "")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key values to extract:
+
+| Component | What to look for |
+|-----------|------------------|
+| **t** | Test statistic |
+| **df** | Degrees of freedom |
+| **p-value** | Is it < .05? |
+| **95% CI** | Does it include 0? |
+| **Means** | Group means |
+
+::: {.callout-note}
+**Decision rule**: If p < .05, reject H₀
+:::
+
+---
+
+## Welch vs Student: Degrees of Freedom {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+welch <- t.test(anxiety_pre ~ group, data = anxiety_data)
+student <- t.test(anxiety_pre ~ group, data = anxiety_data,
+                  var.equal = TRUE)
+
+welch$parameter
+student$parameter
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+welch <- t.test(anxiety_pre ~ group, data = anxiety_data)
+student <- t.test(anxiety_pre ~ group, data = anxiety_data,
+                  var.equal = TRUE)
+
+welch$parameter
+student$parameter
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+welch <- t.test(anxiety_pre ~ group, data = anxiety_data)
+student <- t.test(anxiety_pre ~ group, data = anxiety_data,
+                  var.equal = TRUE)
+n1 <- sum(anxiety_data$group == "control")
+n2 <- sum(anxiety_data$group == "intervention")
+
+cat("Two versions of the same test - notice the degrees of freedom:\n")
+cat("  Welch's df:   ", round(welch$parameter, 2), "(fractional)\n")
+cat("  Student's df:", student$parameter, "(integer:", n1 + n2 - 2, "= n1 + n2 - 2)\n\n")
+
+cat("Student's t-test assumes equal variances and gives you df = n1 + n2 - 2.\n")
+cat("That's the 'classic' formula you might see in textbooks.\n\n")
+
+cat("Welch's t-test adjusts the degrees of freedom downward when variances\n")
+cat("differ, making it more conservative (harder to get significance).\n")
+cat("This adjustment is the Welch-Satterthwaite approximation.\n\n")
+
+cat("Which should you use? Most statisticians now recommend Welch's as the\n")
+cat("default - it performs well even when variances ARE equal, and protects\n")
+cat("you when they're not. R uses Welch by default for this reason.")
+```
+
+:::
+
+---
+
+## Checking Assumptions {background-color="#f0f0f0"}
+
+**1. Independence**: Different people in each group ✓
+
+**2. Normality**: Check with histogram or Shapiro-Wilk
+
+**3. Equal variances**: Compare group variances
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+var(control)
+var(intervention)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+var(control)
+var(intervention)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+v1 <- round(var(control), 2)
+v2 <- round(var(intervention), 2)
+ratio <- round(v1 / v2, 2)
+
+cat("Checking the homogeneity of variance assumption:\n")
+cat("  Control variance:     ", v1, "\n")
+cat("  Intervention variance:", v2, "\n")
+cat("  Variance ratio:       ", ratio, "\n\n")
+
+cat("A common rule of thumb: if the larger variance is less than 4× the\n")
+cat("smaller, you're probably fine. Your ratio of", ratio, "is",
+    ifelse(ratio < 4 && ratio > 0.25, "within\n", "outside\n"))
+cat("acceptable limits for Student's t-test.\n\n")
+
+cat("But here's the practical advice: just use Welch's test (R's default)!\n")
+cat("It handles unequal variances automatically, so you don't need to\n")
+cat("formally test this assumption. Some argue testing assumptions with\n")
+cat("significance tests is problematic anyway - your sample might be too\n")
+cat("small to detect violations, or too large to matter.")
+```
+
+:::
+
+---
+
+## Visualising the Comparison {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+boxplot(anxiety_pre ~ group,
+        data = anxiety_data,
+        main = "Pre-Test Anxiety by Group",
+        xlab = "Group",
+        ylab = "Anxiety Score",
+        col = c("#E74C3C", "#27AE60"))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+boxplot(anxiety_pre ~ group,
+        data = anxiety_data,
+        main = "Pre-Test Anxiety by Group",
+        xlab = "Group",
+        ylab = "Anxiety Score",
+        col = c("#E74C3C", "#27AE60"))
+```
+
+:::
+
+---
+
+## What About Post-Test? {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+t.test(anxiety_post ~ group, data = anxiety_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+t.test(anxiety_post ~ group, data = anxiety_data)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- t.test(anxiety_post ~ group, data = anxiety_data)
+result_pre <- t.test(anxiety_pre ~ group, data = anxiety_data)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+
+m_ctrl <- round(mean(anxiety_data$anxiety_post[anxiety_data$group == "control"]), 2)
+m_int <- round(mean(anxiety_data$anxiety_post[anxiety_data$group == "intervention"]), 2)
+
+cat("Now comparing groups AFTER the intervention:\n")
+cat("  Control:      M =", m_ctrl, "\n")
+cat("  Intervention: M =", m_int, "\n")
+cat("  t(", round(result$parameter, 2), ") = ", round(result$statistic, 2),
+    ", ", p_text, "\n\n", sep = "")
+
+cat("Compare to baseline where t =", round(result_pre$statistic, 2), ".\n")
+if(abs(result$statistic) > abs(result_pre$statistic)) {
+  cat("The groups have diverged - the intervention appears to have had\n")
+  cat("an effect! The intervention group now shows lower anxiety.\n\n")
+} else {
+  cat("The groups remain similar - no clear intervention effect here.\n\n")
+}
+
+cat("This is the key comparison in a between-subjects intervention study:\n")
+cat("if groups started similar but differ after intervention, that's your\n")
+cat("evidence that the treatment worked.")
+```
+
+:::
+
+---
+
+## Summary {.center background-color="#2C3E50"}
+
+**Independent Samples T-Test**
+
+| Aspect | Details |
+|--------|---------|
+| **Purpose** | Compare two different groups |
+| **Syntax** | `t.test(y ~ group, data = df)` |
+| **Default** | Welch's test (recommended) |
+| **Student's** | Add `var.equal = TRUE` |
+| **Decision** | Reject H₀ if p < .05 |
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Compare groups at baseline
+2. Compare groups at post-test
+3. Interpret both results
+4. Create a visualisation
+:::
+
+**Next up:** Paired Samples T-Test!

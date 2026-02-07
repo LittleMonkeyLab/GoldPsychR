@@ -1,0 +1,165 @@
+---
+title: "Part 5: Effect Sizes & Reporting"
+subtitle: "Lab 3: ANOVA"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part5-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Calculate eta-squared** for your ANOVA
+2. **Interpret** the effect size
+3. **Write APA-style results**
+:::
+
+### Calculate Eta-Squared (η²)
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Fit the model
+model <- aov(recall ~ method, data = study_data)
+model_summary <- summary(model)
+
+# Extract sums of squares
+ss_method <- model_summary[[1]]["method", "Sum Sq"]
+ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+# Calculate eta-squared
+eta_sq <- ss_method / ss_total
+
+cat("SS_method:", round(ss_method, 2), "\n")
+cat("SS_residual:", round(ss_residual, 2), "\n")
+cat("SS_total:", round(ss_total, 2), "\n")
+cat("\nEta-squared:", round(eta_sq, 3))
+```
+
+### Interpret the Effect Size
+
+```{webr-r}
+# Cohen's conventions for eta-squared
+interpret_eta <- function(eta) {
+  if (eta < 0.01) return("negligible")
+  if (eta < 0.06) return("small")
+  if (eta < 0.14) return("medium")
+  return("large")
+}
+
+eta_sq <- 0.277  # From our calculation
+cat("Eta-squared =", eta_sq, "\n")
+cat("Interpretation:", interpret_eta(eta_sq), "effect\n\n")
+cat("This means", round(eta_sq * 100, 1), "% of variance in recall\n")
+cat("is explained by study method.")
+```
+
+### Partial Eta-Squared for Two-Way ANOVA
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Two-way ANOVA
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary2 <- summary(model2)
+
+# Extract SS values
+ss_method <- summary2[[1]]["method", "Sum Sq"]
+ss_time <- summary2[[1]]["time_of_day", "Sum Sq"]
+ss_interaction <- summary2[[1]]["method:time_of_day", "Sum Sq"]
+ss_residual <- summary2[[1]]["Residuals", "Sum Sq"]
+
+# Partial eta-squared for method
+partial_eta_method <- ss_method / (ss_method + ss_residual)
+
+cat("Partial eta-squared for method:", round(partial_eta_method, 3))
+```
+
+### Building the APA Results
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Get all the values we need
+model <- aov(recall ~ method, data = study_data)
+model_summary <- summary(model)
+
+f_val <- round(model_summary[[1]]["method", "F value"], 2)
+df1 <- model_summary[[1]]["method", "Df"]
+df2 <- model_summary[[1]]["Residuals", "Df"]
+p_val <- model_summary[[1]]["method", "Pr(>F)"]
+
+ss_method <- model_summary[[1]]["method", "Sum Sq"]
+ss_res <- model_summary[[1]]["Residuals", "Sum Sq"]
+eta <- round(ss_method / (ss_method + ss_res), 2)
+
+cat("APA format:\n")
+cat(paste0("F(", df1, ", ", df2, ") = ", f_val,
+           ", p < .001, η² = ", eta))
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. Eta-squared measures:**
+
+`r mcq(c("Statistical significance", "Sample size needed", answer = "Proportion of variance explained", "Effect direction"))`
+
+**2. An eta-squared of 0.06 is considered:**
+
+`r mcq(c("Negligible", "Small", answer = "Medium", "Large"))`
+
+**3. The formula for eta-squared is: SS_effect / SS_`r fitb("total", width = 8)`**
+
+**4. True or False: Partial eta-squared is typically larger than regular eta-squared.**
+
+`r torf(TRUE)`
+
+**5. In APA format, ANOVA results should include:**
+
+`r mcq(c("Only F and p", "Only descriptives", answer = "F, df, p, and effect size", "Just the conclusion"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 4](part4.qmd){.btn .btn-secondary}
+
+[Back to Lab 3 Overview →](../../labs/lab03.qmd){.btn .btn-primary}
+:::

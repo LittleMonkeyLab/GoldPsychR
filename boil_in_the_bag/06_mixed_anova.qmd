@@ -1,0 +1,291 @@
+---
+title: "Boil in the Bag: Mixed ANOVA"
+subtitle: "One between-subjects factor + one within-subjects factor"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have groups of different participants (between-subjects) measured at multiple time points (within-subjects).
+
+**Example scenarios:**
+- Treatment vs Control groups, measured Pre and Post
+- Male vs Female, tested under 3 conditions
+- Young vs Old, with repeated trials
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(afex)
+library(emmeans)
+library(effectsize)
+```
+
+
+## Step 2: Load Your Data
+
+Data should be in **wide format** with separate columns for each time point.
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/mixed_anova_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+id_var <- "id"
+between_var <- "group"              # Between-subjects factor
+time_vars <- c("time1", "time2")    # Within-subjects columns
+
+# Convert between-subjects to factor
+data <- data |>
+  mutate(across(all_of(between_var), as.factor))
+
+cat("Between-subjects levels:", levels(data[[between_var]]), "\n")
+cat("Within-subjects levels:", time_vars, "\n")
+```
+
+
+## Step 4: Reshape to Long Format
+
+```{r}
+#| label: reshape
+
+data_long <- data |>
+  pivot_longer(
+    cols = all_of(time_vars),
+    names_to = "time",
+    values_to = "score"
+  ) |>
+  mutate(
+    time = factor(time, levels = time_vars)
+  )
+
+head(data_long)
+```
+
+
+## Step 5: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+# Cell means (Group × Time)
+descriptives <- data_long |>
+  group_by(.data[[between_var]], time) |>
+  summarise(
+    n = n(),
+    mean = mean(score, na.rm = TRUE),
+    sd = sd(score, na.rm = TRUE),
+    se = sd / sqrt(n),
+    .groups = "drop"
+  )
+
+print(descriptives)
+
+# Marginal means
+cat("\nMarginal means by group:\n")
+data_long |>
+  group_by(.data[[between_var]]) |>
+  summarise(mean = mean(score), sd = sd(score))
+
+cat("\nMarginal means by time:\n")
+data_long |>
+  group_by(time) |>
+  summarise(mean = mean(score), sd = sd(score))
+```
+
+### Visualise: Interaction Plot
+
+```{r}
+#| label: interaction-plot
+#| fig-cap: "Group × Time interaction"
+
+ggplot(descriptives, aes(x = time, y = mean,
+                          color = .data[[between_var]],
+                          group = .data[[between_var]])) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.1) +
+  labs(
+    x = "Time",
+    y = "Mean Score",
+    color = "Group",
+    title = "Group × Time Interaction"
+  ) +
+  theme_minimal()
+```
+
+### Individual Trajectories
+
+```{r}
+#| label: trajectories
+#| fig-cap: "Individual change patterns by group"
+
+ggplot(data_long, aes(x = time, y = score, group = .data[[id_var]])) +
+  geom_line(alpha = 0.3) +
+  geom_point(alpha = 0.3) +
+  stat_summary(aes(group = 1), fun = mean, geom = "line", color = "red", linewidth = 1.5) +
+  stat_summary(fun = mean, geom = "point", color = "red", size = 3) +
+  facet_wrap(as.formula(paste("~", between_var))) +
+  labs(x = "Time", y = "Score", title = "Individual Trajectories by Group") +
+  theme_minimal()
+```
+
+
+## Step 6: Check Assumptions
+
+### Normality per Cell
+
+```{r}
+#| label: normality
+
+data_long |>
+  group_by(.data[[between_var]], time) |>
+  summarise(
+    shapiro_p = shapiro.test(score)$p.value,
+    .groups = "drop"
+  )
+```
+
+### Homogeneity of Variance per Time Point
+
+```{r}
+#| label: homogeneity
+
+library(car)
+
+# At each time point
+for (t in time_vars) {
+  cat("\nLevene's test at", t, ":\n")
+  test_data <- data_long |> filter(time == t)
+  print(leveneTest(as.formula(paste("score ~", between_var)), data = test_data))
+}
+```
+
+
+## Step 7: Run the Mixed ANOVA
+
+```{r}
+#| label: mixed-anova
+
+mixed_anova <- aov_ez(
+  id = id_var,
+  dv = "score",
+  data = data_long,
+  between = between_var,
+  within = "time"
+)
+
+# Summary
+summary(mixed_anova)
+
+# Nice output
+nice(mixed_anova)
+```
+
+
+## Step 8: Effect Sizes
+
+```{r}
+#| label: effect-size
+
+# Generalized eta-squared is in nice() output
+# The ges column shows generalized eta-squared for each effect
+```
+
+
+## Step 9: Post-Hoc and Simple Effects
+
+### If Interaction is Significant
+
+```{r}
+#| label: simple-effects
+
+emm <- emmeans(mixed_anova, specs = c(between_var, "time"))
+print(emm)
+
+# Simple effect of time within each group
+cat("\nSimple effect of time within each group:\n")
+pairs(emm, by = between_var)
+
+# Simple effect of group at each time point
+cat("\nSimple effect of group at each time point:\n")
+pairs(emm, by = "time")
+```
+
+### Main Effects (if interaction not significant)
+
+```{r}
+#| label: main-effects
+
+# Main effect of group
+cat("\nMain effect of group:\n")
+emmeans(mixed_anova, specs = between_var) |> pairs()
+
+# Main effect of time
+cat("\nMain effect of time:\n")
+emmeans(mixed_anova, specs = "time") |> pairs()
+```
+
+
+## Step 10: Summary of Results
+
+```{r}
+#| label: summary
+
+cat("=== MIXED ANOVA RESULTS ===\n\n")
+
+cat("CELL MEANS:\n")
+print(descriptives)
+
+cat("\nANOVA RESULTS:\n")
+anova_nice <- nice(mixed_anova)
+print(anova_nice)
+```
+
+
+## Step 11: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A mixed ANOVA with [BETWEEN FACTOR] ([LEVEL 1] vs [LEVEL 2]) as the between-subjects factor and time ([TIME 1] vs [TIME 2]) as the within-subjects factor was conducted on [OUTCOME].
+
+**Main effect of [BETWEEN]:** *F*(X, XX) = XX.XX, *p* = .XXX, η²~G~ = .XX. [Describe direction if significant.]
+
+**Main effect of time:** *F*(X, XX) = XX.XX, *p* = .XXX, η²~G~ = .XX. [Describe direction if significant.]
+
+**[BETWEEN] × Time interaction:** *F*(X, XX) = XX.XX, *p* = .XXX, η²~G~ = .XX.
+
+[If interaction significant:] Simple effects analysis revealed that [GROUP A] showed a significant change from [TIME 1] to [TIME 2], *p* = .XXX, while [GROUP B] [did/did not] show significant change, *p* = .XXX.
+:::
+
+
+## Checklist
+
+- [ ] Data in wide format with time points as columns
+- [ ] Between-subjects factor as factor
+- [ ] Data reshaped to long format
+- [ ] Cell means calculated
+- [ ] Interaction plot created
+- [ ] Assumptions checked
+- [ ] Mixed ANOVA run
+- [ ] Sphericity checked (for within-subjects factor)
+- [ ] Effect sizes noted (ges)
+- [ ] Simple effects explored (if interaction significant)
+- [ ] Results interpreted

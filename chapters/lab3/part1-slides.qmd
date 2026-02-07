@@ -1,0 +1,254 @@
+---
+title: "Part 1: Introduction to ANOVA"
+subtitle: "Lab 3: ANOVA"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 3, Part 1"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: []
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+## How This Lab Works: Watch → Try → Do {.center background-color="#2C3E50"}
+
+Every part follows the same **3-step cycle**:
+
+:::::: columns
+::: {.column width="33%"}
+### 1. Watch
+
+**Instructor Demo**
+
+Follow along with slides and live code!
+:::
+
+::: {.column width="33%"}
+### 2. Try
+
+**Practice Here**
+
+Edit code directly in your browser.
+:::
+
+::: {.column width="33%"}
+### 3. Do
+
+**Your Notebook**
+
+Complete exercises in RStudio Server.
+:::
+::::::
+
+---
+
+## Today's Dataset {.center background-color="#27AE60"}
+
+We've collected **Study Techniques** data:
+
+-   **120 students** in a memory experiment
+-   **Three study methods**: Rereading, Self-Testing, Elaboration
+-   **Two time periods**: Morning or Evening
+-   **Outcome**: Items recalled (0-30)
+
+---
+
+## Today's Research Questions
+
+**Questions**:
+
+1. Do study methods differ in effectiveness?
+2. Does time of day matter?
+3. Is there an interaction?
+
+---
+
+## When T-Tests Aren't Enough
+
+**T-tests compare 2 groups.** But what if we have 3 or more?
+
+::: {.incremental}
+-   3 groups → 3 comparisons (A vs B, A vs C, B vs C)
+-   4 groups → 6 comparisons
+-   5 groups → 10 comparisons
+-   Problem: **Multiple testing inflates Type I error!**
+:::
+
+---
+
+## The Multiple Comparisons Problem
+
+If we run 3 t-tests at α = .05:
+
+$$P(\text{at least one Type I error}) = 1 - (1 - 0.05)^3 = 0.143$$
+
+That's a **14.3% chance** of a false positive!
+
+::: {.callout-warning}
+## Family-Wise Error Rate
+With 5 groups (10 comparisons), the error rate rises to **40%**!
+:::
+
+---
+
+## The Solution: ANOVA {.center background-color="#27AE60"}
+
+**Analysis of Variance (ANOVA)**:
+
+-   Tests all groups simultaneously
+-   Controls Type I error rate
+-   One test, one p-value for the overall effect
+
+**Trade-off**: Doesn't tell us *which* groups differ (that's what post-hoc tests are for)
+
+---
+
+## The Logic of ANOVA
+
+ANOVA partitions **total variance** into two sources:
+
+:::: columns
+::: {.column width="50%"}
+**Between-Group Variance**
+
+- Differences *between* group means
+- Due to treatment effect (+ error)
+:::
+
+::: {.column width="50%"}
+**Within-Group Variance**
+
+- Differences *within* each group
+- Due to individual differences (error only)
+:::
+::::
+
+---
+
+## The F-Ratio
+
+$$F = \frac{\text{Between-Group Variance}}{\text{Within-Group Variance}} = \frac{MS_{between}}{MS_{within}}$$
+
+-   **Large F**: Between > Within → Groups likely differ
+-   **Small F** (near 1): Between ≈ Within → No evidence of group differences
+
+---
+
+## Visual: F-Ratio Logic {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+# High F: Groups clearly differ
+cat("=== High F Scenario ===\n")
+cat("Group means: 10, 20, 30 (big differences)\n")
+cat("Within-group SD: 2 (low variability)\n")
+cat("Result: Easy to see groups differ!\n\n")
+
+# Low F: Groups overlap
+cat("=== Low F Scenario ===\n")
+cat("Group means: 18, 19, 20 (small differences)\n")
+cat("Within-group SD: 8 (high variability)\n")
+cat("Result: Hard to tell groups apart")
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+# High F: Groups clearly differ
+cat("=== High F Scenario ===\n")
+cat("Group means: 10, 20, 30 (big differences)\n")
+cat("Within-group SD: 2 (low variability)\n")
+cat("Result: Easy to see groups differ!\n\n")
+
+# Low F: Groups overlap
+cat("=== Low F Scenario ===\n")
+cat("Group means: 18, 19, 20 (small differences)\n")
+cat("Within-group SD: 8 (high variability)\n")
+cat("Result: Hard to tell groups apart")
+```
+
+:::
+
+---
+
+## ANOVA Summary Table
+
+ANOVA output gives us:
+
+| Source | SS | df | MS | F | p |
+|--------|----|----|----|----|---|
+| Between | SS_B | k-1 | MS_B | F | p |
+| Within | SS_W | N-k | MS_W | | |
+| Total | SS_T | N-1 | | | |
+
+Where:
+- k = number of groups
+- N = total sample size
+
+---
+
+## ANOVA Assumptions
+
+1. **Independence**: Observations are independent
+2. **Normality**: Data approximately normal in each group
+3. **Homogeneity of variance**: Equal variances across groups
+
+::: {.callout-tip}
+ANOVA is robust to violations when group sizes are equal and large (n > 20)
+:::
+
+---
+
+## Summary: Part 1 {.center background-color="#2C3E50"}
+
+Key concepts:
+
+-   ANOVA compares **3+ groups** simultaneously
+-   Controls **family-wise error rate**
+-   The **F-ratio** = between-variance / within-variance
+-   Large F → Evidence of group differences
+-   Doesn't tell us *which* groups differ
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+Work through the **Try It Yourself** exercises.
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Tips
+
+-   Edit code and experiment with different values
+-   Complete the self-assessment before moving on
+-   Download the exercise notebook and set it up in RStudio
+:::

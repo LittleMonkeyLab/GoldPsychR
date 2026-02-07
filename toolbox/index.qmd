@@ -4,6 +4,8 @@ title: "R Toolbox"
 
 Quick reference guides for common R tasks in psychology research.
 
+## Reference Guides
+
 - [Setup](setup.qmd) - Installing and configuring R
 - [Import](import.qmd) - Loading data into R
 - [Wrangle](wrangle.qmd) - Cleaning and transforming data
@@ -12,3 +14,27 @@ Quick reference guides for common R tasks in psychology research.
 - [Models](models.qmd) - Regression and linear models
 - [Reporting](reporting.qmd) - APA-style output
 - [Troubleshooting](troubleshooting.qmd) - Common errors and fixes
+
+---
+
+## Boil in the Bag Templates
+
+**Ready-to-run statistical analysis templates** - just add your data!
+
+Each template walks you through: **descriptives → assumptions → analysis → interpretation**
+
+[**View All Templates**](../boil_in_the_bag/00_index.qmd){.btn .btn-primary}
+
+### Quick Links
+
+| Analysis | Template |
+|----------|----------|
+| Independent t-test | [01_independent_ttest.qmd](../boil_in_the_bag/01_independent_ttest.qmd) |
+| Paired t-test | [02_paired_ttest.qmd](../boil_in_the_bag/02_paired_ttest.qmd) |
+| One-way ANOVA | [03_oneway_anova.qmd](../boil_in_the_bag/03_oneway_anova.qmd) |
+| Factorial ANOVA | [04_factorial_anova.qmd](../boil_in_the_bag/04_factorial_anova.qmd) |
+| Repeated Measures ANOVA | [05_repeated_measures_anova.qmd](../boil_in_the_bag/05_repeated_measures_anova.qmd) |
+| Mixed ANOVA | [06_mixed_anova.qmd](../boil_in_the_bag/06_mixed_anova.qmd) |
+| Simple Regression | [07_simple_regression.qmd](../boil_in_the_bag/07_simple_regression.qmd) |
+| Multiple Regression (2 pred) | [08_multiple_regression_2pred.qmd](../boil_in_the_bag/08_multiple_regression_2pred.qmd) |
+| Multiple Regression (3 pred) | [09_multiple_regression_3pred.qmd](../boil_in_the_bag/09_multiple_regression_3pred.qmd) |

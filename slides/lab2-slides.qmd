@@ -1,141 +1,347 @@
 ---
-title: "Lab 2: Comparing Groups"
-subtitle: "Independent & Paired t-tests"
+title: "Lab 2: T-Tests"
+subtitle: "Test Anxiety & Statistical Inference"
 format:
   revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
     theme: default
     logo: ../assets/images/GoldLogo.png
-    footer: "GoldPsychR - 4-Week Intensive"
-    slide-number: true
-    preview-links: auto
+    footer: "GoldPsychR - Lab 2"
+    embed-resources: false
     code-line-numbers: false
     highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
 ---
 
-## Lab 2 Preview {.center}
+## Lab 2: T-Tests {.center background-color="#9B1B30"}
 
-**Week 2: Comparing Groups (t-tests)**
-
----
-
-## Today's Lab Overview
-
-**Duration:** 2 hours
-
-**Dataset:** Experimental Data (n=120)
-
-**What we'll do:**
-
-- Independent samples t-test
-- Paired samples t-test
-- Effect sizes (Cohen's d)
-- Reporting results in APA format
+**Test Anxiety & Statistical Inference**
 
 ---
 
-## Part 1: Independent Samples t-test
+## How This Lab Works: Watch → Try → Do
 
-**Time:** 30 minutes
+Every part of this lab follows the same **3-step cycle**:
 
-Compare two independent groups:
+:::::: columns
+::: {.column width="33%"}
+### 1. Watch
 
-```r
-t.test(score ~ group, data = mydata)
+**Instructor Demo**
+
+Follow along with the slides and live code demonstrations
+:::
+
+::: {.column width="33%"}
+### 2. Try
+
+**Practice Here**
+
+Edit code directly in your browser on the activity pages
+:::
+
+::: {.column width="33%"}
+### 3. Do
+
+**Your Notebook**
+
+Complete exercises in RStudio Server and submit your work
+:::
+::::::
+
+---
+
+## Today's Dataset
+
+We've collected **Test Anxiety** data from university students:
+
+-   **80 students** completed the Test Anxiety Inventory
+-   Participants in **Control** or **Intervention** groups
+-   Anxiety measured **before and after** intervention
+-   Population mean is known to be **50**
+
+**Our research questions:**
+
+1. Does our sample differ from the population norm?
+2. Do the groups differ at baseline and post-test?
+3. Did anxiety change from pre to post?
+
+---
+
+## The Five Parts
+
+| Part | Topic | Key Skills |
+|------|-------|------------|
+| 1 | Introduction | Hypotheses, test selection |
+| 2 | One-Sample T-Test | `t.test(x, mu = )` |
+| 3 | Independent Samples | `t.test(y ~ group)` |
+| 4 | Paired Samples | `t.test(x, y, paired = TRUE)` |
+| 5 | Effect Sizes & Reporting | Cohen's d, APA format |
+
+---
+
+# Part 1: Introduction to T-Tests {.center background-color="#2C3E50"}
+
+---
+
+## What is a T-Test?
+
+A **t-test** compares means to determine if differences are **statistically significant**.
+
+-   One of the most common statistical tests in psychology
+-   Accounts for sample size and variability
+-   Key question: Is the observed difference larger than chance?
+
+---
+
+## The Logic of Hypothesis Testing
+
+:::: columns
+::: {.column width="50%"}
+**Null Hypothesis (H₀)**
+
+- States "no effect" or "no difference"
+- What we assume is true unless evidence suggests otherwise
+:::
+
+::: {.column width="50%"}
+**Alternative Hypothesis (H₁)**
+
+- States there IS an effect or difference
+- What we're trying to find evidence for
+:::
+::::
+
+**We test if data provide enough evidence to reject H₀**
+
+---
+
+## P-Values Explained
+
+> "If the null hypothesis were true, what's the probability of getting results at least this extreme?"
+
+-   **p < .05**: Statistically significant
+-   **p ≥ .05**: Not statistically significant
+
+::: {.callout-important}
+p < .05 doesn't mean "true" - it means "unlikely if H₀ were true"
+:::
+
+---
+
+## Three Types of T-Tests
+
+| Test | Use When | Example |
+|------|----------|---------|
+| **One-Sample** | Compare sample to known value | Is mean different from 50? |
+| **Independent** | Compare two separate groups | Control vs. Intervention |
+| **Paired** | Compare related measurements | Before vs. After |
+
+---
+
+# Part 2: One-Sample T-Test {.center background-color="#2C3E50"}
+
+---
+
+## One-Sample T-Test
+
+**Purpose**: Compare a sample mean to a known population value
+
+$$t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$$
+
+Where:
+- $\bar{x}$ = sample mean
+- $\mu_0$ = population mean
+- $s$ = sample SD
+- $n$ = sample size
+
+---
+
+## The R Code
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# One-sample t-test: Is mean different from 50?
+t.test(anxiety_data$anxiety_pre, mu = 50)
 ```
 
-**When to use:** Different participants in each condition
+---
+
+## Reading the Output
+
+Key values to report:
+
+-   **t** = test statistic
+-   **df** = degrees of freedom (n - 1)
+-   **p-value** = probability value
+-   **95% CI** = confidence interval
+
+**Decision**: If p < .05, reject H₀
 
 ---
 
-## Independent t-test: The Code
-
-```r
-# Run the test
-result <- t.test(score ~ condition, data = experiment)
-
-# View results
-result
-```
-
-Key output:
-- t-statistic
-- degrees of freedom
-- p-value
-- confidence interval
+# Part 3: Independent Samples T-Test {.center background-color="#2C3E50"}
 
 ---
 
-## Part 2: Paired Samples t-test
+## Independent Samples T-Test
 
-**Time:** 30 minutes
+**Purpose**: Compare means of **two different groups**
 
-Compare repeated measures:
+$$t = \frac{\bar{x}_1 - \bar{x}_2}{SE_{difference}}$$
 
-```r
-t.test(pre_score, post_score, paired = TRUE)
-```
-
-**When to use:** Same participants measured twice
+-   **Welch's test** (default): Does NOT assume equal variances
+-   **Student's test**: Assumes equal variances
 
 ---
 
-## Paired t-test: The Code
+## The R Code
 
-```r
-# With two separate columns
-t.test(data$pre, data$post, paired = TRUE)
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-# Or with long format data
-t.test(score ~ time, data = long_data, paired = TRUE)
+# Compare groups at post-test
+t.test(anxiety_post ~ group, data = anxiety_data)
 ```
 
 ---
 
-## Part 3: Effect Sizes
-
-**Time:** 30 minutes
-
-Calculate and interpret Cohen's d:
+## The Formula Syntax
 
 ```r
-library(effectsize)
-cohens_d(score ~ group, data = mydata)
+t.test(outcome ~ grouping_variable, data = dataframe)
 ```
 
-| d value | Interpretation |
-|---------|----------------|
+This reads: "Test if **outcome** differs by **group**"
+
+Examples:
+- `anxiety_post ~ group`
+- `exam_score ~ condition`
+- `reaction_time ~ treatment`
+
+---
+
+# Part 4: Paired Samples T-Test {.center background-color="#2C3E50"}
+
+---
+
+## Paired Samples T-Test
+
+**Purpose**: Compare two related measurements from **same people**
+
+$$t = \frac{\bar{d}}{s_d / \sqrt{n}}$$
+
+-   Tests if mean difference ≠ 0
+-   More powerful than independent t-test
+-   Each person is their own control
+
+---
+
+## The R Code
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Paired t-test: pre vs post
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
+```
+
+**Key**: `paired = TRUE` is essential!
+
+---
+
+## By Group
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Intervention group only
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+---
+
+# Part 5: Effect Sizes & Reporting {.center background-color="#2C3E50"}
+
+---
+
+## Why Effect Sizes Matter
+
+| Study | n | Difference | p-value | Cohen's d |
+|-------|---|------------|---------|-----------|
+| A | 1000 | 1.5 points | p < .001 | 0.10 |
+| B | 30 | 8.0 points | p = .04 | 0.75 |
+
+**P-values tell us IF. Effect sizes tell us HOW BIG.**
+
+---
+
+## Cohen's d
+
+$$d = \frac{\text{Difference}}{\text{Standard Deviation}}$$
+
+**Cohen's conventions:**
+
+| d | Interpretation |
+|---|----------------|
 | 0.2 | Small |
 | 0.5 | Medium |
 | 0.8 | Large |
 
 ---
 
-## Part 4: APA Reporting
+## APA Reporting Format
 
-**Time:** 30 minutes
+> A paired samples t-test revealed a significant decrease in anxiety from pre-test (M = 53.20, SD = 10.15) to post-test (M = 46.82, SD = 9.45) in the intervention group, t(39) = 4.23, p < .001, d = 0.89.
 
-Write up results correctly:
-
-> There was a significant difference between groups, *t*(58) = 2.45, *p* = .017, *d* = 0.64, 95% CI [0.12, 1.16].
-
-Include:
-- Test statistic and df
-- Exact p-value
-- Effect size with CI
+**Include:** Descriptives, t, df, p, d
 
 ---
 
-## Key Takeaways
+## Summary
 
 Today you learned to:
 
-- Run independent samples t-tests
-- Run paired samples t-tests
-- Calculate and interpret effect sizes
-- Report results in APA format
+-   ✅ Explain hypothesis testing logic
+-   ✅ Run one-sample t-tests
+-   ✅ Run independent samples t-tests
+-   ✅ Run paired samples t-tests
+-   ✅ Calculate Cohen's d
+-   ✅ Write APA-style results
 
 ---
 
-## Questions? {.center}
+## Now It's Your Turn! {.center}
 
-Ask your instructor or check with your lab partner!
+Work through the activity pages and complete your exercise notebook.
+
+{{< countdown "90:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Tips
+
+-   Follow the Watch → Try → Do cycle for each part
+-   Don't skip the self-assessment questions
+-   Ask if you get stuck!
+:::

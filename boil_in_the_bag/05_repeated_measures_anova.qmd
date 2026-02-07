@@ -1,0 +1,251 @@
+---
+title: "Boil in the Bag: Repeated Measures ANOVA"
+subtitle: "Comparing three or more related measurements"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have the same participants measured at three or more time points (or conditions).
+
+**Example scenarios:**
+- Pre, Post, Follow-up measurements
+- Three different experimental conditions (within-subjects)
+- Performance across multiple trials
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(afex)       # For repeated measures ANOVA
+library(emmeans)    # For post-hoc
+library(effectsize)
+```
+
+
+## Step 2: Load Your Data
+
+Data should be in **wide format** (one row per participant, separate columns for each time point).
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/repeated_measures_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+id_var <- "id"
+time_vars <- c("time1", "time2", "time3")  # Your repeated measures columns
+
+# Check data
+cat("N participants:", nrow(data), "\n")
+cat("Time points:", length(time_vars), "\n")
+```
+
+
+## Step 4: Reshape to Long Format
+
+Repeated measures ANOVA requires long format data.
+
+```{r}
+#| label: reshape
+
+data_long <- data |>
+  pivot_longer(
+    cols = all_of(time_vars),
+    names_to = "time",
+    values_to = "score"
+  ) |>
+  mutate(
+    time = factor(time, levels = time_vars)
+  )
+
+head(data_long)
+```
+
+
+## Step 5: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+descriptives <- data_long |>
+  group_by(time) |>
+  summarise(
+    n = n(),
+    mean = mean(score, na.rm = TRUE),
+    sd = sd(score, na.rm = TRUE),
+    se = sd / sqrt(n)
+  )
+
+print(descriptives)
+```
+
+### Visualise the Data
+
+```{r}
+#| label: visualise
+#| fig-cap: "Individual trajectories across time"
+
+ggplot(data_long, aes(x = time, y = score)) +
+  geom_boxplot(alpha = 0.3, width = 0.3) +
+  geom_line(aes(group = .data[[id_var]]), alpha = 0.3) +
+  geom_point(alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 5, color = "red") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  labs(
+    x = "Time",
+    y = "Score",
+    title = "Change Across Time Points"
+  ) +
+  theme_minimal()
+```
+
+
+## Step 6: Check Assumptions
+
+### Normality at Each Time Point
+
+```{r}
+#| label: normality
+
+data_long |>
+  group_by(time) |>
+  summarise(
+    shapiro_W = shapiro.test(score)$statistic,
+    shapiro_p = shapiro.test(score)$p.value
+  )
+```
+
+### Sphericity
+
+Sphericity is tested automatically in afex and Mauchly's test is reported.
+
+
+## Step 7: Run the Repeated Measures ANOVA
+
+```{r}
+#| label: rm-anova
+
+rm_anova <- aov_ez(
+  id = id_var,
+  dv = "score",
+  data = data_long,
+  within = "time"
+)
+
+# Summary with sphericity correction
+summary(rm_anova)
+
+# Nice output
+nice(rm_anova)
+```
+
+### Mauchly's Test for Sphericity
+
+```{r}
+#| label: sphericity
+
+# Mauchly's test is in the summary
+# If p < .05, sphericity is violated - use Greenhouse-Geisser correction (GGe)
+```
+
+
+## Step 8: Effect Size
+
+```{r}
+#| label: effect-size
+
+# Generalized eta-squared is in the nice() output
+# Or calculate partial eta-squared:
+eta_squared(rm_anova)
+```
+
+
+## Step 9: Post-Hoc Pairwise Comparisons
+
+Only interpret if ANOVA is significant.
+
+```{r}
+#| label: posthoc
+
+emm <- emmeans(rm_anova, specs = "time")
+print(emm)
+
+# Pairwise comparisons with Bonferroni correction
+pairs(emm, adjust = "bonferroni")
+```
+
+
+## Step 10: Summary of Results
+
+```{r}
+#| label: summary
+
+cat("=== REPEATED MEASURES ANOVA RESULTS ===\n\n")
+
+cat("DESCRIPTIVES:\n")
+for (i in 1:nrow(descriptives)) {
+  cat(sprintf("  %s: M = %.2f, SD = %.2f\n",
+              descriptives$time[i],
+              descriptives$mean[i],
+              descriptives$sd[i]))
+}
+
+# Extract results from afex
+anova_table <- nice(rm_anova)
+cat("\nRM ANOVA:\n")
+cat(sprintf("  Effect of time: F(%.2f, %.2f) = %.2f, p = %s, ges = %.3f\n",
+            anova_table$`num Df`,
+            anova_table$`den Df`,
+            anova_table$F,
+            anova_table$`p.value`,
+            anova_table$ges))
+
+cat("\nNote: If sphericity violated (Mauchly's p < .05),\n")
+cat("      use Greenhouse-Geisser corrected values (GGe columns)\n")
+```
+
+
+## Step 11: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format (Sphericity Assumed)
+
+A one-way repeated measures ANOVA was conducted to compare [OUTCOME] across [NUMBER] time points. There was a [significant/non-significant] effect of time, *F*(X, XX) = XX.XX, *p* = .XXX, η²~G~ = .XX.
+
+Post-hoc pairwise comparisons with Bonferroni correction revealed that [TIME 1] (*M* = XX.XX, *SD* = XX.XX) was significantly different from [TIME 2] (*M* = XX.XX, *SD* = XX.XX), *p* = .XXX. [Continue for significant comparisons...]
+:::
+
+::: {.callout-note}
+## APA Format (Sphericity Violated)
+
+Mauchly's test indicated that the assumption of sphericity had been violated, χ²(X) = XX.XX, *p* = .XXX. Therefore, a Greenhouse-Geisser correction was applied (ε = .XX). There was a [significant/non-significant] effect of time, *F*(X.XX, XX.XX) = XX.XX, *p* = .XXX, η²~G~ = .XX.
+:::
+
+
+## Checklist
+
+- [ ] Data in wide format (one row per participant)
+- [ ] Data reshaped to long format
+- [ ] Time variable as factor
+- [ ] Descriptives calculated
+- [ ] Normality checked per time point
+- [ ] RM ANOVA run
+- [ ] Sphericity checked (Mauchly's test)
+- [ ] Correction applied if needed (GG or HF)
+- [ ] Post-hoc comparisons run
+- [ ] Results interpreted

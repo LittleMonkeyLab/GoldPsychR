@@ -1,0 +1,333 @@
+---
+title: "Part 4: Two-Way ANOVA"
+subtitle: "Lab 3: ANOVA"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 3, Part 4"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Two-Way (Factorial) ANOVA {.center background-color="#2C3E50"}
+
+**Examining Two Factors Simultaneously**
+
+---
+
+## When to Use It
+
+Use two-way ANOVA when:
+
+-   You have **two categorical IVs** (factors)
+-   You want to examine **main effects** and **interactions**
+
+:::: columns
+::: {.column width="50%"}
+**Our Design:**
+
+-   **Factor A**: Study Method (3 levels)
+-   **Factor B**: Time of Day (2 levels)
+-   **Design**: 3 × 2 factorial = 6 cells
+:::
+
+::: {.column width="50%"}
+**Our Questions:**
+
+1. Main effect of Method?
+2. Main effect of Time?
+3. Interaction?
+:::
+::::
+
+---
+
+## What Can We Test?
+
+Three research questions in one analysis:
+
+1. **Main effect of Method**: Do study methods differ (ignoring time)?
+2. **Main effect of Time**: Does time matter (ignoring method)?
+3. **Interaction**: Does the effect of method depend on time?
+
+---
+
+## Our Factorial Design
+
+|  | Morning | Evening |
+|--|---------|---------|
+| Rereading | Cell 1 | Cell 2 |
+| Self-Testing | Cell 3 | Cell 4 |
+| Elaboration | Cell 5 | Cell 6 |
+
+Each cell has 20 participants (balanced design)
+
+---
+
+## The Factorial Data {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+table(study_data$method, study_data$time_of_day)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+table(study_data$method, study_data$time_of_day)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+cell_table <- table(study_data$method, study_data$time_of_day)
+cat("Cell sizes in your 3 × 2 factorial design:\n\n")
+print(cell_table)
+
+cat("\nThis shows participants in each combination of method × time.\n")
+cat("A '3 × 2' design means 3 levels of one factor (method) and 2 levels\n")
+cat("of another (time) = 6 unique cells total.\n\n")
+
+if(length(unique(as.vector(cell_table))) == 1) {
+  cat("You have a perfectly balanced design - each cell has the same n.\n")
+  cat("This is ideal for factorial ANOVA: it maximizes power, simplifies\n")
+  cat("interpretation, and makes the analysis more robust.\n")
+} else {
+  cat("Cell sizes vary somewhat. For moderate imbalances, Type III sums\n")
+  cat("of squares (default in many packages) handles this appropriately.\n")
+}
+```
+
+:::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+model <- aov(outcome ~ factorA * factorB, data = df)
+```
+
+-   `*` includes both main effects AND interaction
+-   Equivalent to: `factorA + factorB + factorA:factorB`
+
+---
+
+## Running Two-Way ANOVA {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary(model2)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary(model2)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+s <- summary(model2)
+
+# Extract values
+f1 <- round(s[[1]]["method", "F value"], 2)
+p1 <- s[[1]]["method", "Pr(>F)"]
+f2 <- round(s[[1]]["time_of_day", "F value"], 2)
+p2 <- s[[1]]["time_of_day", "Pr(>F)"]
+f3 <- round(s[[1]]["method:time_of_day", "F value"], 2)
+p3 <- s[[1]]["method:time_of_day", "Pr(>F)"]
+
+cat("Two-way ANOVA gives us THREE tests:\n\n")
+
+cat("1. MAIN EFFECT of Method: F =", f1, ",",
+    ifelse(p1 < 0.001, "p < .001", paste0("p = ", round(p1, 3))), "\n")
+cat("   --> Do study methods differ, averaging across time of day?\n")
+cat("   ", ifelse(p1 < 0.05, "YES - methods differ significantly.\n\n", "NO - no significant method effect.\n\n"))
+
+cat("2. MAIN EFFECT of Time: F =", f2, ",",
+    ifelse(p2 < 0.001, "p < .001", paste0("p = ", round(p2, 3))), "\n")
+cat("   --> Does time of day matter, averaging across methods?\n")
+cat("   ", ifelse(p2 < 0.05, "YES - time matters.\n\n", "NO - no significant time effect.\n\n"))
+
+cat("3. INTERACTION (Method × Time): F =", f3, ",",
+    ifelse(p3 < 0.001, "p < .001", paste0("p = ", round(p3, 3))), "\n")
+cat("   --> Does the effect of method DEPEND on time of day?\n")
+cat("   ", ifelse(p3 < 0.05, "YES - the pattern differs!\n\n", "NO - the pattern is consistent.\n\n"))
+
+cat("IMPORTANT: Always check the interaction FIRST. If it's significant,\n")
+cat("main effects can be misleading because the effect of one factor\n")
+cat("changes depending on the level of the other.")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key rows in two-way ANOVA:
+
+| Effect | What it tests |
+|--------|---------------|
+| **method** | Main effect of Factor A |
+| **time_of_day** | Main effect of Factor B |
+| **method:time_of_day** | Interaction A × B |
+| **Residuals** | Error variance |
+
+---
+
+## What is an Interaction?
+
+**No interaction**: Effect of A is the same at all levels of B
+
+**Interaction**: Effect of A **depends on** level of B
+
+Example with interaction:
+- Self-testing works great in the morning
+- Self-testing is worse in the evening
+- The effect of method changes with time
+
+---
+
+## Interaction Plots {background-color="#f0f0f0"}
+
+Visual test: Are the lines **parallel**?
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+interaction.plot(study_data$time_of_day, study_data$method,
+                 study_data$recall,
+                 type = "b", xlab = "Time", ylab = "Recall",
+                 col = c("blue", "red", "green"), lwd = 2)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+interaction.plot(study_data$time_of_day, study_data$method,
+                 study_data$recall,
+                 type = "b", xlab = "Time", ylab = "Recall",
+                 col = c("blue", "red", "green"), lwd = 2)
+```
+
+:::
+
+---
+
+## Interpreting the Plot
+
+**Parallel lines** = No interaction
+
+-   The pattern of method differences is the same for morning and evening
+-   Main effects can be interpreted directly
+
+**Non-parallel/crossing lines** = Interaction
+
+-   The effect of one factor depends on the other
+-   Need to examine simple effects
+
+---
+
+## When Interaction is Significant
+
+If interaction IS significant:
+
+1. Don't just interpret main effects
+2. Examine **simple effects** (effect of A at each level of B)
+3. The story is more nuanced
+
+Our case: No significant interaction, so main effects are interpretable!
+
+---
+
+## Summary: Two-Way ANOVA {.center background-color="#2C3E50"}
+
+-   Tests **two factors** simultaneously
+-   Use `aov(y ~ A * B)` for main effects + interaction
+-   Three F-tests: Factor A, Factor B, A:B interaction
+-   **Interaction** = effect depends on other factor
+-   Check interaction **first** before interpreting main effects
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Run the two-way ANOVA
+2. Interpret main effects and interaction
+3. Create an interaction plot
+4. Explain what the results mean
+:::

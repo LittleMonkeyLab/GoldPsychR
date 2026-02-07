@@ -1,7 +1,6 @@
 ---
-title: "Lab 3: ANOVA"
-subtitle: "Interactive Practice with WebR"
-author: "Gordon Wright"
+title: "Lab 3: ANOVA - WebR Practice"
+subtitle: "Interactive Browser-Based Practice"
 format:
   html:
     toc: true
@@ -12,7 +11,7 @@ format:
 filters:
   - webr
 webr:
-  packages: ['dplyr', 'ggplot2']
+  packages: ['readr', 'dplyr', 'ggplot2']
   show-startup-message: false
 ---
 
@@ -24,160 +23,285 @@ library(webexercises)
 
 # Welcome
 
-This interactive chapter lets you practice ANOVA directly in your browser.
+This interactive page lets you practice ANOVA directly in your browser - no installation required!
 
 ::: {.callout-tip}
 ## How to Use This Page
 
-1. Read the explanations carefully
-2. Run the code cells by clicking the **Run** button
-3. Modify code and experiment
-4. Complete the self-check questions
+1. **Run the setup code first** - this loads the data
+2. **Work through the exercises** - edit code and click "Run Code"
+3. **Experiment freely** - you can't break anything!
+4. **Refer back to slides** - use this alongside the instructor demonstration
 :::
 
 ```{webr-r}
 #| context: setup
 #| autorun: true
 
-# Simulate experimental data with 3 groups
-set.seed(42)
-n <- 90
-
-therapy_data <- data.frame(
-  participant = 1:n,
-  therapy = rep(c("CBT", "medication", "control"), each = n/3),
-  anxiety = c(
-    rnorm(n/3, mean = 12, sd = 4),
-    rnorm(n/3, mean = 15, sd = 4),
-    rnorm(n/3, mean = 18, sd = 4)
-  )
-)
-
-# Factorial data (2x2)
-factorial_data <- data.frame(
-  participant = 1:80,
-  therapy = rep(c("CBT", "control"), each = 40),
-  duration = rep(rep(c("short", "long"), each = 20), 2),
-  improvement = c(
-    rnorm(20, mean = 8, sd = 3),   # CBT short
-    rnorm(20, mean = 14, sd = 3),  # CBT long
-    rnorm(20, mean = 4, sd = 3),   # control short
-    rnorm(20, mean = 5, sd = 3)    # control long
-  )
-)
+# Load the study techniques data
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+cat("Data loaded: 120 participants, 3 study methods × 2 time periods")
 ```
 
-# When to Use ANOVA
+---
 
-## t-test vs ANOVA
+# Part 1: Exploring the Data
 
-- **t-test**: Compare **2** groups
-- **ANOVA**: Compare **3+** groups
+## View the Data
 
-Why not just run multiple t-tests?
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-::: {.callout-warning}
-## Multiple Comparisons Problem
+head(study_data)
+```
 
-Running many t-tests inflates your Type I error rate. ANOVA controls this!
-:::
+## Check the Groups
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+table(study_data$method)
+```
 
 ::: {.callout-note}
 ## Self-Check
 
-When should you use ANOVA instead of a t-test?
+How many participants are in each study method group?
 
-`r mcq(c("Always", "When comparing 2 groups", answer = "When comparing 3 or more groups"))`
+`r mcq(c("20 each", answer = "40 each", "60 each", "80 each"))`
 :::
 
-# One-Way ANOVA
-
-## The Data
+## Factorial Design
 
 ```{webr-r}
-#| autorun: true
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-# View the therapy data
-head(therapy_data)
-
-# Check group sizes
-table(therapy_data$therapy)
+# Cross-tabulation: method × time
+table(study_data$method, study_data$time_of_day)
 ```
 
-## Running One-Way ANOVA
+---
+
+# Part 2: One-Way ANOVA
+
+## When to Use
+
+Use a **one-way ANOVA** when:
+
+- You have **3 or more groups** to compare
+- The outcome variable is **continuous**
+- Groups are **independent** (different participants)
+
+## Group Descriptives
 
 ```{webr-r}
-# Fit the ANOVA model
-model <- aov(anxiety ~ therapy, data = therapy_data)
+library(readr)
+library(dplyr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-# View results
-summary(model)
+study_data |>
+  group_by(method) |>
+  summarise(
+    n = n(),
+    mean = round(mean(recall), 2),
+    sd = round(sd(recall), 2)
+  )
 ```
 
-## Understanding the Output
+## Run the ANOVA
 
-Key values:
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-- **F value**: Ratio of between-group to within-group variance
-- **Pr(>F)**: p-value for the F-test
-- **Df**: Degrees of freedom (between groups, within groups)
+# Fit one-way ANOVA
+model1 <- aov(recall ~ method, data = study_data)
+summary(model1)
+```
 
 ::: {.callout-note}
 ## Self-Check
 
-A significant ANOVA tells us:
+What does a significant F-test tell us?
 
-`r mcq(c("Which groups differ", answer = "At least one group differs from the others", "All groups are different"))`
+`r mcq(c("Which groups differ from each other", answer = "At least one group differs from the others", "All groups are significantly different"))`
 :::
 
-# Post-Hoc Tests
+## Visualise the Groups
+
+```{webr-r}
+library(readr)
+library(ggplot2)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+ggplot(study_data, aes(x = method, y = recall, fill = method)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("Elaboration" = "#3498DB",
+                                "Rereading" = "#E74C3C",
+                                "Self-Testing" = "#27AE60")) +
+  theme_minimal() +
+  labs(title = "Recall by Study Method",
+       x = "Study Method", y = "Items Recalled") +
+  theme(legend.position = "none")
+```
+
+---
+
+# Part 3: Post-Hoc Tests
 
 ## Why Post-Hoc Tests?
 
 ANOVA tells us IF groups differ, but not WHICH groups differ.
 
+Post-hoc tests make **pairwise comparisons** while controlling for multiple testing.
+
 ## Tukey's HSD
 
 ```{webr-r}
-# Run Tukey's Honest Significant Difference
-TukeyHSD(model)
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+model1 <- aov(recall ~ method, data = study_data)
+TukeyHSD(model1)
 ```
-
-## Interpreting Post-Hoc Results
-
-Look for:
-
-- **diff**: Difference between means
-- **p adj**: Adjusted p-value
-- Confidence intervals that don't include 0
 
 ::: {.callout-note}
 ## Self-Check
 
-What does "HSD" stand for in Tukey's HSD?
+In Tukey's output, what does `p adj` mean?
 
-`r mcq(c("High Standard Deviation", answer = "Honest Significant Difference", "Hypothesis Statistical Difference"))`
+`r mcq(c("Unadjusted p-value", answer = "P-value adjusted for multiple comparisons", "Effect size"))`
 :::
 
-# Effect Sizes
+## Interpreting the Results
+
+Look for:
+
+- **diff**: Difference between group means
+- **p adj**: Adjusted p-value (significant if < .05)
+- **lwr, upr**: 95% confidence interval for the difference
+
+::: {.callout-note}
+## Self-Check
+
+If the confidence interval includes 0, the difference is:
+
+`r mcq(c("Significant", answer = "Not significant", "Large"))`
+:::
+
+---
+
+# Part 4: Two-Way ANOVA
+
+## When to Use
+
+Use a **two-way ANOVA** when:
+
+- You have **two categorical predictors**
+- You want to test **main effects** and an **interaction**
+
+## Factorial Design
+
+Our design: 3 methods × 2 times = 6 cells
+
+```{webr-r}
+library(readr)
+library(dplyr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Cell means
+study_data |>
+  group_by(method, time_of_day) |>
+  summarise(
+    n = n(),
+    mean = round(mean(recall), 2),
+    .groups = "drop"
+  )
+```
+
+## Run Two-Way ANOVA
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Two-way ANOVA with interaction
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary(model2)
+```
+
+::: {.callout-note}
+## Self-Check
+
+In `aov(y ~ A * B)`, what does the `*` include?
+
+`r mcq(c("Only main effects", "Only the interaction", answer = "Main effects AND interaction"))`
+:::
+
+## Interaction Plot
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Base R interaction plot
+interaction.plot(study_data$time_of_day, study_data$method,
+                 study_data$recall,
+                 type = "b",
+                 xlab = "Time of Day",
+                 ylab = "Mean Recall",
+                 col = c("blue", "red", "green"),
+                 lwd = 2)
+```
+
+::: {.callout-note}
+## Self-Check
+
+Parallel lines in an interaction plot indicate:
+
+`r mcq(c(answer = "No interaction", "A significant interaction", "An error in the analysis"))`
+:::
+
+---
+
+# Part 5: Effect Sizes
 
 ## Eta-Squared (η²)
 
+Proportion of variance explained by the factor.
+
 ```{webr-r}
-# Calculate eta-squared manually
-ss_between <- sum(model$effects^2)
-ss_total <- sum((therapy_data$anxiety - mean(therapy_data$anxiety))^2)
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-# Get from summary
-model_summary <- summary(model)
-ss_therapy <- model_summary[[1]]["therapy", "Sum Sq"]
+model1 <- aov(recall ~ method, data = study_data)
+model_summary <- summary(model1)
+
+ss_method <- model_summary[[1]]["method", "Sum Sq"]
 ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
 
-eta_sq <- ss_therapy / (ss_therapy + ss_residual)
-cat("Eta-squared:", round(eta_sq, 3))
+eta_sq <- ss_method / ss_total
+cat("Eta-squared =", round(eta_sq, 3))
 ```
 
-## Interpreting Effect Sizes
+## Interpreting Eta-Squared
 
 | η² value | Interpretation |
 |----------|----------------|
@@ -188,145 +312,67 @@ cat("Eta-squared:", round(eta_sq, 3))
 ::: {.callout-note}
 ## Self-Check
 
-An eta-squared of 0.10 would be considered:
+An eta-squared of 0.28 would be considered:
 
-`r mcq(c("Small", answer = "Medium", "Large"))`
+`r mcq(c("Small", "Medium", answer = "Large"))`
 :::
 
-# Visualisation
-
-## Boxplot by Group
+## Partial Eta-Squared for Two-Way
 
 ```{webr-r}
-#| fig-width: 8
-#| fig-height: 5
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
 
-library(ggplot2)
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary2 <- summary(model2)
 
-ggplot(therapy_data, aes(x = therapy, y = anxiety, fill = therapy)) +
-  geom_boxplot(alpha = 0.7) +
-  theme_minimal() +
-  labs(title = "Anxiety Scores by Therapy Type",
-       x = "Therapy", y = "Anxiety Score")
+ss_method <- summary2[[1]]["method", "Sum Sq"]
+ss_error <- summary2[[1]]["Residuals", "Sum Sq"]
+
+partial_eta <- ss_method / (ss_method + ss_error)
+cat("Partial eta-squared for method:", round(partial_eta, 3))
 ```
 
-## Bar Chart with Error Bars
-
-```{webr-r}
-#| fig-width: 8
-#| fig-height: 5
-
-# Calculate means and SEs
-summary_data <- therapy_data |>
-  group_by(therapy) |>
-  summarise(
-    mean = mean(anxiety),
-    se = sd(anxiety) / sqrt(n())
-  )
-
-ggplot(summary_data, aes(x = therapy, y = mean, fill = therapy)) +
-  geom_col(alpha = 0.7) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2) +
-  theme_minimal() +
-  labs(title = "Mean Anxiety by Therapy",
-       x = "Therapy", y = "Mean Anxiety Score")
-```
-
-# Two-Way ANOVA
-
-## Factorial Designs
-
-When you have two independent variables:
-
-```{webr-r}
-#| autorun: true
-
-# View factorial data
-head(factorial_data)
-```
-
-## Running Two-Way ANOVA
-
-```{webr-r}
-# Fit factorial ANOVA
-factorial_model <- aov(improvement ~ therapy * duration, data = factorial_data)
-
-summary(factorial_model)
-```
-
-## Interpreting Results
-
-The output shows:
-
-- Main effect of therapy
-- Main effect of duration
-- **Interaction** (therapy:duration)
-
-::: {.callout-note}
-## Self-Check
-
-What does a significant interaction mean?
-
-`r mcq(c("Both main effects are significant", answer = "The effect of one IV depends on the level of the other", "There is no effect"))`
-:::
-
-## Visualising Interactions
-
-```{webr-r}
-#| fig-width: 8
-#| fig-height: 5
-
-ggplot(factorial_data, aes(x = duration, y = improvement,
-                            colour = therapy, group = therapy)) +
-  stat_summary(fun = mean, geom = "line", size = 1) +
-  stat_summary(fun = mean, geom = "point", size = 3) +
-  theme_minimal() +
-  labs(title = "Interaction: Therapy x Duration",
-       x = "Duration", y = "Improvement")
-```
-
-# APA Reporting
-
-## One-Way ANOVA
-
-> A one-way ANOVA revealed a significant effect of therapy type on anxiety scores, *F*(2, 87) = [F-value], *p* < .001, η² = [effect size].
-
-## With Post-Hoc
-
-> Post-hoc comparisons using Tukey's HSD indicated that CBT (M = [mean], SD = [sd]) resulted in significantly lower anxiety than control (M = [mean], SD = [sd]), p < .05.
+---
 
 # Knowledge Check
 
 ::: {.webex-check .webex-box}
 
-**1. What test should follow a significant ANOVA?**
+**1. When should you use ANOVA instead of a t-test?**
 
-`r mcq(c("Another ANOVA", answer = "Post-hoc tests", "Correlation"))`
+`r mcq(c("When comparing 2 groups", answer = "When comparing 3 or more groups", "When you have paired data"))`
 
-**2. True or False: ANOVA can only compare exactly 3 groups.**
+**2. What test follows a significant ANOVA?**
 
-`r torf(FALSE)`
+`r mcq(c("Another ANOVA", answer = "Post-hoc tests (e.g., Tukey's HSD)", "A regression"))`
 
-**3. What is the effect size measure for ANOVA?**
+**3. True or False: A significant interaction means the main effects are not interpretable on their own.**
+
+`r torf(TRUE)`
+
+**4. What effect size is commonly used with ANOVA?**
 
 `r fitb("eta-squared", ignore_case = TRUE)`
 
 :::
 
-# Summary
+---
 
-::: {.callout-tip}
-## Key Skills Practised
+# Quick Reference
 
-1. Running one-way ANOVA
-2. Conducting post-hoc comparisons
-3. Calculating effect sizes
-4. Running two-way ANOVA
-5. Interpreting interactions
-:::
+| Test Type | R Function |
+|-----------|------------|
+| One-Way ANOVA | `aov(y ~ factor, data = df)` |
+| Two-Way ANOVA | `aov(y ~ A * B, data = df)` |
+| Post-Hoc | `TukeyHSD(model)` |
+| Effect Size | `SS_effect / SS_total` |
+
+---
 
 ## Next Steps
 
-1. Download the **exercise** (.qmd file)
-2. Complete the analysis in RStudio
+1. Return to the activity pages for more detailed practice
+2. Complete the **exercise notebook** in RStudio Server
 3. Try the **follow-on exercise** for extra practice

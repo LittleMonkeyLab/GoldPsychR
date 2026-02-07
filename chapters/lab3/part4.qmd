@@ -1,0 +1,155 @@
+---
+title: "Part 4: Two-Way ANOVA"
+subtitle: "Lab 3: ANOVA"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part4-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Examine the factorial design**
+2. **Run the two-way ANOVA**
+3. **Interpret main effects and interaction**
+:::
+
+### Explore the Factorial Design
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Count by method AND time
+table(study_data$method, study_data$time_of_day)
+```
+
+### Descriptives by Both Factors
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Group means
+cat("=== Cell Means ===\n\n")
+for (m in unique(study_data$method)) {
+  for (t in unique(study_data$time_of_day)) {
+    scores <- study_data$recall[study_data$method == m & study_data$time_of_day == t]
+    cat(m, "-", t, ": M =", round(mean(scores), 2), "\n")
+  }
+}
+```
+
+### Run Two-Way ANOVA
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Two-way ANOVA with interaction
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+summary(model2)
+```
+
+::: {.callout-note}
+## Reading the Output
+- **method**: Main effect of study method
+- **time_of_day**: Main effect of time
+- **method:time_of_day**: Interaction effect
+:::
+
+### Interaction Plot
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Calculate cell means
+cell_means <- tapply(study_data$recall,
+                     list(study_data$method, study_data$time_of_day),
+                     mean)
+
+# Create interaction plot
+interaction.plot(study_data$time_of_day, study_data$method,
+                 study_data$recall,
+                 type = "b",
+                 xlab = "Time of Day",
+                 ylab = "Mean Recall",
+                 main = "Interaction Plot",
+                 col = c("blue", "red", "green"),
+                 lwd = 2)
+```
+
+### Interpreting the Interaction
+
+```{webr-r}
+cat("How to interpret interaction plots:\n\n")
+cat("PARALLEL LINES = No interaction\n")
+cat("- The effect of one factor is the same at all levels of the other\n\n")
+cat("NON-PARALLEL LINES = Interaction present\n")
+cat("- The effect of one factor DEPENDS on the level of the other\n")
+cat("- Need to interpret simple effects, not just main effects")
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. A two-way ANOVA has:**
+
+`r mcq(c("One factor", answer = "Two factors", "Two dependent variables", "Two samples"))`
+
+**2. In `aov(y ~ A * B)`, the `*` includes:**
+
+`r mcq(c("Only main effects", "Only the interaction", answer = "Main effects AND interaction", "Neither"))`
+
+**3. An interaction means the effect of one factor `r fitb("depends", width = 10)` on the level of the other.**
+
+**4. True or False: Parallel lines in an interaction plot indicate no interaction.**
+
+`r torf(TRUE)`
+
+**5. A 3 × 2 factorial design has how many cells?**
+
+`r mcq(c("3", "2", "5", answer = "6"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 3](part3.qmd){.btn .btn-secondary}
+
+[Continue to Part 5: Effect Sizes →](part5.qmd){.btn .btn-primary}
+:::

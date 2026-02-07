@@ -1,0 +1,424 @@
+---
+title: "Part 5: Effect Sizes & Reporting"
+subtitle: "Lab 3: ANOVA"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 3, Part 5"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Beyond p-values {.center background-color="#2C3E50"}
+
+**Effect Sizes for ANOVA**
+
+---
+
+## Why Effect Sizes Matter
+
+A significant F-test tells us groups differ.
+
+But **how much** do they differ?
+
+**Effect sizes** quantify the magnitude of the effect.
+
+---
+
+## Eta-Squared (η²) {.center background-color="#27AE60"}
+
+The most common effect size for ANOVA:
+
+$$\eta^2 = \frac{SS_{effect}}{SS_{total}}$$
+
+**Interpretation**: Proportion of total variance explained by the factor
+
+---
+
+## Cohen's Guidelines for η²
+
+| η² | Interpretation |
+|-----|----------------|
+| 0.01 | Small |
+| 0.06 | Medium |
+| 0.14 | Large |
+
+Note: These are rougher categories than Cohen's d
+
+---
+
+## Calculating Eta-Squared {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_residual <- s[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+eta_sq <- ss_method / ss_total
+eta_sq
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_residual <- s[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+eta_sq <- ss_method / ss_total
+eta_sq
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_residual <- s[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+eta_sq <- ss_method / ss_total
+size <- if(eta_sq < 0.01) "negligible" else if(eta_sq < 0.06) "small" else if(eta_sq < 0.14) "medium" else "large"
+
+cat("Eta-squared (η²) tells us what proportion of total variance in\n")
+cat("the outcome is explained by our grouping variable.\n\n")
+
+cat("Calculation:\n")
+cat("  SS (method):    ", round(ss_method, 2), "\n")
+cat("  SS (residual):  ", round(ss_residual, 2), "\n")
+cat("  SS (total):     ", round(ss_total, 2), "\n")
+cat("  η² = ", round(ss_method, 2), " / ", round(ss_total, 2),
+    " = ", round(eta_sq, 3), "\n\n", sep = "")
+
+cat("This means study method explains", round(eta_sq * 100, 1), "% of the\n")
+cat("variance in recall scores. That's a", size, "effect.\n\n")
+
+cat("Cohen's benchmarks for η²:\n")
+cat("  .01 = small, .06 = medium, .14 = large\n\n")
+
+cat("Think of it this way:", round(eta_sq * 100, 1), "% of why people\n")
+cat("differ in recall is due to which method they used. The remaining\n")
+cat(round((1 - eta_sq) * 100, 1), "% is individual differences and noise.")
+```
+
+:::
+
+---
+
+## Interpreting Our Result
+
+η² ≈ 0.28 (28% of variance explained)
+
+::: {.incremental}
+-   This is a **large** effect by Cohen's standards
+-   Study method explains ~28% of differences in recall
+-   That's substantial for a psychological experiment!
+:::
+
+---
+
+## Partial Eta-Squared (η²_p)
+
+For **multi-factor ANOVA**, use partial eta-squared:
+
+$$\eta^2_p = \frac{SS_{effect}}{SS_{effect} + SS_{error}}$$
+
+-   Proportion of variance explained by factor, controlling for others
+-   Generally **larger** than regular η²
+-   More commonly reported in factorial designs
+
+---
+
+## Partial η² in R {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+s <- summary(model2)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_error <- s[[1]]["Residuals", "Sum Sq"]
+
+partial_eta <- ss_method / (ss_method + ss_error)
+partial_eta
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+s <- summary(model2)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_error <- s[[1]]["Residuals", "Sum Sq"]
+
+partial_eta <- ss_method / (ss_method + ss_error)
+partial_eta
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+s <- summary(model2)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_time <- s[[1]]["time_of_day", "Sum Sq"]
+ss_int <- s[[1]]["method:time_of_day", "Sum Sq"]
+ss_error <- s[[1]]["Residuals", "Sum Sq"]
+
+partial_eta_method <- ss_method / (ss_method + ss_error)
+partial_eta_time <- ss_time / (ss_time + ss_error)
+
+cat("In factorial designs, we use PARTIAL eta-squared (η²p) rather than\n")
+cat("regular eta-squared. Here's why:\n\n")
+
+cat("Regular η² divides by TOTAL SS (all effects + error).\n")
+cat("Partial η²p divides by (effect SS + error SS only).\n\n")
+
+cat("For method: η²p = ", round(ss_method, 1), " / (", round(ss_method, 1),
+    " + ", round(ss_error, 1), ")\n", sep = "")
+cat("          = ", round(partial_eta_method, 3), "\n\n", sep = "")
+
+cat("For time:   η²p = ", round(ss_time, 1), " / (", round(ss_time, 1),
+    " + ", round(ss_error, 1), ")\n", sep = "")
+cat("          = ", round(partial_eta_time, 3), "\n\n", sep = "")
+
+cat("Partial η²p answers: 'What proportion of variance in the DV that\n")
+cat("is NOT explained by other factors in the model, is explained by\n")
+cat("this effect?' It's the standard in psychology journals.\n\n")
+
+cat("Note: η²p values will always be >= regular η², and don't sum to 1.")
+```
+
+:::
+
+---
+
+## APA Reporting: One-Way ANOVA
+
+Template:
+
+> A one-way ANOVA revealed a significant effect of [factor] on [DV], *F*(df1, df2) = F-value, *p* = p-value, η² = effect-size.
+
+Example:
+
+> A one-way ANOVA revealed a significant effect of study method on recall performance, *F*(2, 117) = 22.45, *p* < .001, η² = .28.
+
+---
+
+## APA Reporting: Two-Way ANOVA
+
+Report each effect separately:
+
+> A 3 × 2 ANOVA examined the effects of study method and time of day on recall. There was a significant main effect of study method, *F*(2, 114) = 23.42, *p* < .001, η²_p = .29. The main effect of time was not significant, *F*(1, 114) = 3.27, *p* = .073. The interaction was not significant, *F*(2, 114) = 0.34, *p* = .714.
+
+---
+
+## Including Post-Hoc Results
+
+After reporting the ANOVA:
+
+> Post-hoc comparisons using Tukey's HSD indicated that self-testing (*M* = 21.5, *SD* = 4.2) and elaboration (*M* = 19.7, *SD* = 4.5) both resulted in significantly higher recall than rereading (*M* = 14.9, *SD* = 4.1), *p*s < .001. Self-testing and elaboration did not differ significantly (*p* = .28).
+
+---
+
+## Full Example {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+f_val <- round(s[[1]]["method", "F value"], 2)
+df1 <- s[[1]]["method", "Df"]
+df2 <- s[[1]]["Residuals", "Df"]
+eta <- round(s[[1]]["method", "Sum Sq"] /
+            (s[[1]]["method", "Sum Sq"] + s[[1]]["Residuals", "Sum Sq"]), 2)
+
+cat("One-way ANOVA:\n")
+cat(paste0("F(", df1, ", ", df2, ") = ", f_val, ", p < .001, η² = ", eta))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+f_val <- round(s[[1]]["method", "F value"], 2)
+df1 <- s[[1]]["method", "Df"]
+df2 <- s[[1]]["Residuals", "Df"]
+eta <- round(s[[1]]["method", "Sum Sq"] /
+            (s[[1]]["method", "Sum Sq"] + s[[1]]["Residuals", "Sum Sq"]), 2)
+
+cat("One-way ANOVA:\n")
+cat(paste0("F(", df1, ", ", df2, ") = ", f_val, ", p < .001, η² = ", eta))
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+
+f_val <- round(s[[1]]["method", "F value"], 2)
+p_val <- s[[1]]["method", "Pr(>F)"]
+df1 <- s[[1]]["method", "Df"]
+df2 <- s[[1]]["Residuals", "Df"]
+eta <- round(s[[1]]["method", "Sum Sq"] /
+            (s[[1]]["method", "Sum Sq"] + s[[1]]["Residuals", "Sum Sq"]), 2)
+p_text <- if(p_val < 0.001) "p < .001" else paste0("p = ", round(p_val, 3))
+
+# Get descriptives
+methods <- unique(study_data$method)
+means <- sapply(methods, function(m) round(mean(study_data$recall[study_data$method == m]), 2))
+sds <- sapply(methods, function(m) round(sd(study_data$recall[study_data$method == m]), 2))
+
+cat("Here's everything for your APA results paragraph:\n\n")
+
+cat("Test result: F(", df1, ", ", df2, ") = ", f_val, ", ", p_text,
+    ", η² = ", eta, "\n\n", sep = "")
+
+cat("Descriptives by group:\n")
+for(i in 1:length(methods)) {
+  cat("  ", methods[i], ": M =", means[i], ", SD =", sds[i], "\n")
+}
+
+cat("\nWritten up:\n\n")
+cat("'A one-way ANOVA revealed a significant effect of study method on\n")
+cat("recall performance, F(", df1, ", ", df2, ") = ", f_val, ", ", p_text,
+    ", η² = ", eta, ".\n", sep = "")
+cat("This represents a large effect, with study method explaining\n")
+cat(round(eta * 100), "% of the variance in recall scores. Post-hoc\n")
+cat("comparisons using Tukey's HSD indicated...' (then report which\n")
+cat("groups differed and by how much).")
+```
+
+:::
+
+---
+
+## Common Reporting Mistakes
+
+1. **Forgetting effect sizes** - Always report η² or η²_p
+2. **Wrong df order** - It's F(between, within)
+3. **Not rounding appropriately** - F to 2 decimal places
+4. **Missing post-hocs** - Need them to specify which groups differ
+5. **Over-interpreting non-significant effects**
+
+---
+
+## Summary: Effect Sizes & Reporting {.center background-color="#2C3E50"}
+
+-   **η²** = SS_effect / SS_total (proportion of variance)
+-   **η²_p** for factorial designs (controls for other factors)
+-   Small = .01, Medium = .06, Large = .14
+-   **APA format**: F(df1, df2) = value, p = value, η² = value
+-   Include descriptives and post-hoc results
+
+---
+
+## Lab Complete! {.center background-color="#27AE60"}
+
+You've learned:
+
+-   ✅ When to use ANOVA vs t-tests
+-   ✅ Running one-way ANOVA
+-   ✅ Post-hoc comparisons (Tukey)
+-   ✅ Two-way factorial ANOVA
+-   ✅ Interpreting interactions
+-   ✅ Calculating and interpreting η²
+-   ✅ APA-style reporting
+
+---
+
+## Now Complete Your Notebook! {.center background-color="#9B1B30"}
+
+{{< countdown "15:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Final Tasks
+
+1. Calculate effect sizes for all analyses
+2. Write APA results sections
+3. Answer reflection questions
+4. **Render to HTML** and check your work!
+:::

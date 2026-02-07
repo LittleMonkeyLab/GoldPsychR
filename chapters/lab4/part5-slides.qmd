@@ -1,0 +1,306 @@
+---
+title: "Part 5: Diagnostics & Reporting"
+subtitle: "Lab 4: Linear Models"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4, Part 5"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Model Diagnostics {.center background-color="#2C3E50"}
+
+**Checking Regression Assumptions**
+
+---
+
+## Regression Assumptions
+
+1. **Linearity**: Relationship is linear
+2. **Independence**: Observations are independent
+3. **Normality**: Residuals are normally distributed
+4. **Homoscedasticity**: Constant variance of residuals
+5. **No multicollinearity**: Predictors not too correlated
+
+---
+
+## Diagnostic Plots {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+:::
+
+---
+
+## Interpreting the Plots
+
+| Plot | What to look for |
+|------|------------------|
+| **Residuals vs Fitted** | Random scatter (linearity) |
+| **Normal Q-Q** | Points on diagonal line |
+| **Scale-Location** | Horizontal line (homoscedasticity) |
+| **Residuals vs Leverage** | No influential outliers |
+
+---
+
+## Checking Normality {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+shapiro.test(residuals(model))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+shapiro.test(residuals(model))
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+result <- shapiro.test(residuals(model))
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+
+cat("Testing normality of RESIDUALS (not the raw variables!):\n\n")
+
+cat("Shapiro-Wilk W =", round(result$statistic, 3), ",", p_text, "\n\n")
+
+if(result$p.value > 0.05) {
+  cat("Since p > .05, residuals don't deviate significantly from normality.\n")
+  cat("The assumption is reasonably met.\n\n")
+} else {
+  cat("Since p < .05, residuals may not be perfectly normal.\n")
+  cat("But regression is fairly robust to mild violations, especially\n")
+  cat("with larger samples.\n\n")
+}
+
+cat("Why residuals, not raw scores? Regression assumes the ERRORS are\n")
+cat("normally distributed around the regression line. The residuals\n")
+cat("are our estimates of these errors.\n\n")
+
+cat("In practice, the Q-Q plot (from plot(model)) is often more\n")
+cat("informative than this test. Look for points that roughly follow\n")
+cat("the diagonal line - perfect normality isn't required, just\n")
+cat("no dramatic departures from it.")
+```
+
+:::
+
+---
+
+## APA Reporting: Correlation {.center background-color="#27AE60"}
+
+Template:
+
+> There was a [strong/moderate/weak] [positive/negative] correlation between [X] and [Y], *r* = .XX, *p* = .XXX [or *p* < .001].
+
+Example:
+
+> There was a strong negative correlation between stress and wellbeing, *r* = -.85, *p* < .001.
+
+---
+
+## APA Reporting: Simple Regression
+
+Template:
+
+> A simple linear regression was conducted to predict [Y] from [X]. [X] significantly predicted [Y], *b* = X.XX, *SE* = X.XX, *t*(df) = X.XX, *p* = .XXX. [X] explained X% of variance in [Y], *R*² = .XX.
+
+---
+
+## APA Reporting: Multiple Regression
+
+> A multiple regression was conducted to predict wellbeing from stress, sleep, and exercise. The model explained 78% of variance in wellbeing, *R*² = .78, *F*(3, 96) = 112.34, *p* < .001.
+>
+> Stress was a significant negative predictor (*b* = -0.95, *p* < .001). Sleep was a significant positive predictor (*b* = 4.23, *p* < .001). Exercise was not a significant predictor (*b* = 0.02, *p* = .312).
+
+---
+
+## Full Reporting Example {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+s <- summary(model)
+
+cat("R² =", round(s$r.squared, 2), "\n")
+cat("Adjusted R² =", round(s$adj.r.squared, 2), "\n")
+cat("F(", s$fstatistic[2], ",", s$fstatistic[3], ") =",
+    round(s$fstatistic[1], 2), "\n\n")
+cat("Coefficients:\n")
+print(round(s$coefficients, 3))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+s <- summary(model)
+
+cat("R² =", round(s$r.squared, 2), "\n")
+cat("Adjusted R² =", round(s$adj.r.squared, 2), "\n")
+cat("F(", s$fstatistic[2], ",", s$fstatistic[3], ") =",
+    round(s$fstatistic[1], 2), "\n\n")
+cat("Coefficients:\n")
+print(round(s$coefficients, 3))
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+s <- summary(model)
+
+f_p <- pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE)
+f_text <- if(f_p < 0.001) "p < .001" else paste0("p = ", round(f_p, 3))
+
+cat("Complete APA-style results for multiple regression:\n\n")
+
+cat("MODEL FIT (report this first):\n")
+cat("  R² = ", round(s$r.squared, 2), ", Adjusted R² = ", round(s$adj.r.squared, 2), "\n", sep = "")
+cat("  F(", s$fstatistic[2], ", ", s$fstatistic[3], ") = ",
+    round(s$fstatistic[1], 2), ", ", f_text, "\n\n", sep = "")
+
+cat("INDIVIDUAL PREDICTORS:\n")
+for(i in 2:4) {
+  name <- c("Stress", "Sleep", "Exercise")[i-1]
+  b <- s$coefficients[i, 1]
+  se <- s$coefficients[i, 2]
+  p <- s$coefficients[i, 4]
+  cat("  ", name, ": b = ", round(b, 2), ", SE = ", round(se, 2), ", ",
+      ifelse(p < 0.001, "p < .001", paste0("p = ", round(p, 3))), "\n", sep = "")
+}
+
+cat("\nSAMPLE WRITE-UP:\n\n")
+cat("'A multiple regression examined stress, sleep, and exercise as\n")
+cat("predictors of wellbeing. The overall model was significant,\n")
+cat("R² = ", round(s$r.squared, 2), ", F(", s$fstatistic[2], ", ", s$fstatistic[3],
+    ") = ", round(s$fstatistic[1], 2), ", ", f_text, ", explaining ",
+    round(s$r.squared * 100), "%\n", sep = "")
+cat("of variance in wellbeing. [Then describe each predictor in turn,\n")
+cat("noting which were significant, the direction of effects, and\n")
+cat("include standardized coefficients for comparing importance.]'")
+```
+
+:::
+
+---
+
+## Summary: Diagnostics & Reporting {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Check assumptions with **diagnostic plots**
+-   Use `plot(model)` for four standard plots
+-   Report **r** for correlation, **b** and **R²** for regression
+-   Include **F-test** for overall model significance
+-   Report **each predictor's** significance in multiple regression
+
+---
+
+## Lab Complete! {.center background-color="#27AE60"}
+
+You've learned:
+
+-   ✅ Correlation analysis
+-   ✅ Simple linear regression
+-   ✅ Multiple regression
+-   ✅ Model diagnostics
+-   ✅ APA-style reporting
+
+---
+
+## Now Complete Your Notebook! {.center background-color="#9B1B30"}
+
+{{< countdown "15:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Final Tasks
+
+1. Run diagnostic plots
+2. Check all assumptions
+3. Write APA results for correlation and regression
+4. **Render to HTML** and check your work!
+:::

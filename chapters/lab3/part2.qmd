@@ -1,0 +1,149 @@
+---
+title: "Part 2: One-Way ANOVA"
+subtitle: "Lab 3: ANOVA"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part2-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to see ANOVA in action
+2. **Examine the output** carefully
+3. **Copy to RStudio** for your notebook exercises
+:::
+
+### Load the Data
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Data loaded successfully!")
+cat("\nNumber of participants:", nrow(study_data))
+```
+
+### Explore the Groups
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Count by study method
+table(study_data$method)
+```
+
+### Descriptive Statistics by Group
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Calculate means and SDs for each method
+methods <- unique(study_data$method)
+for (m in methods) {
+  scores <- study_data$recall[study_data$method == m]
+  cat(m, ": M =", round(mean(scores), 2),
+      ", SD =", round(sd(scores), 2),
+      ", n =", length(scores), "\n")
+}
+```
+
+### Run One-Way ANOVA
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Fit the ANOVA model
+model <- aov(recall ~ method, data = study_data)
+
+# View the summary
+summary(model)
+```
+
+::: {.callout-note}
+## Key Output
+Look for:
+- **F value**: The F-ratio
+- **Pr(>F)**: The p-value
+- `***` or `**` indicate significance
+:::
+
+### Visualise the Groups
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+boxplot(recall ~ method, data = study_data,
+        main = "Recall Scores by Study Method",
+        xlab = "Study Method",
+        ylab = "Items Recalled",
+        col = c("lightblue", "lightgreen", "lightyellow"))
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. The function to run ANOVA in R is:**
+
+`r mcq(c("anova()", answer = "aov()", "t.test()", "lm()"))`
+
+**2. In the formula `recall ~ method`, `recall` is the:**
+
+`r mcq(c("Grouping variable", answer = "Outcome/dependent variable", "Independent variable", "Intercept"))`
+
+**3. To view ANOVA results, we use the `r fitb("summary", width = 10)`() function.**
+
+**4. True or False: A significant ANOVA result tells us which specific groups differ.**
+
+`r torf(FALSE)`
+
+**5. The degrees of freedom for the between-groups effect with 3 groups is:**
+
+`r mcq(c("1", answer = "2", "3", "n - 1"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 1](part1.qmd){.btn .btn-secondary}
+
+[Continue to Part 3: Post-Hoc Tests →](part3.qmd){.btn .btn-primary}
+:::

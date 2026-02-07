@@ -1,0 +1,363 @@
+---
+title: "Part 2: Correlation Analysis"
+subtitle: "Lab 4: Linear Models"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4, Part 2"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Correlation Analysis {.center background-color="#2C3E50"}
+
+**Measuring Relationships Between Variables**
+
+---
+
+## Loading the Data {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+
+head(wellbeing)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+
+head(wellbeing)
+```
+
+:::
+
+---
+
+## Our Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| stress | Perceived stress (0-50) | Continuous |
+| sleep_hours | Hours of sleep per night | Continuous |
+| exercise_mins | Minutes of exercise per week | Continuous |
+| wellbeing | Wellbeing score (0-100) | Continuous |
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+cor.test(x, y)
+```
+
+Tests if the correlation is significantly different from 0.
+
+---
+
+## Stress and Wellbeing {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+cor.test(wellbeing$stress, wellbeing$wellbeing)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+cor.test(wellbeing$stress, wellbeing$wellbeing)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- cor.test(wellbeing$stress, wellbeing$wellbeing)
+r <- result$estimate
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+size <- if(abs(r) < 0.1) "negligible" else if(abs(r) < 0.3) "small" else if(abs(r) < 0.5) "medium" else "large"
+
+cat("Stress and Wellbeing correlation: r =", round(r, 3), "\n\n")
+
+cat("The r of", round(r, 3), "tells us:\n")
+cat("  - Direction:", ifelse(r > 0, "POSITIVE", "NEGATIVE"),
+    "(as stress increases, wellbeing", ifelse(r > 0, "increases", "decreases"), ")\n")
+cat("  - Strength:", size, "relationship by Cohen's conventions\n")
+cat("  - Statistical test:", p_text, "\n\n")
+
+cat("With", p_text, ",", ifelse(result$p.value < 0.05,
+    "the correlation IS statistically significant.\n", "the correlation is NOT significant.\n"))
+cat("This means the relationship is unlikely due to chance alone.\n\n")
+
+cat("But remember: correlation ≠ causation! We can't say stress CAUSES\n")
+cat("lower wellbeing from this data. Maybe low wellbeing causes stress,\n")
+cat("or a third variable (like sleep problems) affects both.\n\n")
+
+cat("APA format: 'There was a strong negative correlation between stress\n")
+cat("and wellbeing, r =", round(r, 2), ",", p_text, ".'")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key values in correlation output:
+
+| Component | Meaning |
+|-----------|---------|
+| **t** | Test statistic |
+| **df** | Degrees of freedom (n-2) |
+| **p-value** | Significance |
+| **cor** | Correlation coefficient (r) |
+| **95% CI** | Confidence interval for r |
+
+---
+
+## Visualising the Relationship {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Stress vs Wellbeing",
+     xlab = "Stress Score", ylab = "Wellbeing Score",
+     pch = 19, col = "steelblue")
+abline(lm(wellbeing ~ stress, data = wellbeing), col = "red", lwd = 2)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Stress vs Wellbeing",
+     xlab = "Stress Score", ylab = "Wellbeing Score",
+     pch = 19, col = "steelblue")
+abline(lm(wellbeing ~ stress, data = wellbeing), col = "red", lwd = 2)
+```
+
+:::
+
+---
+
+## Sleep and Wellbeing {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
+r <- result$estimate
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+size <- if(abs(r) < 0.1) "negligible" else if(abs(r) < 0.3) "small" else if(abs(r) < 0.5) "medium" else "large"
+
+cat("Sleep and Wellbeing correlation: r =", round(r, 3), "\n\n")
+
+cat("This is a", ifelse(r > 0, "positive", "negative"), size, "correlation.\n")
+cat("More sleep is associated with", ifelse(r > 0, "higher", "lower"), "wellbeing.\n\n")
+
+# Compare to stress correlation
+r_stress <- cor(wellbeing$stress, wellbeing$wellbeing)
+cat("Comparing correlations:\n")
+cat("  Stress-Wellbeing:  r =", round(r_stress, 3), "\n")
+cat("  Sleep-Wellbeing:   r =", round(r, 3), "\n\n")
+
+cat("The stress correlation is", ifelse(abs(r_stress) > abs(r), "stronger", "weaker"),
+    "than the sleep\n")
+cat("correlation. Both relate to wellbeing, but stress appears to be\n")
+cat("the more important predictor - something we can test formally\n")
+cat("with multiple regression later.\n\n")
+
+cat("Note: r² =", round(r^2, 3), "tells us sleep explains about\n")
+cat(round(r^2 * 100, 1), "% of variance in wellbeing (shared variance).")
+```
+
+:::
+
+---
+
+## Correlation Matrix {background-color="#f0f0f0"}
+
+See all correlations at once:
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+# Select numeric variables
+vars <- wellbeing[, c("stress", "sleep_hours", "exercise_mins", "wellbeing")]
+cor(vars)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+vars <- wellbeing[, c("stress", "sleep_hours", "exercise_mins", "wellbeing")]
+cor(vars)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+vars <- wellbeing[, c("stress", "sleep_hours", "exercise_mins", "wellbeing")]
+cor_matrix <- round(cor(vars), 2)
+
+cat("Correlation Matrix:\n\n")
+print(cor_matrix)
+
+cat("\nHow to read this:\n")
+cat("- Each cell shows r between the row and column variables\n")
+cat("- The diagonal is always 1.00 (variable with itself)\n")
+cat("- Matrix is symmetric (above/below diagonal are mirrors)\n\n")
+
+cat("Key insights from this matrix:\n")
+cat("- Wellbeing correlates most strongly with stress (r =",
+    cor_matrix["wellbeing", "stress"], ")\n")
+cat("- Stress and sleep are also related (r =",
+    cor_matrix["stress", "sleep_hours"], ")\n\n")
+
+cat("Watch out for MULTICOLLINEARITY - when predictors correlate too\n")
+cat("highly with each other (|r| > .70), it can cause problems in\n")
+cat("regression. Here, our predictors seem reasonably independent.\n\n")
+
+cat("A correlation matrix is often your first step in any analysis.\n")
+cat("It shows the web of relationships and helps identify which\n")
+cat("variables might be good candidates for regression.")
+```
+
+:::
+
+---
+
+## Assumptions for Correlation
+
+1. **Linearity**: Relationship should be linear
+2. **Normality**: Variables approximately normal
+3. **No outliers**: Extreme values can distort r
+4. **Independence**: Observations are independent
+
+---
+
+## Summary: Correlation {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Use `cor.test(x, y)` for a single correlation
+-   Use `cor(data)` for a correlation matrix
+-   **r** ranges from -1 to +1
+-   Check scatterplot for linearity
+-   Report r, p-value, and interpret the size
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Load the data
+2. Calculate correlation between exercise and wellbeing
+3. Create a scatterplot
+4. Build a correlation matrix
+:::

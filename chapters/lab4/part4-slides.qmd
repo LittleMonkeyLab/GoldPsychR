@@ -1,0 +1,323 @@
+---
+title: "Part 4: Multiple Regression"
+subtitle: "Lab 4: Linear Models"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4, Part 4"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Multiple Regression {.center background-color="#2C3E50"}
+
+**Predicting with Multiple Variables**
+
+---
+
+## When to Use It
+
+Use multiple regression when:
+
+-   You have **multiple predictors** (X₁, X₂, X₃...)
+-   You want to **control for** other variables
+-   You want to compare **relative importance** of predictors
+
+**Our Question**: Do stress, sleep, AND exercise predict wellbeing?
+
+---
+
+## The Multiple Regression Equation
+
+$$Y = b_0 + b_1X_1 + b_2X_2 + b_3X_3 + \epsilon$$
+
+Each coefficient (b) shows the effect of that predictor **holding others constant**.
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+model <- lm(outcome ~ pred1 + pred2 + pred3, data = dataframe)
+```
+
+Use `+` to add predictors to the model.
+
+---
+
+## Running Multiple Regression {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+summary(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+summary(model)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+s <- summary(model)
+
+cat("Multiple Regression: Predicting Wellbeing from 3 Variables\n\n")
+
+cat("MODEL FIT:\n")
+cat("  R² =", round(s$r.squared, 3), "- Total variance explained\n")
+cat("  Adjusted R² =", round(s$adj.r.squared, 3), "- Penalized for # predictors\n")
+cat("  Together, these predictors explain", round(s$r.squared * 100, 1), "% of variance.\n\n")
+
+cat("COEFFICIENTS (each controlling for the others):\n\n")
+
+coefs <- s$coefficients
+for(i in 2:4) {
+  name <- rownames(coefs)[i]
+  b <- round(coefs[i, 1], 3)
+  p <- coefs[i, 4]
+  sig <- if(p < 0.05) "SIGNIFICANT" else "not significant"
+  p_text <- if(p < 0.001) "p < .001" else paste0("p = ", round(p, 3))
+
+  cat(name, ": b =", b, ",", p_text, "-", sig, "\n")
+  cat("  Interpretation: For each 1-unit increase in", name, ", wellbeing\n")
+  cat("  changes by", b, "points, HOLDING OTHER VARIABLES CONSTANT.\n\n")
+}
+
+cat("The 'holding constant' part is key - it's the unique contribution\n")
+cat("of each predictor after accounting for overlapping variance.")
+```
+
+:::
+
+---
+
+## Interpreting the Coefficients
+
+Each slope (b) represents:
+
+> "The expected change in Y for a 1-unit change in X, **holding all other predictors constant**"
+
+This is the key difference from simple regression!
+
+---
+
+## Adjusted R²
+
+**R²** always increases when you add predictors (even useless ones).
+
+**Adjusted R²** penalizes for extra predictors:
+
+$$R^2_{adj} = 1 - \frac{(1 - R^2)(n-1)}{n - k - 1}$$
+
+Where k = number of predictors.
+
+Use adjusted R² when comparing models.
+
+---
+
+## Comparing Predictors
+
+Which predictor is most important?
+
+::: {.callout-warning}
+## Problem
+Coefficients are in **different units** (stress points, hours, minutes)
+:::
+
+**Solution**: Look at **standardized coefficients** (β) or compare p-values
+
+---
+
+## Standardized Coefficients {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+# Standardize all variables
+wellbeing_z <- data.frame(
+  wellbeing = scale(wellbeing$wellbeing),
+  stress = scale(wellbeing$stress),
+  sleep = scale(wellbeing$sleep_hours),
+  exercise = scale(wellbeing$exercise_mins)
+)
+
+model_std <- lm(wellbeing ~ stress + sleep + exercise, data = wellbeing_z)
+coef(model_std)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+wellbeing_z <- data.frame(
+  wellbeing = scale(wellbeing$wellbeing),
+  stress = scale(wellbeing$stress),
+  sleep = scale(wellbeing$sleep_hours),
+  exercise = scale(wellbeing$exercise_mins)
+)
+
+model_std <- lm(wellbeing ~ stress + sleep + exercise, data = wellbeing_z)
+coef(model_std)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+wellbeing_z <- data.frame(
+  wellbeing = scale(wellbeing$wellbeing),
+  stress = scale(wellbeing$stress),
+  sleep = scale(wellbeing$sleep_hours),
+  exercise = scale(wellbeing$exercise_mins)
+)
+
+model_std <- lm(wellbeing ~ stress + sleep + exercise, data = wellbeing_z)
+betas <- coef(model_std)[-1]
+
+cat("Standardized Coefficients (β) - Comparing Predictor Strength:\n\n")
+cat("  Stress:   β =", round(betas[1], 3), "\n")
+cat("  Sleep:    β =", round(betas[2], 3), "\n")
+cat("  Exercise: β =", round(betas[3], 3), "\n\n")
+
+# Find the strongest
+abs_betas <- abs(betas)
+strongest <- names(which.max(abs_betas))
+
+cat("Why standardize? Unstandardized coefficients (b) are in different\n")
+cat("units - stress points, hours, minutes. We can't compare them directly.\n\n")
+
+cat("Standardized coefficients (β) put everything in SD units:\n")
+cat("'A 1-SD increase in X predicts a β-SD change in Y.'\n\n")
+
+cat("Now we can compare:", strongest, "is the strongest predictor\n")
+cat("(|β| =", round(max(abs_betas), 3), "). In your results, you might write:\n\n")
+
+cat("'Stress was the strongest predictor of wellbeing (β =",
+    round(betas["stress"], 2), "),\n")
+cat("followed by sleep (β =", round(betas["sleep"], 2), "). Exercise was\n")
+cat("the weakest predictor (β =", round(betas["exercise"], 2), ").'")
+```
+
+:::
+
+---
+
+## Model Comparison {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model1 <- lm(wellbeing ~ stress, data = wellbeing)
+model2 <- lm(wellbeing ~ stress + sleep_hours, data = wellbeing)
+model3 <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+
+cat("Model 1 (stress only):     R² =", round(summary(model1)$r.squared, 3), "\n")
+cat("Model 2 (+ sleep):         R² =", round(summary(model2)$r.squared, 3), "\n")
+cat("Model 3 (+ exercise):      R² =", round(summary(model3)$r.squared, 3))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model1 <- lm(wellbeing ~ stress, data = wellbeing)
+model2 <- lm(wellbeing ~ stress + sleep_hours, data = wellbeing)
+model3 <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+
+cat("Model 1 (stress only):     R² =", round(summary(model1)$r.squared, 3), "\n")
+cat("Model 2 (+ sleep):         R² =", round(summary(model2)$r.squared, 3), "\n")
+cat("Model 3 (+ exercise):      R² =", round(summary(model3)$r.squared, 3))
+```
+
+:::
+
+---
+
+## Summary: Multiple Regression {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Use `lm(y ~ x1 + x2 + x3)` for multiple predictors
+-   Coefficients show effects **controlling for** other variables
+-   Use **Adjusted R²** to compare models
+-   **Standardized coefficients** allow predictor comparison
+-   More predictors ≠ better model
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Build a multiple regression model
+2. Interpret each coefficient
+3. Compare adjusted R² across models
+4. Identify the strongest predictor
+:::

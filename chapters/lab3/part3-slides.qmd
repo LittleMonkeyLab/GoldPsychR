@@ -1,0 +1,262 @@
+---
+title: "Part 3: Post-Hoc Tests"
+subtitle: "Lab 3: ANOVA"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 3, Part 3"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Post-Hoc Tests {.center background-color="#2C3E50"}
+
+**Finding WHICH Groups Differ**
+
+---
+
+## The Post-Hoc Problem
+
+ANOVA told us: "Groups differ significantly"
+
+But... **which** groups differ from which?
+
+-   Rereading vs Self-Testing?
+-   Rereading vs Elaboration?
+-   Self-Testing vs Elaboration?
+
+We need **post-hoc tests** to find out!
+
+---
+
+## Why Not Just Use T-Tests?
+
+Multiple t-tests inflate Type I error rate.
+
+Post-hoc tests **adjust** for multiple comparisons:
+
+| Method | Approach | Conservativeness |
+|--------|----------|------------------|
+| Tukey's HSD | Controls family-wise error | Moderate |
+| Bonferroni | Divides α by # tests | Conservative |
+| Scheffe | Most conservative | Very conservative |
+
+**Tukey's HSD** is the standard choice in psychology.
+
+---
+
+## Tukey's HSD {.center background-color="#27AE60"}
+
+**Honestly Significant Difference**
+
+-   Compares **all possible pairs** of means
+-   Maintains **α = .05** across all comparisons
+-   Based on the studentized range distribution
+
+---
+
+## Running Tukey's HSD {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+TukeyHSD(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+TukeyHSD(model)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+tukey <- TukeyHSD(model)
+results <- tukey$method
+
+cat("Tukey's HSD compares ALL pairs of groups while controlling for\n")
+cat("multiple comparisons. With 3 groups, that's 3 comparisons.\n\n")
+
+for(i in 1:nrow(results)) {
+  comparison <- rownames(results)[i]
+  diff <- round(results[i, "diff"], 2)
+  p_adj <- results[i, "p adj"]
+  p_text <- if(p_adj < 0.001) "p < .001" else paste0("p = ", round(p_adj, 3))
+
+  cat(comparison, ":\n")
+  cat("  Mean difference =", diff, "(", ifelse(diff > 0, "second group higher", "first group higher"), ")\n")
+  cat("  Adjusted p-value:", p_text)
+  if(p_adj < 0.05) {
+    cat(" --> Significant difference!\n\n")
+  } else {
+    cat(" --> Not significantly different\n\n")
+  }
+}
+
+cat("The 'p adj' is crucial - it's adjusted for multiple comparisons.\n")
+cat("Without this adjustment, we'd have a ~14% chance of a false positive\n")
+cat("across 3 tests. Tukey keeps our overall error rate at 5%.")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key columns in Tukey output:
+
+| Column | Meaning |
+|--------|---------|
+| **diff** | Mean difference (Group1 - Group2) |
+| **lwr, upr** | 95% confidence interval |
+| **p adj** | Adjusted p-value |
+
+::: {.callout-note}
+**Decision rule**: If p adj < .05, the pair differs significantly
+:::
+
+---
+
+## Interpreting the Results
+
+| Comparison | diff | p adj | Significant? |
+|------------|------|-------|--------------|
+| Self-Test vs Elab | ~1.85 | ~0.28 | No |
+| Reread vs Elab | ~-4.75 | ~0.0005 | Yes *** |
+| Reread vs Self-Test | ~-6.60 | <.001 | Yes *** |
+
+**Conclusion**: Rereading is significantly worse than both other methods!
+
+---
+
+## Visualising Tukey Results {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+plot(TukeyHSD(model))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+plot(TukeyHSD(model))
+```
+
+:::
+
+**Rule**: If CI crosses 0 → NOT significant
+
+---
+
+## Interpreting the Plot
+
+-   Each horizontal line = 95% CI for a difference
+-   **Crosses 0**: Not significant (groups similar)
+-   **Doesn't cross 0**: Significant (groups differ)
+-   Direction shows which group is higher/lower
+
+---
+
+## When to Use Post-Hoc Tests
+
+::: {.callout-important}
+## Golden Rule
+Only run post-hoc tests if the overall ANOVA is **significant**!
+:::
+
+If ANOVA is not significant:
+
+-   No evidence that groups differ
+-   Post-hoc tests would be meaningless
+-   Stop at the ANOVA result
+
+---
+
+## Common Mistakes
+
+1. **Running post-hocs without significant ANOVA**
+2. **Using multiple t-tests instead** (inflates error)
+3. **Forgetting to report adjusted p-values**
+4. **Not interpreting the direction of differences**
+
+---
+
+## Summary: Post-Hoc Tests {.center background-color="#2C3E50"}
+
+-   Use **after significant ANOVA** only
+-   `TukeyHSD(model)` compares all pairs
+-   Look at **p adj** column for significance
+-   CIs that **include 0** = not significant
+-   Report which specific groups differ
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Run Tukey's HSD on your ANOVA model
+2. Identify which pairs differ
+3. Create the Tukey plot
+4. Write a summary of findings
+:::

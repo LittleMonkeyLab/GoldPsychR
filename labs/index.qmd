@@ -9,6 +9,9 @@ Each week's lab includes multiple resources. Use them in order during lab sessio
 | Week | Topic | Materials |
 |:----:|-------|-----------|
 | 1 | Descriptive Statistics | [Lab Overview](lab01.qmd) |
+| 2 | T-Tests | [Lab Overview](lab02.qmd) |
+| 3 | ANOVA | [Lab Overview](lab03.qmd) |
+| 4 | Correlation & Regression | [Lab Overview](lab04.qmd) |
 
 # Learning Pathway
 

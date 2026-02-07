@@ -1,0 +1,145 @@
+---
+title: "Part 3: Post-Hoc Tests"
+subtitle: "Lab 3: ANOVA"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part3-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the ANOVA first** to see it's significant
+2. **Apply Tukey's HSD** to find which groups differ
+3. **Interpret** the pairwise comparisons
+:::
+
+### First: Confirm ANOVA is Significant
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Fit the model
+model <- aov(recall ~ method, data = study_data)
+summary(model)
+```
+
+### Run Tukey's HSD
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+model <- aov(recall ~ method, data = study_data)
+
+# Tukey's Honestly Significant Difference
+TukeyHSD(model)
+```
+
+::: {.callout-note}
+## Reading the Output
+- **diff**: Mean difference between groups
+- **lwr, upr**: 95% CI for the difference
+- **p adj**: Adjusted p-value (compare to 0.05)
+:::
+
+### Visualise Tukey Results
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+model <- aov(recall ~ method, data = study_data)
+tukey_results <- TukeyHSD(model)
+
+# Plot the confidence intervals
+plot(tukey_results)
+```
+
+### Interpreting the Plot
+
+```{webr-r}
+cat("How to read the Tukey plot:\n\n")
+cat("- Each line shows a 95% CI for a pairwise difference\n")
+cat("- If the CI crosses 0: NOT significant\n")
+cat("- If the CI does NOT cross 0: SIGNIFICANT\n")
+cat("- Lines entirely to one side of 0 indicate a real difference")
+```
+
+### Extract Specific Comparisons
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+model <- aov(recall ~ method, data = study_data)
+tukey <- TukeyHSD(model)
+
+# Get the method comparisons
+cat("Pairwise Comparisons:\n\n")
+print(round(tukey$method, 3))
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. Post-hoc tests are used:**
+
+`r mcq(c("Before running ANOVA", "Instead of ANOVA", answer = "After a significant ANOVA result", "With only 2 groups"))`
+
+**2. Tukey's HSD stands for:**
+
+`r mcq(c("Highly Sensitive Difference", answer = "Honestly Significant Difference", "Hypothesis Significance Determination", "High Standard Deviation"))`
+
+**3. If a Tukey CI includes zero, the comparison is `r fitb("not significant", width = 15)`.**
+
+**4. True or False: Tukey's test adjusts p-values to control family-wise error rate.**
+
+`r torf(TRUE)`
+
+**5. You should only run post-hoc tests if the overall ANOVA is:**
+
+`r mcq(c("Non-significant", answer = "Significant", "Exactly p = .05", "Based on large samples"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 2](part2.qmd){.btn .btn-secondary}
+
+[Continue to Part 4: Two-Way ANOVA →](part4.qmd){.btn .btn-primary}
+:::

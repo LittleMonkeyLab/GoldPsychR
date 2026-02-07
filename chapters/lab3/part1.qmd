@@ -1,0 +1,167 @@
+---
+title: "Part 1: Introduction to ANOVA"
+subtitle: "Lab 3: ANOVA"
+format: html
+filters:
+  - webr
+webr:
+  packages: []
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below. You can advance slides with the arrow keys or click the arrows.
+
+```{=html}
+<iframe src="part1-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+Now practice what you just learned! The code cells below are **interactive**.
+
+::: {.callout-tip}
+## How to Practice
+1. **Click "Run Code"** to execute the code and see the result
+2. **Edit the code directly** - change values and see what happens
+3. **Experiment freely** - you can't break anything!
+:::
+
+### Why Not Multiple T-Tests?
+
+If we have 3 groups and do all pairwise t-tests:
+
+```{webr-r}
+# Number of comparisons with 3 groups
+groups <- 3
+comparisons <- (groups * (groups - 1)) / 2
+cat("Number of pairwise comparisons:", comparisons, "\n")
+
+# Family-wise error rate
+alpha <- 0.05
+familywise_error <- 1 - (1 - alpha)^comparisons
+cat("Family-wise error rate:", round(familywise_error, 3))
+```
+
+::: {.callout-note}
+## Challenge
+Try changing `groups <- 3` to `groups <- 5`. How does the family-wise error rate change?
+:::
+
+### Understanding Variance
+
+ANOVA partitions total variance into components:
+
+```{webr-r}
+# Simulated data: 3 groups
+set.seed(42)
+group_a <- rnorm(10, mean = 10, sd = 2)
+group_b <- rnorm(10, mean = 15, sd = 2)
+group_c <- rnorm(10, mean = 12, sd = 2)
+
+# Grand mean
+all_scores <- c(group_a, group_b, group_c)
+grand_mean <- mean(all_scores)
+
+cat("Grand mean:", round(grand_mean, 2), "\n")
+cat("Group A mean:", round(mean(group_a), 2), "\n")
+cat("Group B mean:", round(mean(group_b), 2), "\n")
+cat("Group C mean:", round(mean(group_c), 2))
+```
+
+### The F-Ratio Concept
+
+```{webr-r}
+# Conceptual demonstration
+between_variance <- 25  # Variance between group means
+within_variance <- 5    # Variance within groups
+
+F_ratio <- between_variance / within_variance
+cat("Between-group variance:", between_variance, "\n")
+cat("Within-group variance:", within_variance, "\n")
+cat("F-ratio:", F_ratio, "\n\n")
+
+cat("Large F = groups differ more than expected by chance")
+```
+
+---
+
+## Self-Assessment
+
+Check your understanding before moving on.
+
+::: {.webex-check .webex-box}
+
+**1. ANOVA is used to compare:**
+
+`r mcq(c("Two groups only", "A sample to a population", answer = "Three or more groups", "Paired observations"))`
+
+**2. The F-ratio compares:**
+
+`r mcq(c("Sample means directly", answer = "Between-group variance to within-group variance", "Standard deviations", "Effect sizes"))`
+
+**3. Running multiple t-tests instead of ANOVA increases the risk of Type `r fitb("I", width = 3)` error.**
+
+**4. True or False: ANOVA tells us which specific groups differ from each other.**
+
+`r torf(FALSE)`
+
+**5. If between-group variance is large relative to within-group variance, the F-ratio will be:**
+
+`r mcq(c("Close to 0", "Close to 1", answer = "Greater than 1", "Negative"))`
+
+:::
+
+---
+
+## Download Exercise
+
+Ready to practice in RStudio? Follow these steps:
+
+### ![](/assets/images/svg/download.svg){width=24} Step 1: Download the File
+
+```{r}
+#| echo: false
+downloadthis::download_file(
+  path = "../../templates/lab3-exercise.qmd",
+  output_name = "lab3-exercise",
+  button_label = "Download Exercise (.qmd)",
+  button_type = "warning",
+  icon = "fa fa-download",
+  class = "btn-lg"
+)
+```
+
+### Step 2: Open RStudio Server
+
+1. Go to [RStudio Server](https://psy909.gold.ac.uk/rstudioserver/)
+2. Log in with `yourusername@campus.goldsmiths.ac.uk`
+
+### Step 3: Create Folder and Upload
+
+1. Create a folder called `RLab3`
+2. Upload `lab3-exercise.qmd` to the folder
+3. Open the file and change your name
+4. Click Render to test it works!
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Lab 3 Overview](../../labs/lab03.qmd){.btn .btn-secondary}
+
+[Continue to Part 2: One-Way ANOVA →](part2.qmd){.btn .btn-primary}
+:::

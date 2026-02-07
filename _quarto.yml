@@ -69,7 +69,22 @@ website:
           #   href: followon/lab1-followon.qmd
           # - text: "Exercise Template"
           #   href: templates/lab1-exercise.qmd
-      
+
+      - section: "Lab 2: T-Tests"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab02.qmd
+
+      - section: "Lab 3: ANOVA"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab03.qmd
+
+      - section: "Lab 4: Correlation & Regression"
+        contents:
+          - text: "Lab Materials"
+            href: labs/lab04.qmd
+
       - text: "---"
       
       - section: "R Toolbox"
@@ -78,6 +93,29 @@ website:
             href: toolbox/index.qmd
           - text: "R Handbook (Single Page)"
             href: r-handbook.qmd
+
+      - section: "Boil in the Bag"
+        contents:
+          - text: "All Templates"
+            href: boil_in_the_bag/00_index.qmd
+          - text: "Independent T-Test"
+            href: boil_in_the_bag/01_independent_ttest.qmd
+          - text: "Paired T-Test"
+            href: boil_in_the_bag/02_paired_ttest.qmd
+          - text: "One-Way ANOVA"
+            href: boil_in_the_bag/03_oneway_anova.qmd
+          - text: "Factorial ANOVA"
+            href: boil_in_the_bag/04_factorial_anova.qmd
+          - text: "Repeated Measures ANOVA"
+            href: boil_in_the_bag/05_repeated_measures_anova.qmd
+          - text: "Mixed ANOVA"
+            href: boil_in_the_bag/06_mixed_anova.qmd
+          - text: "Simple Regression"
+            href: boil_in_the_bag/07_simple_regression.qmd
+          - text: "Multiple Regression (2 pred)"
+            href: boil_in_the_bag/08_multiple_regression_2pred.qmd
+          - text: "Multiple Regression (3 pred)"
+            href: boil_in_the_bag/09_multiple_regression_3pred.qmd
           # - text: "Setup & Installation"
           #   href: toolbox/setup.qmd
           # - text: "Importing Data"

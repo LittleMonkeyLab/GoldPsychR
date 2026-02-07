@@ -1,0 +1,248 @@
+---
+title: "Boil in the Bag: Independent Samples t-test"
+subtitle: "Comparing two independent groups"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have two different groups of participants and want to compare their scores on a continuous outcome variable.
+
+**Example scenarios:**
+- Control vs Treatment groups
+- Male vs Female comparison
+- Before vs After (different people)
+
+## Step 1: Setup
+
+Load the required packages.
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)  # For Cohen's d
+```
+
+## Step 2: Load Your Data
+
+Replace the file path with your own data file.
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/independent_ttest_data.csv")
+
+# View the structure
+glimpse(data)
+```
+
+## Step 3: Define Your Variables
+
+ **CHANGE THESE** to match your variable names:
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+group_var <- "group"      # Your grouping variable (categorical, 2 levels)
+outcome_var <- "score"    # Your outcome variable (continuous)
+
+# Convert to factor if needed
+data <- data |>
+  mutate(across(all_of(group_var), as.factor))
+
+# Check the levels
+cat("Group levels:", levels(data[[group_var]]))
+```
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+# Descriptives by group
+descriptives <- data |>
+  group_by(.data[[group_var]]) |>
+  summarise(
+    n = n(),
+    mean = mean(.data[[outcome_var]], na.rm = TRUE),
+    sd = sd(.data[[outcome_var]], na.rm = TRUE),
+    se = sd / sqrt(n),
+    min = min(.data[[outcome_var]], na.rm = TRUE),
+    max = max(.data[[outcome_var]], na.rm = TRUE)
+  )
+
+print(descriptives)
+```
+
+### Visualise the Data
+
+```{r}
+#| label: visualise
+#| fig-cap: "Comparison of groups"
+
+ggplot(data, aes(x = .data[[group_var]], y = .data[[outcome_var]], fill = .data[[group_var]])) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "red") +
+  labs(
+    x = "Group",
+    y = "Score",
+    title = "Distribution by Group"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Step 5: Check Assumptions
+
+### Assumption 1: Normality
+
+Check normality within each group using Shapiro-Wilk test.
+
+```{r}
+#| label: normality
+
+# Shapiro-Wilk test per group
+data |>
+  group_by(.data[[group_var]]) |>
+  summarise(
+    shapiro_W = shapiro.test(.data[[outcome_var]])$statistic,
+    shapiro_p = shapiro.test(.data[[outcome_var]])$p.value
+  )
+```
+
+**Interpretation:** p > .05 suggests normality is acceptable.
+
+### Visual Check: Q-Q Plots
+
+```{r}
+#| label: qq-plots
+#| fig-cap: "Q-Q plots by group"
+
+ggplot(data, aes(sample = .data[[outcome_var]])) +
+  stat_qq() +
+  stat_qq_line() +
+  facet_wrap(as.formula(paste("~", group_var))) +
+  labs(title = "Q-Q Plots by Group") +
+  theme_minimal()
+```
+
+### Assumption 2: Homogeneity of Variance
+
+Levene's test for equality of variances.
+
+```{r}
+#| label: levene
+
+# Levene's test
+library(car)
+leveneTest(as.formula(paste(outcome_var, "~", group_var)), data = data)
+```
+
+**Interpretation:** p > .05 suggests equal variances (use Student's t-test). p < .05 suggests unequal variances (use Welch's t-test).
+
+## Step 6: Run the t-test
+
+### Welch's t-test (default, does not assume equal variances)
+
+```{r}
+#| label: welch-ttest
+
+# Welch's t-test (default)
+t_result <- t.test(
+  as.formula(paste(outcome_var, "~", group_var)),
+  data = data,
+  var.equal = FALSE  # Welch's t-test
+)
+
+print(t_result)
+```
+
+### Student's t-test (if Levene's test was non-significant)
+
+```{r}
+#| label: student-ttest
+
+# Student's t-test (assumes equal variances)
+t_result_student <- t.test(
+  as.formula(paste(outcome_var, "~", group_var)),
+  data = data,
+  var.equal = TRUE  # Student's t-test
+)
+
+print(t_result_student)
+```
+
+## Step 7: Effect Size
+
+Calculate Cohen's d.
+
+```{r}
+#| label: effect-size
+
+# Cohen's d
+d <- cohens_d(
+  as.formula(paste(outcome_var, "~", group_var)),
+  data = data
+)
+
+print(d)
+```
+
+**Interpretation:** |d| = 0.2 (small), 0.5 (medium), 0.8 (large)
+
+## Step 8: Summary of Results
+
+```{r}
+#| label: summary
+
+cat("=== INDEPENDENT SAMPLES T-TEST RESULTS ===\n\n")
+
+cat("DESCRIPTIVES:\n")
+for (i in 1:nrow(descriptives)) {
+  cat(sprintf("  %s: M = %.2f, SD = %.2f, n = %d\n",
+              descriptives[[group_var]][i],
+              descriptives$mean[i],
+              descriptives$sd[i],
+              descriptives$n[i]))
+}
+
+cat("\nINFERENTIAL STATISTICS:\n")
+cat(sprintf("  t(%.2f) = %.2f, p = %.3f\n",
+            t_result$parameter,
+            t_result$statistic,
+            t_result$p.value))
+
+cat(sprintf("  95%% CI for difference: [%.2f, %.2f]\n",
+            t_result$conf.int[1],
+            t_result$conf.int[2]))
+
+cat(sprintf("  Cohen's d = %.2f [%.2f, %.2f]\n",
+            d$Cohens_d,
+            d$CI_low,
+            d$CI_high))
+```
+
+## Step 9: APA Write-Up Template
+
+Copy and fill in the blanks:
+
+::: {.callout-note}
+## APA Format
+
+An independent samples t-test was conducted to compare [OUTCOME] between [GROUP 1] and [GROUP 2]. There was a [significant/non-significant] difference between [GROUP 1] (*M* = XX.XX, *SD* = XX.XX) and [GROUP 2] (*M* = XX.XX, *SD* = XX.XX), *t*(XX.XX) = XX.XX, *p* = .XXX, *d* = X.XX, 95% CI [X.XX, X.XX].
+:::
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Variables renamed to match your data
+- [ ] Normality checked (Shapiro-Wilk, Q-Q plots)
+- [ ] Homogeneity of variance checked (Levene's test)
+- [ ] Correct t-test chosen (Welch's or Student's)
+- [ ] Effect size calculated (Cohen's d)
+- [ ] Results interpreted

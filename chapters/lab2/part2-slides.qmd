@@ -1,0 +1,487 @@
+---
+title: "Part 2: One-Sample T-Test"
+subtitle: "Lab 2: T-Tests"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 2, Part 2"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## One-Sample T-Test {.center background-color="#2C3E50"}
+
+**Comparing a Sample to a Known Value**
+
+---
+
+## When to Use It
+
+Use a one-sample t-test when:
+
+-   You have **one sample** of continuous data
+-   You have a **known population value** to compare against
+-   You want to test if your sample is "typical" of the population
+
+:::: columns
+::: {.column width="50%"}
+**Examples:**
+
+- Is student IQ different from 100?
+- Is reaction time different from established norms?
+- Is our sample's anxiety level different from the population?
+:::
+
+::: {.column width="50%"}
+**Our Question:**
+
+Is our sample's mean anxiety different from the population mean of 50?
+:::
+::::
+
+---
+
+## The Hypotheses
+
+:::: columns
+::: {.column width="50%"}
+**Null Hypothesis (H₀)**
+
+$$\mu_{sample} = \mu_{population}$$
+
+The sample comes from a population with this mean.
+:::
+
+::: {.column width="50%"}
+**Alternative Hypothesis (H₁)**
+
+$$\mu_{sample} \neq \mu_{population}$$
+
+The sample does NOT come from that population.
+:::
+::::
+
+---
+
+## The Formula
+
+$$t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$$
+
+Where:
+
+-   $\bar{x}$ = sample mean
+-   $\mu_0$ = hypothesised population mean
+-   $s$ = sample standard deviation
+-   $n$ = sample size
+
+---
+
+## Loading the Data {background-color="#f0f0f0"}
+
+First, load the dataset from GitHub:
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(anxiety_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(anxiety_data)
+```
+
+:::
+
+---
+
+## Descriptive Statistics {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+mean(anxiety_data$anxiety_pre)
+sd(anxiety_data$anxiety_pre)
+length(anxiety_data$anxiety_pre)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+mean(anxiety_data$anxiety_pre)
+sd(anxiety_data$anxiety_pre)
+length(anxiety_data$anxiety_pre)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+m <- round(mean(anxiety_data$anxiety_pre), 2)
+s <- round(sd(anxiety_data$anxiety_pre), 2)
+n <- length(anxiety_data$anxiety_pre)
+
+cat("Before running any test, always get a feel for your data. Here we have\n")
+cat(n, "participants with a mean anxiety score of", m, "and a standard\n")
+cat("deviation of", s, ". The population benchmark is 50.\n\n")
+
+cat("Notice the sample mean of", m, "is", ifelse(m > 50, "above", "below"), "50 - but\n")
+cat("is that difference meaningful or just random sampling variation? That's\n")
+cat("exactly what the t-test will tell us. The SD of", s, "gives us a sense\n")
+cat("of how spread out scores are - you'll need this for your results section.\n\n")
+
+cat("For APA reporting, you'd write: 'Pre-intervention anxiety scores\n")
+cat("(M =", m, ", SD =", s, ") were compared to the population mean of 50.'")
+```
+
+:::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+t.test(variable, mu = population_mean)
+```
+
+This reads: **"Test if the variable's mean differs from the population mean"**
+
+---
+
+## Running the T-Test {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, mu = 50)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, mu = 50)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- t.test(anxiety_data$anxiety_pre, mu = 50)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m <- round(mean(anxiety_data$anxiety_pre), 2)
+
+cat("Your t-value of", round(result$statistic, 2), "tells us how far the sample\n")
+cat("mean is from 50, measured in standard errors. Think of it as a signal-to-noise\n")
+cat("ratio: bigger t means clearer signal.\n\n")
+
+cat("With", result$parameter, "degrees of freedom (your sample size minus 1), this\n")
+cat("t-value gives us", p_text, ". ", sep = "")
+if(result$p.value < 0.05) {
+  cat("Since p < .05, we reject the null\n")
+  cat("hypothesis - the sample mean of", m, "is significantly different from 50.\n\n")
+} else {
+  cat("Since p >= .05, we can't reject the null\n")
+  cat("hypothesis - the difference from 50 could be due to chance.\n\n")
+}
+
+cat("In your results section: 'A one-sample t-test revealed that pre-intervention\n")
+cat("anxiety scores (M =", m, ") differed significantly from the population\n")
+cat("benchmark, t(", result$parameter, ") = ", round(result$statistic, 2),
+    ", ", p_text, ".'", sep = "")
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key values to extract:
+
+| Component | What to look for |
+|-----------|------------------|
+| **t** | Test statistic |
+| **df** | Degrees of freedom (n-1) |
+| **p-value** | Is it < .05? |
+| **95% CI** | Does it include μ₀? |
+| **mean of x** | Sample mean |
+
+::: {.callout-note}
+**Decision rule**: If p < .05, reject H₀
+:::
+
+---
+
+## Visualising the Comparison {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+hist(anxiety_data$anxiety_pre,
+     main = "Pre-Test Anxiety Distribution",
+     xlab = "Anxiety Score", col = "lightblue")
+abline(v = 50, col = "red", lwd = 2, lty = 2)
+abline(v = mean(anxiety_data$anxiety_pre), col = "blue", lwd = 2)
+legend("topright", c("Population (50)", "Sample mean"),
+       col = c("red", "blue"), lwd = 2)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+hist(anxiety_data$anxiety_pre,
+     main = "Pre-Test Anxiety Distribution",
+     xlab = "Anxiety Score", col = "lightblue")
+abline(v = 50, col = "red", lwd = 2, lty = 2)
+abline(v = mean(anxiety_data$anxiety_pre), col = "blue", lwd = 2)
+legend("topright", c("Population (50)", "Sample mean"),
+       col = c("red", "blue"), lwd = 2)
+```
+
+:::
+
+---
+
+## Checking Assumptions {background-color="#f0f0f0"}
+
+**Normality**: Data should be approximately normal
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+shapiro.test(anxiety_data$anxiety_pre)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+shapiro.test(anxiety_data$anxiety_pre)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- shapiro.test(anxiety_data$anxiety_pre)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+n <- length(anxiety_data$anxiety_pre)
+
+cat("The Shapiro-Wilk test checks whether your data are normally distributed.\n")
+cat("Here W =", round(result$statistic, 3), "with", p_text, ".\n\n")
+
+cat("This is one of those backwards tests: you WANT a non-significant p-value!\n")
+if(result$p.value > 0.05) {
+  cat("Since p > .05, we conclude the data don't deviate significantly from\n")
+  cat("normality - the assumption is met.\n\n")
+} else {
+  cat("Since p < .05, the data deviate significantly from normality.\n")
+  cat("But don't panic - t-tests are robust with larger samples.\n\n")
+}
+
+cat("With n =", n, ",", ifelse(n > 30, "you have a reasonably large sample,\n", "your sample is on the smaller side, but\n"))
+cat("so even mild violations of normality aren't usually a problem. You rarely\n")
+cat("need to report this test formally, but it's good practice to check.\n")
+cat("Visual inspection with a histogram or Q-Q plot is often more informative.")
+```
+
+:::
+
+::: {.callout-tip}
+If p > .05, normality assumption is met. With n > 30, t-tests are robust to violations.
+:::
+
+---
+
+## One-Tailed vs Two-Tailed
+
+**Two-tailed** (default): Different in either direction
+
+```r
+t.test(x, mu = 50)  # Two-tailed
+```
+
+**One-tailed**: Different in a specific direction
+
+```r
+t.test(x, mu = 50, alternative = "greater")  # Greater than 50
+t.test(x, mu = 50, alternative = "less")     # Less than 50
+```
+
+---
+
+## Try It: Different Population Mean {background-color="#f0f0f0"}
+
+What if we test against mu = 52 instead?
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, mu = 52)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+t.test(anxiety_data$anxiety_pre, mu = 52)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- t.test(anxiety_data$anxiety_pre, mu = 52)
+result50 <- t.test(anxiety_data$anxiety_pre, mu = 50)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+m <- round(mean(anxiety_data$anxiety_pre), 2)
+
+cat("Now we're testing against μ = 52 instead of 50. Our sample mean is still", m, ",\n")
+cat("but the question changes: is our sample different from 52?\n\n")
+
+cat("Compare the results:\n")
+cat("  Against 50: t =", round(result50$statistic, 2), "\n")
+cat("  Against 52: t =", round(result$statistic, 2), "\n\n")
+
+cat("Notice the t-value", ifelse(abs(result$statistic) < abs(result50$statistic), "shrinks", "changes"),
+    " because the distance between\n")
+cat("the sample mean and test value is now", ifelse(abs(m - 52) < abs(m - 50), "smaller", "larger"),
+    ". This is a key insight:\n")
+cat("the SAME data can give different conclusions depending on your comparison\n")
+cat("value. The p-value is now", p_text, ".\n\n")
+
+cat("This matters for research design: your comparison value (50 vs 52) should\n")
+cat("come from theory or prior research, not picked after seeing your data!")
+```
+
+:::
+
+::: {.callout-note}
+## Notice
+The p-value changes because the difference between sample and population mean is smaller!
+:::
+
+---
+
+## Summary: One-Sample T-Test {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Compares sample mean to **known population value**
+-   Syntax: `t.test(x, mu = value)`
+-   Reports t, df, p-value, and confidence interval
+-   Reject H₀ if p < .05
+
+**Next**: Comparing two different groups!
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+Complete the one-sample t-test section:
+1. Load the data
+2. Run the t-test
+3. Interpret the results
+4. Answer the questions
+:::

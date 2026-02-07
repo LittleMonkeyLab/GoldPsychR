@@ -1,0 +1,309 @@
+---
+title: "Boil in the Bag: Multiple Regression (2 Predictors)"
+subtitle: "Two predictors, one outcome"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You want to predict a continuous outcome from two continuous (or categorical) predictors.
+
+**Example scenarios:**
+- Predicting anxiety from social media use AND age
+- Predicting performance from motivation AND ability
+- Predicting wellbeing from sleep quality AND exercise
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)
+library(car)  # For VIF
+```
+
+
+## Step 2: Load Your Data
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/multiple_regression_2pred_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+predictor1 <- "predictor1"   # First IV
+predictor2 <- "predictor2"   # Second IV
+outcome <- "outcome"         # DV
+```
+
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+# Summary statistics
+data |>
+  select(all_of(c(predictor1, predictor2, outcome))) |>
+  summary()
+
+# Means and SDs
+data |>
+  summarise(
+    across(all_of(c(predictor1, predictor2, outcome)),
+           list(mean = ~mean(., na.rm = TRUE),
+                sd = ~sd(., na.rm = TRUE)))
+  ) |>
+  pivot_longer(everything(),
+               names_to = c("variable", "stat"),
+               names_sep = "_") |>
+  pivot_wider(names_from = stat, values_from = value)
+```
+
+### Correlation Matrix
+
+```{r}
+#| label: correlations
+
+# Correlation matrix
+cor_matrix <- data |>
+  select(all_of(c(predictor1, predictor2, outcome))) |>
+  cor(use = "complete.obs")
+
+print(round(cor_matrix, 3))
+```
+
+### Visualise Relationships
+
+```{r}
+#| label: scatterplots
+#| fig-cap: "Scatterplots of predictors with outcome"
+
+# Predictor 1 vs Outcome
+p1 <- ggplot(data, aes(x = .data[[predictor1]], y = .data[[outcome]])) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(x = "Predictor 1", y = "Outcome") +
+  theme_minimal()
+
+# Predictor 2 vs Outcome
+p2 <- ggplot(data, aes(x = .data[[predictor2]], y = .data[[outcome]])) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(x = "Predictor 2", y = "Outcome") +
+  theme_minimal()
+
+library(patchwork)
+p1 + p2
+```
+
+
+## Step 5: Run the Multiple Regression
+
+```{r}
+#| label: regression
+
+model <- lm(as.formula(paste(outcome, "~", predictor1, "+", predictor2)),
+            data = data)
+
+summary(model)
+```
+
+
+## Step 6: Extract Key Statistics
+
+```{r}
+#| label: extract-stats
+
+model_summary <- summary(model)
+
+# Model fit
+r_squared <- model_summary$r.squared
+adj_r_squared <- model_summary$adj.r.squared
+
+# F-test
+f_stat <- model_summary$fstatistic[1]
+df1 <- model_summary$fstatistic[2]
+df2 <- model_summary$fstatistic[3]
+f_p <- pf(f_stat, df1, df2, lower.tail = FALSE)
+
+cat("Model R² =", round(r_squared, 3), "\n")
+cat("Adjusted R² =", round(adj_r_squared, 3), "\n")
+cat(sprintf("F(%d, %d) = %.2f, p = %.4f\n", df1, df2, f_stat, f_p))
+```
+
+
+## Step 7: Check Assumptions
+
+### 1. Linearity
+
+```{r}
+#| label: linearity
+#| fig-cap: "Residuals vs Fitted"
+
+plot(model, which = 1)
+```
+
+### 2. Normality of Residuals
+
+```{r}
+#| label: normality
+#| fig-cap: "Q-Q plot"
+
+plot(model, which = 2)
+
+shapiro.test(residuals(model))
+```
+
+### 3. Homoscedasticity
+
+```{r}
+#| label: homoscedasticity
+#| fig-cap: "Scale-Location plot"
+
+plot(model, which = 3)
+```
+
+### 4. Multicollinearity (VIF)
+
+```{r}
+#| label: vif
+
+vif_values <- vif(model)
+print(vif_values)
+
+cat("\nInterpretation:\n")
+cat("VIF < 5: OK\n")
+cat("VIF 5-10: Concerning\n")
+cat("VIF > 10: Serious multicollinearity\n")
+```
+
+### 5. Influential Cases
+
+```{r}
+#| label: influential
+#| fig-cap: "Cook's distance"
+
+plot(model, which = 4)
+```
+
+
+## Step 8: Confidence Intervals
+
+```{r}
+#| label: confidence-intervals
+
+confint(model)
+```
+
+
+## Step 9: Standardised Coefficients (Beta Weights)
+
+```{r}
+#| label: standardised
+
+# Standardise all variables
+data_z <- data |>
+  mutate(across(all_of(c(predictor1, predictor2, outcome)), scale))
+
+model_std <- lm(as.formula(paste(outcome, "~", predictor1, "+", predictor2)),
+                data = data_z)
+
+cat("Standardised coefficients (β):\n")
+coef(model_std)
+```
+
+
+## Step 10: Effect Sizes
+
+```{r}
+#| label: effect-size
+
+# Overall f²
+f_squared <- r_squared / (1 - r_squared)
+
+cat("Overall model:\n")
+cat("  R² =", round(r_squared, 3), "\n")
+cat("  f² =", round(f_squared, 3), "\n")
+
+# Unique contribution of each predictor (semi-partial correlations)
+# Can calculate by comparing R² of full model vs model without each predictor
+model_without_p1 <- lm(as.formula(paste(outcome, "~", predictor2)), data = data)
+model_without_p2 <- lm(as.formula(paste(outcome, "~", predictor1)), data = data)
+
+delta_r2_p1 <- r_squared - summary(model_without_p1)$r.squared
+delta_r2_p2 <- r_squared - summary(model_without_p2)$r.squared
+
+cat("\nUnique variance explained:\n")
+cat(sprintf("  %s: ΔR² = %.3f\n", predictor1, delta_r2_p1))
+cat(sprintf("  %s: ΔR² = %.3f\n", predictor2, delta_r2_p2))
+```
+
+
+## Step 11: Summary of Results
+
+```{r}
+#| label: summary
+
+coef_table <- coef(summary(model))
+
+cat("=== MULTIPLE REGRESSION RESULTS (2 PREDICTORS) ===\n\n")
+
+cat("MODEL FIT:\n")
+cat(sprintf("  R² = %.3f, Adjusted R² = %.3f\n", r_squared, adj_r_squared))
+cat(sprintf("  F(%d, %d) = %.2f, p = %.4f\n\n", df1, df2, f_stat, f_p))
+
+cat("COEFFICIENTS:\n")
+cat(sprintf("  Intercept: b = %.3f, SE = %.3f\n",
+            coef_table[1, 1], coef_table[1, 2]))
+cat(sprintf("  %s: b = %.3f, SE = %.3f, t = %.2f, p = %.4f\n",
+            predictor1, coef_table[2, 1], coef_table[2, 2],
+            coef_table[2, 3], coef_table[2, 4]))
+cat(sprintf("  %s: b = %.3f, SE = %.3f, t = %.2f, p = %.4f\n",
+            predictor2, coef_table[3, 1], coef_table[3, 2],
+            coef_table[3, 3], coef_table[3, 4]))
+
+cat("\nVIF values:", round(vif_values, 2), "\n")
+```
+
+
+## Step 12: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A multiple regression was conducted to predict [OUTCOME] from [PREDICTOR 1] and [PREDICTOR 2]. The overall model was [significant/non-significant], *F*(2, XX) = XX.XX, *p* = .XXX, explaining XX.X% of the variance in [OUTCOME] (*R*² = .XX, adjusted *R*² = .XX).
+
+[PREDICTOR 1] was a [significant/non-significant] predictor, *b* = X.XX, *SE* = X.XX, *t*(XX) = X.XX, *p* = .XXX, β = X.XX.
+
+[PREDICTOR 2] was a [significant/non-significant] predictor, *b* = X.XX, *SE* = X.XX, *t*(XX) = X.XX, *p* = .XXX, β = X.XX.
+
+Multicollinearity was not a concern (VIF = X.XX and X.XX for [PREDICTOR 1] and [PREDICTOR 2], respectively).
+:::
+
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Variables defined
+- [ ] Correlations examined
+- [ ] Regression model run
+- [ ] Assumptions checked (linearity, normality, homoscedasticity)
+- [ ] Multicollinearity checked (VIF)
+- [ ] Influential cases examined
+- [ ] Effect sizes calculated
+- [ ] Standardised coefficients obtained
+- [ ] Results interpreted

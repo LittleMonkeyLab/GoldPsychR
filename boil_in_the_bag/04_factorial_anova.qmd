@@ -1,0 +1,285 @@
+---
+title: "Boil in the Bag: Factorial ANOVA (2x2)"
+subtitle: "Two between-subjects factors with interaction"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have two categorical independent variables (between-subjects) and want to test their main effects and interaction on a continuous outcome.
+
+**Example scenarios:**
+- Treatment (drug vs placebo) × Gender (male vs female)
+- Condition (A vs B) × Age group (young vs old)
+- Framing (positive vs negative) × Information (present vs absent)
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)
+library(emmeans)
+library(afex)  # For nice ANOVA output
+```
+
+
+## Step 2: Load Your Data
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/factorial_anova_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+factor_a <- "factor_a"    # First IV (between-subjects)
+factor_b <- "factor_b"    # Second IV (between-subjects)
+outcome_var <- "score"    # DV (continuous)
+
+# Convert to factors
+data <- data |>
+  mutate(
+    across(all_of(c(factor_a, factor_b)), as.factor)
+  )
+
+cat("Factor A levels:", levels(data[[factor_a]]), "\n")
+cat("Factor B levels:", levels(data[[factor_b]]), "\n")
+```
+
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+# Cell means
+descriptives <- data |>
+  group_by(.data[[factor_a]], .data[[factor_b]]) |>
+  summarise(
+    n = n(),
+    mean = mean(.data[[outcome_var]], na.rm = TRUE),
+    sd = sd(.data[[outcome_var]], na.rm = TRUE),
+    se = sd / sqrt(n),
+    .groups = "drop"
+  )
+
+print(descriptives)
+
+# Marginal means for Factor A
+data |>
+  group_by(.data[[factor_a]]) |>
+  summarise(mean = mean(.data[[outcome_var]]), sd = sd(.data[[outcome_var]]))
+
+# Marginal means for Factor B
+data |>
+  group_by(.data[[factor_b]]) |>
+  summarise(mean = mean(.data[[outcome_var]]), sd = sd(.data[[outcome_var]]))
+```
+
+### Visualise: Interaction Plot
+
+```{r}
+#| label: interaction-plot
+#| fig-cap: "Interaction plot"
+
+ggplot(descriptives, aes(x = .data[[factor_a]], y = mean,
+                          color = .data[[factor_b]], group = .data[[factor_b]])) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.1) +
+  labs(
+    x = "Factor A",
+    y = "Mean Score",
+    color = "Factor B",
+    title = "Interaction Plot"
+  ) +
+  theme_minimal()
+```
+
+### Visualise: Box Plots
+
+```{r}
+#| label: boxplots
+#| fig-cap: "Distribution by condition"
+
+ggplot(data, aes(x = interaction(.data[[factor_a]], .data[[factor_b]]),
+                 y = .data[[outcome_var]],
+                 fill = .data[[factor_a]])) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  labs(
+    x = "Condition (Factor A . Factor B)",
+    y = "Score"
+  ) +
+  theme_minimal()
+```
+
+
+## Step 5: Check Assumptions
+
+### Normality per Cell
+
+```{r}
+#| label: normality
+
+data |>
+  group_by(.data[[factor_a]], .data[[factor_b]]) |>
+  summarise(
+    shapiro_p = shapiro.test(.data[[outcome_var]])$p.value,
+    .groups = "drop"
+  )
+```
+
+### Homogeneity of Variance
+
+```{r}
+#| label: levene
+
+library(car)
+leveneTest(as.formula(paste(outcome_var, "~", factor_a, "*", factor_b)), data = data)
+```
+
+
+## Step 6: Run the Factorial ANOVA
+
+### Using Base R
+
+```{r}
+#| label: anova-base
+
+anova_model <- aov(
+  as.formula(paste(outcome_var, "~", factor_a, "*", factor_b)),
+  data = data
+)
+
+summary(anova_model)
+```
+
+### Using afex (nicer output with effect sizes)
+
+```{r}
+#| label: anova-afex
+
+anova_afex <- aov_ez(
+  id = "id",
+  dv = outcome_var,
+  data = data,
+  between = c(factor_a, factor_b)
+)
+
+# Nice summary table
+nice(anova_afex)
+```
+
+
+## Step 7: Effect Sizes
+
+```{r}
+#| label: effect-size
+
+eta <- eta_squared(anova_model)
+print(eta)
+```
+
+
+## Step 8: Post-Hoc Comparisons
+
+### Simple Effects (if interaction is significant)
+
+```{r}
+#| label: simple-effects
+
+emm <- emmeans(anova_model, specs = c(factor_a, factor_b))
+
+# Simple effects of Factor A at each level of Factor B
+pairs(emm, by = factor_b)
+
+# Simple effects of Factor B at each level of Factor A
+pairs(emm, by = factor_a)
+```
+
+### Main Effect Comparisons (if main effects significant)
+
+```{r}
+#| label: main-effects
+
+# Factor A marginal means
+emmeans(anova_model, specs = factor_a) |> pairs()
+
+# Factor B marginal means
+emmeans(anova_model, specs = factor_b) |> pairs()
+```
+
+
+## Step 9: Summary of Results
+
+```{r}
+#| label: summary
+
+anova_table <- summary(anova_model)[[1]]
+
+cat("=== FACTORIAL ANOVA RESULTS ===\n\n")
+
+cat("CELL MEANS:\n")
+print(descriptives)
+
+cat("\nANOVA TABLE:\n")
+cat(sprintf("  %s: F(%d, %d) = %.2f, p = %.3f, η² = %.3f\n",
+            factor_a,
+            anova_table$Df[1], anova_table$Df[4],
+            anova_table$`F value`[1], anova_table$`Pr(>F)`[1],
+            eta$Eta2[1]))
+cat(sprintf("  %s: F(%d, %d) = %.2f, p = %.3f, η² = %.3f\n",
+            factor_b,
+            anova_table$Df[2], anova_table$Df[4],
+            anova_table$`F value`[2], anova_table$`Pr(>F)`[2],
+            eta$Eta2[2]))
+cat(sprintf("  %s × %s: F(%d, %d) = %.2f, p = %.3f, η² = %.3f\n",
+            factor_a, factor_b,
+            anova_table$Df[3], anova_table$Df[4],
+            anova_table$`F value`[3], anova_table$`Pr(>F)`[3],
+            eta$Eta2[3]))
+```
+
+
+## Step 10: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A 2 × 2 between-subjects ANOVA was conducted to examine the effects of [FACTOR A] and [FACTOR B] on [OUTCOME].
+
+There was a [significant/non-significant] main effect of [FACTOR A], *F*(1, XX) = XX.XX, *p* = .XXX, η² = .XX.
+
+There was a [significant/non-significant] main effect of [FACTOR B], *F*(1, XX) = XX.XX, *p* = .XXX, η² = .XX.
+
+The interaction between [FACTOR A] and [FACTOR B] was [significant/non-significant], *F*(1, XX) = XX.XX, *p* = .XXX, η² = .XX.
+
+[If interaction significant:] Simple effects analysis revealed that [describe the pattern of the interaction].
+:::
+
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Both factors defined as factors
+- [ ] Cell means and marginal means calculated
+- [ ] Interaction plot created
+- [ ] Assumptions checked
+- [ ] Factorial ANOVA run
+- [ ] Effect sizes calculated
+- [ ] Simple effects explored (if interaction significant)
+- [ ] Results interpreted

@@ -1,0 +1,141 @@
+---
+title: "Lab 3: ANOVA"
+subtitle: "Study Techniques & Comparing Multiple Groups"
+format: html
+---
+
+## Overview
+
+In this lab, you'll learn to compare three or more groups using ANOVA. Every part follows the same **3-step cycle**:
+
+1. **Watch** - Follow along with the instructor slides (embedded below)
+2. **Try** - Practice with interactive code cells on the activity page
+3. **Do** - Complete exercises in your downloaded notebook in RStudio Server
+
+Work through each part in order, and don't skip steps!
+
+---
+
+## Lab Parts
+
+Work through each part in order:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/brain.svg){width=24} Part 1: Introduction to ANOVA
+- When t-tests aren't enough
+- The logic of ANOVA
+- F-ratio explained
+
+[**Start Part 1**](part1.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=24} Part 2: One-Way ANOVA
+- Comparing 3+ groups
+- Using `aov()` function
+- Interpreting output
+
+[**Start Part 2**](part2.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/target.svg){width=24} Part 3: Post-Hoc Tests
+- Tukey's HSD
+- Pairwise comparisons
+- Controlling Type I error
+
+[**Start Part 3**](part3.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/group.svg){width=24} Part 4: Two-Way ANOVA
+- Factorial designs
+- Main effects
+- Interaction effects
+
+[**Start Part 4**](part4.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=24} Part 5: Effect Sizes & Reporting
+- Eta-squared (η²)
+- APA-style results
+- Professional write-up
+
+[**Start Part 5**](part5.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=24} Extra Practice
+Apply your skills to a new dataset.
+
+[**Follow-On Exercise**](../../followon/lab3-followon.qmd){.btn .btn-secondary}
+:::
+
+::::
+
+---
+
+## ![](/assets/images/svg/target.svg){width=24} Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Explain when to use ANOVA instead of t-tests
+- Conduct a one-way ANOVA using `aov()`
+- Interpret F-ratios and p-values from ANOVA output
+- Conduct Tukey's HSD post-hoc comparisons
+- Conduct a two-way (factorial) ANOVA
+- Identify and interpret main effects and interactions
+- Calculate and interpret eta-squared (η²)
+- Write APA-style ANOVA results
+
+---
+
+## The Data Story
+
+We've collected data from a Study Techniques experiment:
+
+- **120 university students** participated in a memory test
+- Students used one of **three study methods**: Rereading, Self-Testing, or Elaboration
+- Half studied in the **Morning**, half in the **Evening**
+- Outcome: Number of items correctly recalled (0-30)
+
+**Our research questions**:
+1. Do the three study methods differ in effectiveness?
+2. Does time of day affect memory performance?
+3. Is there an interaction between study method and time of day?
+
+::: {.callout-note}
+![](/assets/images/svg/brain.svg){width=20 style="float: left; margin-right: 10px;"}
+
+## The Testing Effect
+
+Research consistently shows that self-testing is more effective than rereading for long-term retention - this is called the "testing effect."
+:::
+
+::: {.callout-tip}
+## Recommended Setup
+Keep this page open in one browser tab and RStudio Server in another. That's all you need!
+:::
+
+---
+
+## Need Help?
+
+::: {.callout-note}
+![](/assets/images/svg/help.svg){width=20 style="float: left; margin-right: 10px;"}
+
+- **During the lab**: Ask your instructor
+- **Reference**: Check the [R Toolbox](../../toolbox/index.qmd) for code examples
+- **Errors**: See the [Troubleshooting Guide](../../toolbox/troubleshooting.qmd)
+:::

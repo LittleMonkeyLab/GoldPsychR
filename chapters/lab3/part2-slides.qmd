@@ -1,0 +1,430 @@
+---
+title: "Part 2: One-Way ANOVA"
+subtitle: "Lab 3: ANOVA"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 3, Part 2"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## One-Way ANOVA {.center background-color="#2C3E50"}
+
+**Comparing Means Across 3+ Groups**
+
+---
+
+## When to Use It
+
+Use one-way ANOVA when:
+
+-   You have **one categorical IV** (factor) with 3+ levels
+-   You have **one continuous DV**
+-   You want to compare group means
+
+:::: columns
+::: {.column width="50%"}
+**Our Design:**
+
+| Method | Description |
+|--------|-------------|
+| Rereading | Traditional rereading |
+| Self-Testing | Practice retrieval |
+| Elaboration | Creating connections |
+:::
+
+::: {.column width="50%"}
+**Our Question:**
+
+Do the three study methods differ in recall performance?
+:::
+::::
+
+---
+
+## Loading the Data {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(study_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(study_data)
+```
+
+:::
+
+---
+
+## Check Group Sizes {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+table(study_data$method)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+table(study_data$method)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+methods <- unique(study_data$method)
+ns <- sapply(methods, function(m) sum(study_data$method == m))
+total <- sum(ns)
+
+cat("Checking your group sizes before ANOVA:\n")
+for(i in 1:length(methods)) {
+  cat("  ", methods[i], ":", ns[i], "participants\n")
+}
+cat("\nTotal N =", total, "\n\n")
+
+if(length(unique(ns)) == 1) {
+  cat("You have a balanced design - equal n in each group. This is ideal!\n")
+  cat("ANOVA is most powerful and robust when groups are equal-sized.\n")
+  cat("It also simplifies interpretation since each group contributes\n")
+  cat("equally to the overall analysis.\n")
+} else {
+  cat("Groups have unequal sizes. This isn't necessarily a problem, but\n")
+  cat("it can slightly reduce power and make the test more sensitive\n")
+  cat("to violations of homogeneity of variance.\n")
+}
+```
+
+:::
+
+---
+
+## Descriptive Statistics {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+methods <- unique(study_data$method)
+for (m in methods) {
+  scores <- study_data$recall[study_data$method == m]
+  cat(m, ": M =", round(mean(scores), 2),
+      ", SD =", round(sd(scores), 2), "\n")
+}
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+methods <- unique(study_data$method)
+for (m in methods) {
+  scores <- study_data$recall[study_data$method == m]
+  cat(m, ": M =", round(mean(scores), 2),
+      ", SD =", round(sd(scores), 2), "\n")
+}
+```
+
+:::
+
+---
+
+## The R Syntax {.center background-color="#27AE60"}
+
+```r
+model <- aov(outcome ~ grouping_variable, data = dataframe)
+summary(model)
+```
+
+-   **outcome**: Your continuous dependent variable
+-   **grouping_variable**: Your factor with 3+ levels
+-   **data**: Your dataframe
+
+---
+
+## Running the ANOVA {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+summary(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+summary(model)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- aov(recall ~ method, data = study_data)
+s <- summary(model)
+f_val <- s[[1]]["method", "F value"]
+p_val <- s[[1]]["method", "Pr(>F)"]
+df1 <- s[[1]]["method", "Df"]
+df2 <- s[[1]]["Residuals", "Df"]
+ms_between <- s[[1]]["method", "Mean Sq"]
+ms_within <- s[[1]]["Residuals", "Mean Sq"]
+p_text <- if(p_val < 0.001) "p < .001" else paste0("p = ", round(p_val, 3))
+k <- length(unique(study_data$method))
+
+cat("The F-ratio is a signal-to-noise ratio:\n")
+cat("  Between-groups variance (signal): MS =", round(ms_between, 2), "\n")
+cat("  Within-groups variance (noise):   MS =", round(ms_within, 2), "\n")
+cat("  F = ", round(ms_between, 2), " / ", round(ms_within, 2), " = ",
+    round(f_val, 2), "\n\n", sep = "")
+
+cat("With F(", df1, ", ", df2, ") = ", round(f_val, 2), ", ", p_text, "\n\n", sep = "")
+
+cat("The first df (", df1, ") = k - 1, where k =", k, "groups.\n", sep = "")
+cat("The second df (", df2, ") = N - k, the error degrees of freedom.\n\n", sep = "")
+
+if(p_val < 0.05) {
+  cat("Since p < .05, at least one group mean differs significantly from\n")
+  cat("the others. But WHICH ones? That's what post-hoc tests will tell us.")
+} else {
+  cat("Since p >= .05, we can't conclude that the groups differ.\n")
+  cat("No need for post-hoc tests when the overall F isn't significant.")
+}
+```
+
+:::
+
+---
+
+## Reading the Output
+
+Key values to extract:
+
+| Component | What to look for |
+|-----------|------------------|
+| **Df** | Degrees of freedom (k-1, N-k) |
+| **F value** | The F-ratio |
+| **Pr(>F)** | The p-value |
+| `***` | Significance stars |
+
+::: {.callout-note}
+**Decision rule**: If p < .05, reject H₀
+:::
+
+---
+
+## Making a Decision
+
+**Decision rule**: If p < .05, reject H₀
+
+-   Our p-value is very small (p < .001)
+-   **Conclusion**: Reject H₀
+-   At least one group mean differs from the others
+
+::: {.callout-important}
+## But Wait!
+ANOVA tells us groups differ, NOT which specific groups!
+:::
+
+---
+
+## Visualising the Data {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+boxplot(recall ~ method, data = study_data,
+        main = "Recall by Study Method",
+        xlab = "Method", ylab = "Items Recalled",
+        col = c("lightblue", "lightgreen", "lightyellow"))
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+boxplot(recall ~ method, data = study_data,
+        main = "Recall by Study Method",
+        xlab = "Method", ylab = "Items Recalled",
+        col = c("lightblue", "lightgreen", "lightyellow"))
+```
+
+:::
+
+---
+
+## Checking Assumptions {background-color="#f0f0f0"}
+
+### Homogeneity of Variance
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+bartlett.test(recall ~ method, data = study_data)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+bartlett.test(recall ~ method, data = study_data)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- bartlett.test(recall ~ method, data = study_data)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+
+# Get group variances
+methods <- unique(study_data$method)
+vars <- sapply(methods, function(m) var(study_data$recall[study_data$method == m]))
+
+cat("Bartlett's test checks if variances are equal across groups:\n\n")
+for(i in 1:length(methods)) {
+  cat("  ", methods[i], ": variance =", round(vars[i], 2), "\n")
+}
+cat("\nBartlett's K² =", round(result$statistic, 2), ",", p_text, "\n\n")
+
+if(result$p.value > 0.05) {
+  cat("Since p > .05, the variances are not significantly different.\n")
+  cat("The homogeneity of variance assumption is met.\n\n")
+} else {
+  cat("Since p < .05, variances differ significantly across groups.\n")
+  cat("Consider using Welch's ANOVA (oneway.test) instead.\n\n")
+}
+
+cat("A word of caution: Bartlett's test is sensitive to non-normality.\n")
+cat("Levene's test (in the car package) is a more robust alternative.\n")
+cat("With balanced designs and reasonable group sizes, ANOVA is fairly\n")
+cat("robust to variance differences anyway.")
+```
+
+:::
+
+p > .05 means variances are equal (assumption met)
+
+---
+
+## Summary: One-Way ANOVA {.center background-color="#2C3E50"}
+
+Key points:
+
+-   Use `aov(outcome ~ group, data = df)`
+-   Use `summary()` to see the ANOVA table
+-   Look for the **F-value** and **p-value**
+-   A significant result means groups differ *somewhere*
+-   Need **post-hoc tests** to find *where*
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## In Your Notebook
+
+1. Load the data
+2. Run descriptive statistics
+3. Fit the ANOVA model
+4. Interpret the results
+:::

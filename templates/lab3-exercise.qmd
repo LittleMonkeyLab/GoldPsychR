@@ -1,132 +1,482 @@
 ---
 title: "Lab 3: ANOVA"
-author: "Your Name"
-date: "`r format(Sys.Date(), '%d %B %Y')`"
+subtitle: "Study Techniques & Comparing Multiple Groups"
+author: "YOUR NAME HERE"
+date: today
 format:
   html:
     toc: true
+    toc-depth: 2
+    number-sections: true
     code-fold: false
     code-annotations: below
     theme: cosmo
+    embed-resources: true
 ---
 
-## 1. Load Packages
-
 ```{r}
+#| label: setup
 #| message: false
 #| warning: false
 
+# Load required packages
+library(readr)
 library(dplyr)
 library(ggplot2)
-library(readr)
+```
+
+# Introduction
+
+In this lab, you will learn to perform and interpret ANOVA to:
+
+- Compare three or more groups using one-way ANOVA
+- Conduct Tukey's HSD post-hoc comparisons
+- Run two-way (factorial) ANOVA with interactions
+- Calculate and interpret eta-squared (η²)
+- Write APA-style ANOVA results
+
+::: {.callout-important}
+## How This Lab Works: Watch → Try → Do
+
+Every part follows the same **3-step cycle**:
+
+1. **Watch** - Follow along with the instructor slides
+2. **Try** - Practice with interactive code on the activity page
+3. **Do** - Complete exercises in this notebook (that's this file!)
+:::
+
+---
+
+# Your First Task: Change Your Name and Render
+
+::: {.callout-note}
+## Slides Part 1
+Complete this task during **Part 1: Introduction to ANOVA** practice time.
+:::
+
+1. Find line 4 where it says `author: "YOUR NAME HERE"`
+2. Replace with your actual name
+3. Click the **Render** button
+4. Check that your name appears in the output!
+
+---
+
+# Part 1: About ANOVA
+
+::: {.callout-note}
+## Slides Part 1
+Continue with this section during **Part 1: Introduction to ANOVA** practice time.
+:::
+
+## About the Study
+
+We are analysing data from a Study Techniques experiment:
+
+- **120 university students** participated
+- **Three study methods**: Rereading, Self-Testing, Elaboration
+- **Two time periods**: Morning or Evening
+- **Outcome**: Items recalled (0-30)
+
+::: {.callout-note}
+## Exercise 1.1: Comprehension Check
+
+1. **Why can't we just run multiple t-tests to compare 3 groups?**
+
+   **[YOUR ANSWER]**
+
+2. **What does the F-ratio compare?**
+
+   **[YOUR ANSWER]**
+
+3. **What are the three assumptions of ANOVA?**
+
+   **[YOUR ANSWER]**
+:::
+
+---
+
+# Part 2: Load and Explore Data
+
+::: {.callout-note}
+## Slides Part 2
+Complete this section during **Part 2: One-Way ANOVA** practice time.
+:::
+
+## Load the Dataset
+
+```{r}
+#| label: load-data
+
+# Load the Study Techniques data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Inspect the Data
+
+```{r}
+#| label: inspect-head
+
+# View the first 6 rows
+head(study_data)
+```
+
+```{r}
+#| label: inspect-structure
+
+# Check the structure
+str(study_data)
+```
+
+```{r}
+#| label: group-counts
+
+# Count by study method
+table(study_data$method)
+```
+
+::: {.callout-note}
+## Exercise 2.1
+
+1. How many participants are in the dataset? **[YOUR ANSWER]**
+2. How many study methods are being compared? **[YOUR ANSWER]**
+3. How many participants in each method group? **[YOUR ANSWER]**
+:::
+
+## Descriptive Statistics by Group
+
+```{r}
+#| label: descriptives-method
+
+# Calculate descriptives by study method
+study_data |>
+  group_by(method) |>
+  summarise(
+    n = n(),
+    mean = mean(recall, na.rm = TRUE),
+    sd = sd(recall, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+## One-Way ANOVA
+
+```{r}
+#| label: one-way-anova
+
+# Fit the one-way ANOVA model
+model1 <- aov(recall ~ method, data = study_data)
+
+# View the ANOVA table
+summary(model1)
+```
+
+::: {.callout-note}
+## Exercise 2.2
+
+Based on the ANOVA output:
+
+1. What is the F-value? **[YOUR ANSWER]**
+2. What are the degrees of freedom? (between, within) **[YOUR ANSWER]**
+3. What is the p-value? **[YOUR ANSWER]**
+4. Is the effect significant at α = .05? **[YOUR ANSWER]**
+5. What can we conclude? **[YOUR ANSWER]**
+:::
+
+## Visualise the Groups
+
+```{r}
+#| label: boxplot-method
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(study_data, aes(x = method, y = recall, fill = method)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("Elaboration" = "#3498DB",
+                                "Rereading" = "#E74C3C",
+                                "Self-Testing" = "#27AE60")) +
+  theme_minimal() +
+  labs(
+    title = "Recall Scores by Study Method",
+    x = "Study Method",
+    y = "Items Recalled"
+  ) +
+  theme(legend.position = "none")
 ```
 
 ---
 
-## 2. Load and Inspect Data
+# Part 3: Post-Hoc Tests
+
+::: {.callout-note}
+## Slides Part 3
+Complete this section during **Part 3: Post-Hoc Tests** practice time.
+:::
+
+## Tukey's HSD
 
 ```{r}
-# TODO: Load your dataset
-# data <- read_csv("your_data.csv")
+#| label: tukey-hsd
 
-# Check group sizes
-# data |> count(condition)
+# Run Tukey's HSD post-hoc test
+tukey_results <- TukeyHSD(model1)
+tukey_results
+```
+
+::: {.callout-note}
+## Exercise 3.1
+
+Based on the Tukey results:
+
+1. Does Rereading differ from Elaboration? **[YOUR ANSWER]**
+2. Does Rereading differ from Self-Testing? **[YOUR ANSWER]**
+3. Does Self-Testing differ from Elaboration? **[YOUR ANSWER]**
+4. Which method(s) produce the best recall? **[YOUR ANSWER]**
+:::
+
+## Visualise Tukey Results
+
+```{r}
+#| label: tukey-plot
+#| fig-width: 8
+#| fig-height: 5
+
+# Plot the Tukey confidence intervals
+plot(tukey_results)
 ```
 
 ---
 
-## 3. Descriptive Statistics by Group
+# Part 4: Two-Way ANOVA
+
+::: {.callout-note}
+## Slides Part 4
+Complete this section during **Part 4: Two-Way ANOVA** practice time.
+:::
+
+## Examine the Factorial Design
 
 ```{r}
-# TODO: Compute descriptives for each group
-# data |>
-#   group_by(condition) |>
-#   summarise(
-#     mean = mean(score, na.rm = TRUE),
-#     sd = sd(score, na.rm = TRUE),
-#     n = n()
-#   )
+#| label: factorial-design
+
+# Cross-tabulation of the two factors
+table(study_data$method, study_data$time_of_day)
 ```
 
----
-
-## 4. One-Way ANOVA
+## Descriptives by Both Factors
 
 ```{r}
-# TODO: Fit the ANOVA model
-# model <- aov(score ~ condition, data = data)
+#| label: descriptives-factorial
+
+# Calculate cell means
+study_data |>
+  group_by(method, time_of_day) |>
+  summarise(
+    n = n(),
+    mean = mean(recall, na.rm = TRUE),
+    sd = sd(recall, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+## Run Two-Way ANOVA
+
+```{r}
+#| label: two-way-anova
+
+# Fit the two-way ANOVA with interaction
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
 
 # View results
-# summary(model)
+summary(model2)
 ```
 
----
+::: {.callout-note}
+## Exercise 4.1
 
-## 5. Post-Hoc Tests
+Based on the two-way ANOVA:
+
+1. Is the main effect of method significant? **[YOUR ANSWER]**
+2. Is the main effect of time of day significant? **[YOUR ANSWER]**
+3. Is the interaction significant? **[YOUR ANSWER]**
+4. What does the interaction result tell us? **[YOUR ANSWER]**
+:::
+
+## Interaction Plot
 
 ```{r}
-# TODO: Run Tukey's HSD (if ANOVA is significant)
-# TukeyHSD(model)
+#| label: interaction-plot
+#| fig-width: 10
+#| fig-height: 5
+
+# Calculate cell means for plotting
+cell_means <- study_data |>
+  group_by(method, time_of_day) |>
+  summarise(mean_recall = mean(recall), .groups = "drop")
+
+# Create interaction plot
+ggplot(cell_means, aes(x = time_of_day, y = mean_recall,
+                        color = method, group = method)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("Elaboration" = "#3498DB",
+                                 "Rereading" = "#E74C3C",
+                                 "Self-Testing" = "#27AE60")) +
+  theme_minimal() +
+  labs(
+    title = "Interaction Plot: Method × Time of Day",
+    x = "Time of Day",
+    y = "Mean Recall",
+    color = "Study Method"
+  )
 ```
 
 ---
 
-## 6. Effect Size (Eta-Squared)
+# Part 5: Effect Sizes and APA Write-Up
+
+::: {.callout-note}
+## Slides Part 5
+Complete this section during **Part 5: Effect Sizes & Reporting** practice time.
+:::
+
+## Calculate Eta-Squared
 
 ```{r}
-# TODO: Calculate eta-squared
-# model_summary <- summary(model)
-# ss_between <- model_summary[[1]]["condition", "Sum Sq"]
-# ss_residual <- model_summary[[1]]["Residuals", "Sum Sq"]
-# eta_sq <- ss_between / (ss_between + ss_residual)
-# eta_sq
+#| label: eta-squared
+
+# Extract sums of squares from one-way ANOVA
+model1_summary <- summary(model1)
+ss_method <- model1_summary[[1]]["method", "Sum Sq"]
+ss_residual <- model1_summary[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+# Calculate eta-squared
+eta_sq <- ss_method / ss_total
+
+cat("One-Way ANOVA Effect Size:\n")
+cat("SS_method:", round(ss_method, 2), "\n")
+cat("SS_residual:", round(ss_residual, 2), "\n")
+cat("SS_total:", round(ss_total, 2), "\n")
+cat("\nEta-squared:", round(eta_sq, 3))
 ```
 
----
-
-## 7. Visualisation
+## Partial Eta-Squared for Two-Way ANOVA
 
 ```{r}
-# TODO: Create boxplot by group
-# ggplot(data, aes(x = condition, y = score, fill = condition)) +
-#   geom_boxplot(alpha = 0.7) +
-#   geom_jitter(width = 0.1, alpha = 0.5) +
-#   theme_minimal() +
-#   labs(title = "Scores by Condition")
+#| label: partial-eta
+
+# Extract from two-way ANOVA
+model2_summary <- summary(model2)
+
+ss_method_2 <- model2_summary[[1]]["method", "Sum Sq"]
+ss_time <- model2_summary[[1]]["time_of_day", "Sum Sq"]
+ss_interaction <- model2_summary[[1]]["method:time_of_day", "Sum Sq"]
+ss_error <- model2_summary[[1]]["Residuals", "Sum Sq"]
+
+# Partial eta-squared for each effect
+partial_eta_method <- ss_method_2 / (ss_method_2 + ss_error)
+partial_eta_time <- ss_time / (ss_time + ss_error)
+partial_eta_int <- ss_interaction / (ss_interaction + ss_error)
+
+cat("Two-Way ANOVA Partial Eta-Squared:\n")
+cat("Method:", round(partial_eta_method, 3), "\n")
+cat("Time:", round(partial_eta_time, 3), "\n")
+cat("Interaction:", round(partial_eta_int, 3))
 ```
+
+::: {.callout-note}
+## Exercise 5.1: Interpret Effect Sizes
+
+Using Cohen's conventions (0.01 = small, 0.06 = medium, 0.14 = large):
+
+1. The eta-squared for method is a **[YOUR ANSWER]** effect
+2. What percentage of variance does method explain? **[YOUR ANSWER]**
+:::
+
+## Write Your APA Results
+
+::: {.callout-tip}
+## APA Template for One-Way ANOVA
+
+A one-way ANOVA revealed a [significant/non-significant] effect of [factor] on [DV], *F*(df1, df2) = F-value, *p* = p-value, η² = effect-size. Post-hoc comparisons using Tukey's HSD indicated that...
+:::
+
+**Write your APA results below:**
+
+### One-Way ANOVA Result
+
+**[YOUR APA-STYLE WRITE-UP HERE]**
+
+### Two-Way ANOVA Result
+
+**[YOUR APA-STYLE WRITE-UP HERE]**
 
 ---
 
-## 8. Two-Way ANOVA (if applicable)
+## Proactive Coding Challenge
+
+Try something extra:
 
 ```{r}
-# TODO: Fit factorial ANOVA (if you have two factors)
-# model2 <- aov(score ~ factor_a * factor_b, data = data)
-# summary(model2)
+#| label: proactive-analysis
+#| fig-width: 8
+#| fig-height: 5
+
+# YOUR CODE HERE
+# Ideas:
+# - Create a bar chart with error bars
+# - Check normality assumption with histograms
+# - Run a different post-hoc test (pairwise.t.test)
+
+
+```
+
+**Describe what you did and what you found:**
+
+[YOUR DESCRIPTION]
+
+# Reflection
+
+::: {.callout-note}
+## Exercise 5.2
+
+1. **When should you use ANOVA instead of t-tests?**
+
+[YOUR ANSWER]
+
+2. **Why is it important to run post-hoc tests after a significant ANOVA?**
+
+[YOUR ANSWER]
+
+3. **What does a significant interaction mean in a two-way ANOVA?**
+
+[YOUR ANSWER]
+
+4. **What questions do you still have about ANOVA?**
+
+[YOUR ANSWER]
+:::
+
+# Session Info
+
+```{r}
+#| label: session-info
+
+sessionInfo()
 ```
 
 ---
 
-## 9. APA Write-Up
+::: {.callout-important}
+## Submission Checklist
 
-[Write your results in APA format. Example:]
+Before submitting, ensure you have:
 
-> A one-way ANOVA revealed a significant effect of condition on scores, *F*(2, 97) = ___, *p* = ___, η² = ___.
-
-> Post-hoc comparisons using Tukey's HSD indicated that...
-
----
-
-## 10. Reflection
-
-1. Was the overall ANOVA significant?
-
-   [Your answer]
-
-2. Which groups differed from each other (based on post-hoc tests)?
-
-   [Your answer]
-
-3. How would you interpret the effect size?
-
-   [Your answer]
+- [ ] Replaced "YOUR NAME HERE" with your name
+- [ ] Completed all exercises (1.1, 2.1, 2.2, 3.1, 4.1, 5.1, 5.2)
+- [ ] Written APA results for both ANOVA analyses
+- [ ] Created a proactive analysis
+- [ ] Answered the reflection questions
+- [ ] Rendered to HTML successfully
+:::

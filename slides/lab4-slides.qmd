@@ -1,105 +1,286 @@
 ---
-title: "Lab Slides Week 4"
-subtitle: "Linear Models & Correlation"
+title: "Lab 4: Correlation & Regression"
+subtitle: "Linear Models"
 format:
   revealjs:
-    theme: default
-    logo: ../assets/images/logo.png
-    footer: "GoldPsychR - 4-Week Intensive"
     slide-number: true
-    preview-links: auto
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4"
+    embed-resources: false
     code-line-numbers: false
     highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 ---
 
-## Lab 4 Preview {.center}
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
 
-**Week 4: Linear Models & Correlation**
+## Lab 4: Correlation & Regression {.center background-color="#2C3E50"}
+
+**Exploring Relationships Between Variables**
 
 ---
 
-## Today's Lab Overview
+## Today's Overview
 
 **Duration:** 2 hours
 
-**Dataset:** Longitudinal Data (n=150)
+**Dataset:** Student Wellbeing (n=100)
 
 **What we'll do:**
 
 - Correlation analysis
 - Simple linear regression
-- Multiple regression basics
-- Model interpretation
+- Multiple regression
+- Model diagnostics
 
 ---
 
-## Part 1: Correlation
+## Today's Dataset {.center background-color="#27AE60"}
 
-**Time:** 30 minutes
+| Variable | Description |
+|----------|-------------|
+| stress | Perceived stress (0-50) |
+| sleep_hours | Hours of sleep |
+| exercise_mins | Weekly exercise |
+| wellbeing | Wellbeing score (0-100) |
 
-Examine relationships:
+---
 
-```r
-cor.test(x, y)
+## Part 1: Correlation {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+cor.test(wellbeing$stress, wellbeing$wellbeing)
 ```
 
-- Pearson r
-- Scatterplots
-- Correlation matrices
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+cor.test(wellbeing$stress, wellbeing$wellbeing)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+result <- cor.test(wellbeing$stress, wellbeing$wellbeing)
+r <- result$estimate
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+size <- if(abs(r) < 0.1) "negligible" else if(abs(r) < 0.3) "small" else if(abs(r) < 0.5) "medium" else "large"
+
+cat("Stress and Wellbeing: r =", round(r, 3), ",", p_text, "\n\n")
+
+cat("This is a", size, ifelse(r > 0, "positive", "negative"), "correlation.\n")
+cat("As stress increases, wellbeing", ifelse(r > 0, "increases", "decreases"), ".\n\n")
+
+cat("r² =", round(r^2, 3), "tells us", round(r^2 * 100, 1), "% of variance\n")
+cat("in wellbeing is shared with stress.\n\n")
+
+cat("Remember: correlation shows association, not causation!")
+```
+
+:::
 
 ---
 
-## Part 2: Simple Regression
+## Part 2: Simple Regression {background-color="#f0f0f0"}
 
-**Time:** 30 minutes
+::: {.panel-tabset}
 
-Predict one variable from another:
+### {{< fa code >}} Interactive
 
-```r
-model <- lm(outcome ~ predictor, data = mydata)
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
 summary(model)
 ```
 
----
+### {{< fa file-code >}} Static
 
-## Part 3: Multiple Regression
-
-**Time:** 30 minutes
-
-Add multiple predictors:
-
-```r
-model <- lm(outcome ~ pred1 + pred2 + pred3, data = mydata)
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+summary(model)
 ```
 
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress, data = wellbeing)
+s <- summary(model)
+b0 <- round(coef(model)[1], 2)
+b1 <- round(coef(model)[2], 2)
+p_val <- s$coefficients[2, 4]
+p_text <- if(p_val < 0.001) "p < .001" else paste0("p = ", round(p_val, 3))
+
+cat("Regression equation: Wellbeing =", b0, "+", b1, "× Stress\n\n")
+
+cat("The slope of", b1, "means: for every 1-point increase in stress,\n")
+cat("wellbeing", ifelse(b1 > 0, "increases", "decreases"), "by", abs(b1), "points.\n\n")
+
+cat("R² =", round(s$r.squared, 3), "→ Stress explains",
+    round(s$r.squared * 100, 1), "% of\n")
+cat("variance in wellbeing.\n\n")
+
+cat("Statistical test:", p_text, "- the slope is significantly\n")
+cat("different from zero.")
+```
+
+:::
+
 ---
 
-## Part 4: Model Diagnostics
+## Part 3: Multiple Regression {background-color="#f0f0f0"}
 
-**Time:** 30 minutes
+::: {.panel-tabset}
 
-Check assumptions:
+### {{< fa code >}} Interactive
 
-- Linearity
-- Normality of residuals
-- Homoscedasticity
-- Independence
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+summary(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+summary(model)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+s <- summary(model)
+f_p <- pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE)
+f_text <- if(f_p < 0.001) "p < .001" else paste0("p = ", round(f_p, 3))
+
+cat("Multiple Regression with 3 predictors:\n\n")
+
+cat("R² =", round(s$r.squared, 3), "→ All predictors together explain\n")
+cat(round(s$r.squared * 100, 1), "% of variance in wellbeing.\n\n")
+
+cat("Adjusted R² =", round(s$adj.r.squared, 3), "→ Penalized for the number\n")
+cat("of predictors. Use this when comparing models.\n\n")
+
+cat("F(", s$fstatistic[2], ", ", s$fstatistic[3], ") = ", round(s$fstatistic[1], 2),
+    ", ", f_text, "\n", sep = "")
+cat("→ The overall model is significant. At least one predictor\n")
+cat("   contributes meaningfully to explaining wellbeing.\n\n")
+
+cat("Next step: Look at individual coefficients to see WHICH\n")
+cat("predictors are significant and how strong each is.")
+```
+
+:::
 
 ---
 
-## Key Takeaways
+## Part 4: Model Diagnostics {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+:::
+
+---
+
+## Key Takeaways {.center background-color="#2C3E50"}
 
 Today you learned to:
 
-- ✅ Run correlation analyses
-- ✅ Build regression models
-- ✅ Interpret coefficients
+- ✅ Run correlation analyses (`cor.test()`)
+- ✅ Build regression models (`lm()`)
+- ✅ Interpret coefficients and R²
 - ✅ Check model assumptions
 
 ---
 
-## Course Complete! {.center}
+## Course Complete! {.center background-color="#9B1B30"}
 
 ::: {.r-fit-text}
-Congratulations on completing the 4-week intensive! 🎉
+Congratulations on completing the 4-week intensive!
 :::
+
+You've mastered:
+
+- Descriptive statistics
+- T-tests
+- ANOVA
+- Correlation & Regression

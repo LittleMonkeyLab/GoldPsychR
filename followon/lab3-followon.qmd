@@ -41,36 +41,14 @@ A clinical trial compared three treatments for generalised anxiety:
 - **Hypothesis**: Treatment groups will differ in anxiety reduction
 :::
 
-```{r}
-#| label: simulate-data
-#| echo: false
-
-# Simulate anxiety treatment data
-set.seed(2026)
-n <- 90
-
-anxiety <- data.frame(
-  patient_id = 1:n,
-  treatment = rep(c("CBT", "Medication", "Waitlist"), each = n/3),
-  gad7_post = c(
-    rnorm(n/3, mean = 7, sd = 3),   # CBT: largest reduction
-    rnorm(n/3, mean = 10, sd = 3),  # Medication: moderate reduction
-    rnorm(n/3, mean = 14, sd = 3)   # Waitlist: minimal change
-  )
-)
-
-# Ensure scores stay in valid range
-anxiety$gad7_post <- pmin(21, pmax(0, round(anxiety$gad7_post, 0)))
-
-write_csv(anxiety, "../data/anxiety_treatment.csv")
-```
-
 # Task 1: Load and Explore
 
 ```{r}
 #| label: load-data
 
-anxiety <- read_csv("../data/anxiety_treatment.csv", show_col_types = FALSE)
+# Load data from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/anxiety_treatment.csv"
+anxiety <- read_csv(data_url, show_col_types = FALSE)
 ```
 
 ```{r}

@@ -196,7 +196,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Lab 3: ANOVA</h1>
-  <p class="subtitle">Analysis of Variance</p>
+  <p class="subtitle">Analysis of Variance - Comparing Multiple Groups</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -207,66 +207,343 @@ Gordon Wright
 </div>
 
 </section>
-<section id="lab-3-preview" class="slide level2 center">
-<h2>Lab 3 Preview</h2>
-<p><strong>Week 3: ANOVA</strong></p>
+<section id="lab-3-overview" class="slide level2 center">
+<h2>Lab 3 Overview</h2>
+<p><strong>Today: ANOVA - Comparing Three or More Groups</strong></p>
 </section>
-<section id="todays-lab-overview" class="slide level2">
-<h2>Today’s Lab Overview</h2>
-<p><strong>Duration:</strong> 2 hours</p>
-<p><strong>Dataset:</strong> Experimental Data (n=150)</p>
-<p><strong>What we’ll do:</strong></p>
+<section id="learning-objectives" class="slide level2 scrollable">
+<h2>Learning Objectives</h2>
+<p>By the end of this lab, you will be able to:</p>
+<ol type="1">
+<li><strong>Explain</strong> when to use ANOVA instead of t-tests</li>
+<li><strong>Conduct</strong> one-way ANOVA in R</li>
+<li><strong>Perform</strong> Tukey’s HSD post-hoc tests</li>
+<li><strong>Run</strong> two-way (factorial) ANOVA with interactions</li>
+<li><strong>Calculate</strong> eta-squared (η²) effect sizes</li>
+<li><strong>Write</strong> APA-style ANOVA results</li>
+</ol>
+</section>
+<section id="the-dataset-study-techniques" class="slide level2">
+<h2>The Dataset: Study Techniques</h2>
+<p><strong>Research Question</strong>: Do different study methods affect memory recall?</p>
 <ul>
-<li>One-way ANOVA</li>
-<li>Post-hoc comparisons</li>
-<li>Effect sizes (eta-squared)</li>
-<li>Two-way ANOVA (factorial designs)</li>
+<li><strong>120 university students</strong></li>
+<li><strong>3 study methods</strong>: Rereading, Self-Testing, Elaboration</li>
+<li><strong>2 time periods</strong>: Morning or Evening</li>
+<li><strong>Outcome</strong>: Items recalled (0-30)</li>
 </ul>
 </section>
-<section id="when-to-use-anova" class="slide level2">
-<h2>When to Use ANOVA</h2>
-<p><strong>t-test:</strong> Compare 2 groups</p>
-<p><strong>ANOVA:</strong> Compare 3+ groups</p>
-<p>Why not multiple t-tests? - Inflates Type I error rate - ANOVA controls family-wise error</p>
+<section id="why-not-multiple-t-tests" class="slide level2">
+<h2>Why Not Multiple t-tests?</h2>
+<p>Comparing 3 groups means 3 pairwise comparisons:</p>
+<ul>
+<li>Group 1 vs Group 2</li>
+<li>Group 1 vs Group 3</li>
+<li>Group 2 vs Group 3</li>
+</ul>
+<p><strong>Problem</strong>: Each test at α = .05 inflates overall error rate!</p>
+<p><span class="math display">\[\text{Family-wise error} = 1 - (1 - .05)^3 = .14\]</span></p>
+<p><strong>ANOVA controls this!</strong></p>
 </section>
-<section id="part-1-one-way-anova" class="slide level2">
-<h2>Part 1: One-Way ANOVA</h2>
-<p><strong>Time:</strong> 30 minutes</p>
-<p>Compare three or more groups:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
-<span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(score <span class="sc">~</span> condition, <span class="at">data =</span> mydata)</span>
-<span id="cb1-3"><a aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
-<span id="cb1-5"><a aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section class="slide level2">
+
 </section>
-<section id="reading-anova-output" class="slide level2">
-<h2>Reading ANOVA Output</h2>
-<pre><code>            Df Sum Sq Mean Sq F value  Pr(&gt;F)
-condition    2   1250   625.0   12.5  0.0001 ***
-Residuals   97   4850    50.0</code></pre>
-<p>Key values: - F-statistic - p-value - Degrees of freedom</p>
+<section>
+<section id="part-1-one-way-anova" class="title-slide slide level1 center">
+<h1>Part 1: One-Way ANOVA</h1>
+
 </section>
-<section id="part-2-post-hoc-tests" class="slide level2">
-<h2>Part 2: Post-Hoc Tests</h2>
-<p><strong>Time:</strong> 30 minutes</p>
-<p>Which groups differ?</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Tukey's HSD</span></span>
-<span id="cb3-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(model)</span>
-<span id="cb3-3"><a aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Or pairwise t-tests with correction</span></span>
-<span id="cb3-5"><a aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(data<span class="sc">$</span>score, data<span class="sc">$</span>condition,</span>
-<span id="cb3-6"><a aria-hidden="true" tabindex="-1"></a>                <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="the-logic-of-anova" class="slide level2">
+<h2>The Logic of ANOVA</h2>
+<p>ANOVA compares <strong>between-group variance</strong> to <strong>within-group variance</strong></p>
+<p><span class="math display">\[F = \frac{\text{Between-group variance}}{\text{Within-group variance}}\]</span></p>
+<ul>
+<li>Large F → Groups differ more than expected by chance</li>
+<li>Small F → Differences could be due to random variation</li>
+</ul>
 </section>
-<section id="part-3-effect-sizes" class="slide level2">
-<h2>Part 3: Effect Sizes</h2>
-<p><strong>Time:</strong> 30 minutes</p>
-<p>Calculate eta-squared:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
-<span id="cb4-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">eta_squared</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="loading-the-data" class="slide level2">
+<h2>Loading the Data</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Load from GitHub</span></span>
+<span id="cb1-6"><a aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"</span></span>
+<span id="cb1-7"><a aria-hidden="true" tabindex="-1"></a>study_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(data_url, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-8"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(study_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="descriptives-by-group" class="slide level2">
+<h2>Descriptives by Group</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-hidden="true" tabindex="-1"></a>study_data <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(method) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb2-4"><a aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb2-5"><a aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(recall, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-6"><a aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(recall, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-7"><a aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top">
 <thead>
 <tr class="header">
-<th>η² value</th>
+<th>Method</th>
+<th>n</th>
+<th>Mean</th>
+<th>SD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rereading</td>
+<td>40</td>
+<td>14.9</td>
+<td>4.1</td>
+</tr>
+<tr class="even">
+<td>Self-Testing</td>
+<td>40</td>
+<td>21.5</td>
+<td>4.2</td>
+</tr>
+<tr class="odd">
+<td>Elaboration</td>
+<td>40</td>
+<td>19.7</td>
+<td>4.5</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="running-one-way-anova" class="slide level2">
+<h2>Running One-Way ANOVA</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb3-2"><a aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(recall <span class="sc">~</span> method, <span class="at">data =</span> study_data)</span>
+<span id="cb3-3"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
+<span id="cb3-5"><a aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>            Df Sum Sq Mean Sq F value   Pr(&gt;F)
+method       2  899.6   449.8   24.1 6.2e-10 ***
+Residuals  117 2183.4    18.7
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</section>
+<section id="reading-the-output" class="slide level2">
+<h2>Reading the Output</h2>
+<p>Key values:</p>
+<ul>
+<li><strong>Df</strong>: Degrees of freedom (2 between, 117 within)</li>
+<li><strong>F value</strong>: 24.1 - ratio of variances</li>
+<li><strong>Pr(&gt;F)</strong>: p-value &lt; .001</li>
+</ul>
+<p><strong>Conclusion</strong>: There IS a significant difference somewhere!</p>
+<p>But which groups differ? 🤔</p>
+</section>
+<section id="visualising-the-groups" class="slide level2">
+<h2>Visualising the Groups</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(study_data, <span class="fu">aes</span>(<span class="at">x =</span> method, <span class="at">y =</span> recall, <span class="at">fill =</span> method)) <span class="sc">+</span></span>
+<span id="cb5-2"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Elaboration"</span> <span class="ot">=</span> <span class="st">"#3498DB"</span>,</span>
+<span id="cb5-4"><a aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Rereading"</span> <span class="ot">=</span> <span class="st">"#E74C3C"</span>,</span>
+<span id="cb5-5"><a aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Self-Testing"</span> <span class="ot">=</span> <span class="st">"#27AE60"</span>)) <span class="sc">+</span></span>
+<span id="cb5-6"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-7"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Recall Scores by Study Method"</span>,</span>
+<span id="cb5-8"><a aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Study Method"</span>, <span class="at">y =</span> <span class="st">"Items Recalled"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-2-post-hoc-tests" class="title-slide slide level1 center">
+<h1>Part 2: Post-Hoc Tests</h1>
+
+</section>
+<section id="why-post-hoc-tests" class="slide level2">
+<h2>Why Post-Hoc Tests?</h2>
+<p>ANOVA tells us: “At least one group differs”</p>
+<p><strong>But we need to know WHICH groups differ!</strong></p>
+<p>Post-hoc tests compare all pairs while controlling Type I error</p>
+</section>
+<section id="tukeys-hsd" class="slide level2">
+<h2>Tukey’s HSD</h2>
+<p>HSD = “Honest Significant Difference”</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Run Tukey's test</span></span>
+<span id="cb6-2"><a aria-hidden="true" tabindex="-1"></a>tukey_results <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(model1)</span>
+<span id="cb6-3"><a aria-hidden="true" tabindex="-1"></a>tukey_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="tukey-output" class="slide level2">
+<h2>Tukey Output</h2>
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+$method
+                            diff       lwr       upr     p adj
+Rereading-Elaboration      -4.8     -7.3    -2.3    0.0001
+Self-Testing-Elaboration    1.8     -0.7     4.3    0.2180
+Self-Testing-Rereading      6.6      4.1     9.1    0.0000</code></pre>
+</section>
+<section id="interpreting-tukey-results" class="slide level2">
+<h2>Interpreting Tukey Results</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Comparison</th>
+<th>diff</th>
+<th>p adj</th>
+<th>Significant?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rereading vs Elaboration</td>
+<td>-4.8</td>
+<td>.0001</td>
+<td>✓ Yes</td>
+</tr>
+<tr class="even">
+<td>Self-Testing vs Elaboration</td>
+<td>1.8</td>
+<td>.22</td>
+<td>✗ No</td>
+</tr>
+<tr class="odd">
+<td>Self-Testing vs Rereading</td>
+<td>6.6</td>
+<td>&lt;.0001</td>
+<td>✓ Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusion</strong>: Self-Testing and Elaboration are both better than Rereading, but don’t differ from each other.</p>
+</section>
+<section id="visualising-tukey-results" class="slide level2">
+<h2>Visualising Tukey Results</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tukey_results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Intervals that cross zero = NOT significant</p>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-3-two-way-anova" class="title-slide slide level1 center">
+<h1>Part 3: Two-Way ANOVA</h1>
+
+</section>
+<section id="factorial-designs" class="slide level2">
+<h2>Factorial Designs</h2>
+<p>When you have <strong>two factors</strong>:</p>
+<ul>
+<li><strong>Factor A</strong>: Study Method (3 levels)</li>
+<li><strong>Factor B</strong>: Time of Day (2 levels)</li>
+</ul>
+<p>Design: 3 × 2 = <strong>6 cells</strong></p>
+</section>
+<section id="what-can-we-test" class="slide level2 scrollable">
+<h2>What Can We Test?</h2>
+<p><strong>Three questions in one analysis:</strong></p>
+<ol type="1">
+<li><strong>Main effect of Method</strong>: Do methods differ (averaging over time)?</li>
+<li><strong>Main effect of Time</strong>: Does time matter (averaging over method)?</li>
+<li><strong>Interaction</strong>: Does the effect of method depend on time?</li>
+</ol>
+</section>
+<section id="running-two-way-anova" class="slide level2">
+<h2>Running Two-Way ANOVA</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Use * to include interaction</span></span>
+<span id="cb9-2"><a aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">aov</span>(recall <span class="sc">~</span> method <span class="sc">*</span> time_of_day, <span class="at">data =</span> study_data)</span>
+<span id="cb9-3"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="two-way-anova-output" class="slide level2">
+<h2>Two-Way ANOVA Output</h2>
+<pre><code>                    Df Sum Sq Mean Sq F value   Pr(&gt;F)
+method               2  899.6  449.80  23.42 2.1e-09 ***
+time_of_day          1   62.8   62.80   3.27   0.073
+method:time_of_day   2   11.2    5.60   0.29   0.748
+Residuals          114 2188.4   19.20</code></pre>
+</section>
+<section id="interpreting-the-results" class="slide level2">
+<h2>Interpreting the Results</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Effect</th>
+<th>F</th>
+<th>p</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Method</td>
+<td>23.42</td>
+<td>&lt;.001</td>
+<td>✓ Significant main effect</td>
+</tr>
+<tr class="even">
+<td>Time</td>
+<td>3.27</td>
+<td>.073</td>
+<td>✗ Not significant</td>
+</tr>
+<tr class="odd">
+<td>Interaction</td>
+<td>0.29</td>
+<td>.748</td>
+<td>✗ Not significant</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Method matters, but time of day doesn’t, and the pattern is consistent across times.</strong></p>
+</section>
+<section id="what-is-an-interaction" class="slide level2">
+<h2>What is an Interaction?</h2>
+<p><strong>No interaction</strong>: The effect of A is the same at all levels of B</p>
+<p><strong>Interaction present</strong>: The effect of A <strong>depends on</strong> the level of B</p>
+<p>Example with interaction: - Self-testing works great in the morning - Self-testing is worse in the evening - The effect of method <strong>changes</strong> with time</p>
+</section>
+<section id="interaction-plots" class="slide level2">
+<h2>Interaction Plots</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-hidden="true" tabindex="-1"></a><span class="fu">interaction.plot</span>(study_data<span class="sc">$</span>time_of_day, study_data<span class="sc">$</span>method,</span>
+<span id="cb11-2"><a aria-hidden="true" tabindex="-1"></a>                 study_data<span class="sc">$</span>recall,</span>
+<span id="cb11-3"><a aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"b"</span>,</span>
+<span id="cb11-4"><a aria-hidden="true" tabindex="-1"></a>                 <span class="at">xlab =</span> <span class="st">"Time of Day"</span>, <span class="at">ylab =</span> <span class="st">"Mean Recall"</span>,</span>
+<span id="cb11-5"><a aria-hidden="true" tabindex="-1"></a>                 <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>, <span class="st">"green"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Parallel lines</strong> = No interaction</p>
+<p><strong>Crossing/diverging lines</strong> = Interaction</p>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-4-effect-sizes" class="title-slide slide level1 center">
+<h1>Part 4: Effect Sizes</h1>
+
+</section>
+<section id="beyond-p-values" class="slide level2">
+<h2>Beyond p-values</h2>
+<p>A significant F tells us groups differ.</p>
+<p>But <strong>how much</strong> do they differ?</p>
+<p><strong>Eta-squared (η²)</strong> = proportion of variance explained</p>
+</section>
+<section id="calculating-eta-squared" class="slide level2">
+<h2>Calculating Eta-Squared</h2>
+<p><span class="math display">\[\eta^2 = \frac{SS_{effect}}{SS_{total}}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Extract from summary</span></span>
+<span id="cb12-2"><a aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(model1)</span>
+<span id="cb12-3"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a aria-hidden="true" tabindex="-1"></a>ss_method <span class="ot">&lt;-</span> s[[<span class="dv">1</span>]][<span class="st">"method"</span>, <span class="st">"Sum Sq"</span>]</span>
+<span id="cb12-5"><a aria-hidden="true" tabindex="-1"></a>ss_residual <span class="ot">&lt;-</span> s[[<span class="dv">1</span>]][<span class="st">"Residuals"</span>, <span class="st">"Sum Sq"</span>]</span>
+<span id="cb12-6"><a aria-hidden="true" tabindex="-1"></a>ss_total <span class="ot">&lt;-</span> ss_method <span class="sc">+</span> ss_residual</span>
+<span id="cb12-7"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a aria-hidden="true" tabindex="-1"></a>eta_sq <span class="ot">&lt;-</span> ss_method <span class="sc">/</span> ss_total</span>
+<span id="cb12-9"><a aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"η² ="</span>, <span class="fu">round</span>(eta_sq, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="cohens-guidelines-for-η²" class="slide level2">
+<h2>Cohen’s Guidelines for η²</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>η²</th>
 <th>Interpretation</th>
 </tr>
 </thead>
@@ -285,55 +562,96 @@ Residuals   97   4850    50.0</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Our η² ≈ 0.29 → <strong>Large effect</strong></p>
+<p>Study method explains ~29% of variance in recall!</p>
 </section>
-<section id="part-4-two-way-anova" class="slide level2">
-<h2>Part 4: Two-Way ANOVA</h2>
-<p><strong>Time:</strong> 30 minutes</p>
-<p>Factorial designs with two IVs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">aov</span>(score <span class="sc">~</span> factor_a <span class="sc">*</span> factor_b, <span class="at">data =</span> mydata)</span>
-<span id="cb5-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Tests: - Main effect of A - Main effect of B - A × B interaction</p>
+<section id="partial-eta-squared" class="slide level2">
+<h2>Partial Eta-Squared</h2>
+<p>For <strong>factorial designs</strong>, use partial eta-squared:</p>
+<p><span class="math display">\[\eta^2_p = \frac{SS_{effect}}{SS_{effect} + SS_{error}}\]</span></p>
+<p>Controls for other factors in the model.</p>
 </section>
-<section id="interpreting-interactions" class="slide level2">
-<h2>Interpreting Interactions</h2>
-<p>When the effect of one IV depends on the level of another:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise the interaction</span></span>
-<span id="cb6-2"><a aria-hidden="true" tabindex="-1"></a><span class="fu">interaction.plot</span>(data<span class="sc">$</span>factor_a, data<span class="sc">$</span>factor_b, data<span class="sc">$</span>score)</span>
-<span id="cb6-3"><a aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Or with ggplot2</span></span>
-<span id="cb6-5"><a aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> factor_a, <span class="at">y =</span> score, <span class="at">colour =</span> factor_b)) <span class="sc">+</span></span>
-<span id="cb6-6"><a aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"line"</span>, <span class="fu">aes</span>(<span class="at">group =</span> factor_b))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-5-apa-reporting" class="title-slide slide level1 center">
+<h1>Part 5: APA Reporting</h1>
+
 </section>
-<section id="apa-reporting" class="slide level2">
-<h2>APA Reporting</h2>
+<section id="one-way-anova-template" class="slide level2">
+<h2>One-Way ANOVA Template</h2>
 <blockquote>
-<p>A one-way ANOVA revealed a significant effect of condition on scores, <em>F</em>(2, 97) = 12.50, <em>p</em> &lt; .001, η² = .21.</p>
-</blockquote>
-<blockquote>
-<p>Post-hoc comparisons using Tukey’s HSD indicated that…</p>
+<p>A one-way ANOVA revealed a [significant/non-significant] effect of [factor] on [DV], <em>F</em>(df1, df2) = F-value, <em>p</em> = p-value, η² = effect-size.</p>
 </blockquote>
 </section>
-<section id="key-takeaways" class="slide level2">
-<h2>Key Takeaways</h2>
-<p>Today you learned to:</p>
+<section id="example-write-up" class="slide level2">
+<h2>Example Write-Up</h2>
+<blockquote>
+<p>A one-way ANOVA revealed a significant effect of study method on recall performance, <em>F</em>(2, 117) = 24.10, <em>p</em> &lt; .001, η² = .29. Post-hoc comparisons using Tukey’s HSD indicated that self-testing (<em>M</em> = 21.5, <em>SD</em> = 4.2) and elaboration (<em>M</em> = 19.7, <em>SD</em> = 4.5) both resulted in significantly higher recall than rereading (<em>M</em> = 14.9, <em>SD</em> = 4.1), <em>p</em>s &lt; .001. Self-testing and elaboration did not differ significantly (<em>p</em> = .22).</p>
+</blockquote>
+</section>
+<section id="two-way-anova-template" class="slide level2">
+<h2>Two-Way ANOVA Template</h2>
+<blockquote>
+<p>A 3 × 2 ANOVA examined the effects of [factor A] and [factor B] on [DV]. There was a significant main effect of [factor A], <em>F</em>(df1, df2) = F, <em>p</em> = p, η²_p = value. The main effect of [factor B] was [not] significant. The interaction was [not] significant.</p>
+</blockquote>
+</section>
+<section id="common-reporting-mistakes" class="slide level2 scrollable">
+<h2>Common Reporting Mistakes</h2>
+<ol type="1">
+<li><strong>Forgetting effect sizes</strong> - Always report η² or η²_p</li>
+<li><strong>Wrong df order</strong> - It’s F(between, within)</li>
+<li><strong>Not rounding appropriately</strong> - F to 2 decimal places</li>
+<li><strong>Missing post-hocs</strong> - Need them to specify which groups differ</li>
+<li><strong>Over-interpreting non-significant effects</strong></li>
+</ol>
+</section>
+<section id="summary-what-youve-learned" class="slide level2">
+<h2>Summary: What You’ve Learned</h2>
 <ul>
-<li>Run one-way ANOVA</li>
-<li>Conduct post-hoc comparisons</li>
-<li>Calculate and interpret effect sizes</li>
-<li>Run and interpret two-way ANOVA</li>
+<li>✅ When to use ANOVA vs t-tests</li>
+<li>✅ Running one-way ANOVA with <code>aov()</code></li>
+<li>✅ Post-hoc comparisons with <code>TukeyHSD()</code></li>
+<li>✅ Two-way factorial ANOVA</li>
+<li>✅ Interpreting interactions</li>
+<li>✅ Calculating eta-squared</li>
+<li>✅ APA-style reporting</li>
 </ul>
+</section>
+<section id="now-complete-your-exercises" class="slide level2 scrollable">
+<h2>Now Complete Your Exercises!</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tasks</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>Open your exercise notebook</li>
+<li>Complete all parts following the Watch → Try → Do cycle</li>
+<li>Calculate effect sizes for all analyses</li>
+<li>Write APA results sections</li>
+<li><strong>Render to HTML</strong> and check your work!</li>
+</ol>
+</div>
+</div>
+</div>
 </section>
 <section id="questions" class="slide level2 center">
 <h2>Questions?</h2>
 <p>Ask your instructor or check with your lab partner!</p>
 
 
-</section>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../assets/images/GoldLogo.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p>GoldPsychR - 4-Week Intensive</p>
+<p>GoldPsychR - Lab 3: ANOVA</p>
 </div>
 </div></div>
 
@@ -511,9 +829,9 @@ Residuals   97   4850    50.0</code></pre>
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1280,
+        width: 1050,
 
-        height: 720,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

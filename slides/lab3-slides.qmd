@@ -1,166 +1,430 @@
 ---
 title: "Lab 3: ANOVA"
-subtitle: "Analysis of Variance"
+subtitle: "Analysis of Variance - Comparing Multiple Groups"
 format:
   revealjs:
     theme: default
     logo: ../assets/images/GoldLogo.png
-    footer: "GoldPsychR - 4-Week Intensive"
+    footer: "GoldPsychR - Lab 3: ANOVA"
     slide-number: true
     preview-links: auto
     code-line-numbers: false
     highlight-style: github
+    scrollable: true
+    width: 1050
+    height: 700
+    transition: fade
 ---
 
-## Lab 3 Preview {.center}
+## Lab 3 Overview {.center}
 
-**Week 3: ANOVA**
-
----
-
-## Today's Lab Overview
-
-**Duration:** 2 hours
-
-**Dataset:** Experimental Data (n=150)
-
-**What we'll do:**
-
-- One-way ANOVA
-- Post-hoc comparisons
-- Effect sizes (eta-squared)
-- Two-way ANOVA (factorial designs)
+**Today: ANOVA - Comparing Three or More Groups**
 
 ---
 
-## When to Use ANOVA
+## Learning Objectives
 
-**t-test:** Compare 2 groups
+By the end of this lab, you will be able to:
 
-**ANOVA:** Compare 3+ groups
-
-Why not multiple t-tests?
-- Inflates Type I error rate
-- ANOVA controls family-wise error
+1. **Explain** when to use ANOVA instead of t-tests
+2. **Conduct** one-way ANOVA in R
+3. **Perform** Tukey's HSD post-hoc tests
+4. **Run** two-way (factorial) ANOVA with interactions
+5. **Calculate** eta-squared (η²) effect sizes
+6. **Write** APA-style ANOVA results
 
 ---
 
-## Part 1: One-Way ANOVA
+## The Dataset: Study Techniques
 
-**Time:** 30 minutes
+**Research Question**: Do different study methods affect memory recall?
 
-Compare three or more groups:
+- **120 university students**
+- **3 study methods**: Rereading, Self-Testing, Elaboration
+- **2 time periods**: Morning or Evening
+- **Outcome**: Items recalled (0-30)
+
+---
+
+## Why Not Multiple t-tests?
+
+Comparing 3 groups means 3 pairwise comparisons:
+
+- Group 1 vs Group 2
+- Group 1 vs Group 3
+- Group 2 vs Group 3
+
+**Problem**: Each test at α = .05 inflates overall error rate!
+
+$$\text{Family-wise error} = 1 - (1 - .05)^3 = .14$$
+
+**ANOVA controls this!**
+
+---
+
+# Part 1: One-Way ANOVA
+
+---
+
+## The Logic of ANOVA
+
+ANOVA compares **between-group variance** to **within-group variance**
+
+$$F = \frac{\text{Between-group variance}}{\text{Within-group variance}}$$
+
+- Large F → Groups differ more than expected by chance
+- Small F → Differences could be due to random variation
+
+---
+
+## Loading the Data
+
+```r
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# Load from GitHub
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(study_data)
+```
+
+---
+
+## Descriptives by Group
+
+```r
+study_data |>
+  group_by(method) |>
+  summarise(
+    n = n(),
+    mean = mean(recall, na.rm = TRUE),
+    sd = sd(recall, na.rm = TRUE)
+  )
+```
+
+| Method | n | Mean | SD |
+|--------|---|------|-----|
+| Rereading | 40 | 14.9 | 4.1 |
+| Self-Testing | 40 | 21.5 | 4.2 |
+| Elaboration | 40 | 19.7 | 4.5 |
+
+---
+
+## Running One-Way ANOVA
 
 ```r
 # Fit the model
-model <- aov(score ~ condition, data = mydata)
+model1 <- aov(recall ~ method, data = study_data)
 
 # View results
-summary(model)
+summary(model1)
+```
+
+```
+            Df Sum Sq Mean Sq F value   Pr(>F)
+method       2  899.6   449.8   24.1 6.2e-10 ***
+Residuals  117 2183.4    18.7
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ---
 
-## Reading ANOVA Output
-
-```
-            Df Sum Sq Mean Sq F value  Pr(>F)
-condition    2   1250   625.0   12.5  0.0001 ***
-Residuals   97   4850    50.0
-```
+## Reading the Output
 
 Key values:
-- F-statistic
-- p-value
-- Degrees of freedom
+
+- **Df**: Degrees of freedom (2 between, 117 within)
+- **F value**: 24.1 - ratio of variances
+- **Pr(>F)**: p-value < .001
+
+**Conclusion**: There IS a significant difference somewhere!
+
+But which groups differ? 🤔
 
 ---
 
-## Part 2: Post-Hoc Tests
-
-**Time:** 30 minutes
-
-Which groups differ?
+## Visualising the Groups
 
 ```r
-# Tukey's HSD
-TukeyHSD(model)
-
-# Or pairwise t-tests with correction
-pairwise.t.test(data$score, data$condition,
-                p.adjust.method = "bonferroni")
+ggplot(study_data, aes(x = method, y = recall, fill = method)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("Elaboration" = "#3498DB",
+                                "Rereading" = "#E74C3C",
+                                "Self-Testing" = "#27AE60")) +
+  theme_minimal() +
+  labs(title = "Recall Scores by Study Method",
+       x = "Study Method", y = "Items Recalled")
 ```
 
 ---
 
-## Part 3: Effect Sizes
+# Part 2: Post-Hoc Tests
 
-**Time:** 30 minutes
+---
 
-Calculate eta-squared:
+## Why Post-Hoc Tests?
+
+ANOVA tells us: "At least one group differs"
+
+**But we need to know WHICH groups differ!**
+
+Post-hoc tests compare all pairs while controlling Type I error
+
+---
+
+## Tukey's HSD
+
+HSD = "Honest Significant Difference"
 
 ```r
-library(effectsize)
-eta_squared(model)
+# Run Tukey's test
+tukey_results <- TukeyHSD(model1)
+tukey_results
 ```
 
-| η² value | Interpretation |
-|----------|----------------|
+---
+
+## Tukey Output
+
+```
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+$method
+                            diff       lwr       upr     p adj
+Rereading-Elaboration      -4.8     -7.3    -2.3    0.0001
+Self-Testing-Elaboration    1.8     -0.7     4.3    0.2180
+Self-Testing-Rereading      6.6      4.1     9.1    0.0000
+```
+
+---
+
+## Interpreting Tukey Results
+
+| Comparison | diff | p adj | Significant? |
+|------------|------|-------|--------------|
+| Rereading vs Elaboration | -4.8 | .0001 | ✓ Yes |
+| Self-Testing vs Elaboration | 1.8 | .22 | ✗ No |
+| Self-Testing vs Rereading | 6.6 | <.0001 | ✓ Yes |
+
+**Conclusion**: Self-Testing and Elaboration are both better than Rereading, but don't differ from each other.
+
+---
+
+## Visualising Tukey Results
+
+```r
+plot(tukey_results)
+```
+
+Intervals that cross zero = NOT significant
+
+---
+
+# Part 3: Two-Way ANOVA
+
+---
+
+## Factorial Designs
+
+When you have **two factors**:
+
+- **Factor A**: Study Method (3 levels)
+- **Factor B**: Time of Day (2 levels)
+
+Design: 3 × 2 = **6 cells**
+
+---
+
+## What Can We Test?
+
+**Three questions in one analysis:**
+
+1. **Main effect of Method**: Do methods differ (averaging over time)?
+2. **Main effect of Time**: Does time matter (averaging over method)?
+3. **Interaction**: Does the effect of method depend on time?
+
+---
+
+## Running Two-Way ANOVA
+
+```r
+# Use * to include interaction
+model2 <- aov(recall ~ method * time_of_day, data = study_data)
+
+summary(model2)
+```
+
+---
+
+## Two-Way ANOVA Output
+
+```
+                    Df Sum Sq Mean Sq F value   Pr(>F)
+method               2  899.6  449.80  23.42 2.1e-09 ***
+time_of_day          1   62.8   62.80   3.27   0.073
+method:time_of_day   2   11.2    5.60   0.29   0.748
+Residuals          114 2188.4   19.20
+```
+
+---
+
+## Interpreting the Results
+
+| Effect | F | p | Interpretation |
+|--------|---|---|----------------|
+| Method | 23.42 | <.001 | ✓ Significant main effect |
+| Time | 3.27 | .073 | ✗ Not significant |
+| Interaction | 0.29 | .748 | ✗ Not significant |
+
+**Method matters, but time of day doesn't, and the pattern is consistent across times.**
+
+---
+
+## What is an Interaction?
+
+**No interaction**: The effect of A is the same at all levels of B
+
+**Interaction present**: The effect of A **depends on** the level of B
+
+Example with interaction:
+- Self-testing works great in the morning
+- Self-testing is worse in the evening
+- The effect of method **changes** with time
+
+---
+
+## Interaction Plots
+
+```r
+interaction.plot(study_data$time_of_day, study_data$method,
+                 study_data$recall,
+                 type = "b",
+                 xlab = "Time of Day", ylab = "Mean Recall",
+                 col = c("blue", "red", "green"), lwd = 2)
+```
+
+**Parallel lines** = No interaction
+
+**Crossing/diverging lines** = Interaction
+
+---
+
+# Part 4: Effect Sizes
+
+---
+
+## Beyond p-values
+
+A significant F tells us groups differ.
+
+But **how much** do they differ?
+
+**Eta-squared (η²)** = proportion of variance explained
+
+---
+
+## Calculating Eta-Squared
+
+$$\eta^2 = \frac{SS_{effect}}{SS_{total}}$$
+
+```r
+# Extract from summary
+s <- summary(model1)
+
+ss_method <- s[[1]]["method", "Sum Sq"]
+ss_residual <- s[[1]]["Residuals", "Sum Sq"]
+ss_total <- ss_method + ss_residual
+
+eta_sq <- ss_method / ss_total
+cat("η² =", round(eta_sq, 3))
+```
+
+---
+
+## Cohen's Guidelines for η²
+
+| η² | Interpretation |
+|----|----------------|
 | 0.01 | Small |
 | 0.06 | Medium |
 | 0.14 | Large |
 
----
+Our η² ≈ 0.29 → **Large effect**
 
-## Part 4: Two-Way ANOVA
-
-**Time:** 30 minutes
-
-Factorial designs with two IVs:
-
-```r
-model <- aov(score ~ factor_a * factor_b, data = mydata)
-summary(model)
-```
-
-Tests:
-- Main effect of A
-- Main effect of B
-- A × B interaction
+Study method explains ~29% of variance in recall!
 
 ---
 
-## Interpreting Interactions
+## Partial Eta-Squared
 
-When the effect of one IV depends on the level of another:
+For **factorial designs**, use partial eta-squared:
 
-```r
-# Visualise the interaction
-interaction.plot(data$factor_a, data$factor_b, data$score)
+$$\eta^2_p = \frac{SS_{effect}}{SS_{effect} + SS_{error}}$$
 
-# Or with ggplot2
-ggplot(data, aes(x = factor_a, y = score, colour = factor_b)) +
-  stat_summary(fun = mean, geom = "line", aes(group = factor_b))
-```
+Controls for other factors in the model.
 
 ---
 
-## APA Reporting
-
-> A one-way ANOVA revealed a significant effect of condition on scores, *F*(2, 97) = 12.50, *p* < .001, η² = .21.
-
-> Post-hoc comparisons using Tukey's HSD indicated that...
+# Part 5: APA Reporting
 
 ---
 
-## Key Takeaways
+## One-Way ANOVA Template
 
-Today you learned to:
+> A one-way ANOVA revealed a [significant/non-significant] effect of [factor] on [DV], *F*(df1, df2) = F-value, *p* = p-value, η² = effect-size.
 
-- Run one-way ANOVA
-- Conduct post-hoc comparisons
-- Calculate and interpret effect sizes
-- Run and interpret two-way ANOVA
+---
+
+## Example Write-Up
+
+> A one-way ANOVA revealed a significant effect of study method on recall performance, *F*(2, 117) = 24.10, *p* < .001, η² = .29. Post-hoc comparisons using Tukey's HSD indicated that self-testing (*M* = 21.5, *SD* = 4.2) and elaboration (*M* = 19.7, *SD* = 4.5) both resulted in significantly higher recall than rereading (*M* = 14.9, *SD* = 4.1), *p*s < .001. Self-testing and elaboration did not differ significantly (*p* = .22).
+
+---
+
+## Two-Way ANOVA Template
+
+> A 3 × 2 ANOVA examined the effects of [factor A] and [factor B] on [DV]. There was a significant main effect of [factor A], *F*(df1, df2) = F, *p* = p, η²_p = value. The main effect of [factor B] was [not] significant. The interaction was [not] significant.
+
+---
+
+## Common Reporting Mistakes
+
+1. **Forgetting effect sizes** - Always report η² or η²_p
+2. **Wrong df order** - It's F(between, within)
+3. **Not rounding appropriately** - F to 2 decimal places
+4. **Missing post-hocs** - Need them to specify which groups differ
+5. **Over-interpreting non-significant effects**
+
+---
+
+## Summary: What You've Learned
+
+- ✅ When to use ANOVA vs t-tests
+- ✅ Running one-way ANOVA with `aov()`
+- ✅ Post-hoc comparisons with `TukeyHSD()`
+- ✅ Two-way factorial ANOVA
+- ✅ Interpreting interactions
+- ✅ Calculating eta-squared
+- ✅ APA-style reporting
+
+---
+
+## Now Complete Your Exercises!
+
+::: {.callout-tip}
+## Tasks
+
+1. Open your exercise notebook
+2. Complete all parts following the Watch → Try → Do cycle
+3. Calculate effect sizes for all analyses
+4. Write APA results sections
+5. **Render to HTML** and check your work!
+:::
 
 ---
 

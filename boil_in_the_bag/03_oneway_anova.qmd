@@ -1,0 +1,238 @@
+---
+title: "Boil in the Bag: One-Way ANOVA"
+subtitle: "Comparing three or more independent groups"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You have three or more different groups of participants and want to compare their scores on a continuous outcome.
+
+**Example scenarios:**
+- Comparing 3 teaching methods
+- Comparing 4 treatment conditions
+- Comparing performance across multiple sites
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)
+library(emmeans)     # For post-hoc comparisons
+```
+
+
+## Step 2: Load Your Data
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/oneway_anova_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+group_var <- "group"      # Your grouping variable (3+ levels)
+outcome_var <- "score"    # Your outcome variable
+
+# Convert to factor
+data <- data |>
+  mutate(across(all_of(group_var), as.factor))
+
+cat("Group levels:", levels(data[[group_var]]), "\n")
+cat("N per group:\n")
+table(data[[group_var]])
+```
+
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+descriptives <- data |>
+  group_by(.data[[group_var]]) |>
+  summarise(
+    n = n(),
+    mean = mean(.data[[outcome_var]], na.rm = TRUE),
+    sd = sd(.data[[outcome_var]], na.rm = TRUE),
+    se = sd / sqrt(n),
+    ci_lower = mean - 1.96 * se,
+    ci_upper = mean + 1.96 * se
+  )
+
+print(descriptives)
+```
+
+### Visualise the Data
+
+```{r}
+#| label: visualise
+#| fig-cap: "Comparison across groups"
+
+ggplot(data, aes(x = .data[[group_var]], y = .data[[outcome_var]], fill = .data[[group_var]])) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "red") +
+  labs(
+    x = "Group",
+    y = "Score",
+    title = "Distribution by Group"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+## Step 5: Check Assumptions
+
+### Assumption 1: Normality (per group)
+
+```{r}
+#| label: normality
+
+data |>
+  group_by(.data[[group_var]]) |>
+  summarise(
+    shapiro_W = shapiro.test(.data[[outcome_var]])$statistic,
+    shapiro_p = shapiro.test(.data[[outcome_var]])$p.value
+  )
+```
+
+### Assumption 2: Homogeneity of Variance
+
+```{r}
+#| label: levene
+
+library(car)
+leveneTest(as.formula(paste(outcome_var, "~", group_var)), data = data)
+```
+
+
+## Step 6: Run the One-Way ANOVA
+
+```{r}
+#| label: anova
+
+# Run ANOVA
+anova_model <- aov(as.formula(paste(outcome_var, "~", group_var)), data = data)
+
+# Summary
+summary(anova_model)
+```
+
+
+## Step 7: Effect Size
+
+```{r}
+#| label: effect-size
+
+# Eta-squared and partial eta-squared
+eta <- eta_squared(anova_model)
+print(eta)
+
+# Omega-squared (less biased)
+omega <- omega_squared(anova_model)
+print(omega)
+```
+
+**Interpretation:** η² = .01 (small), .06 (medium), .14 (large)
+
+
+## Step 8: Post-Hoc Comparisons
+
+Only interpret if ANOVA is significant.
+
+### Tukey HSD
+
+```{r}
+#| label: posthoc-tukey
+
+tukey_result <- TukeyHSD(anova_model)
+print(tukey_result)
+```
+
+### Using emmeans (more flexible)
+
+```{r}
+#| label: posthoc-emmeans
+
+# Estimated marginal means
+emm <- emmeans(anova_model, specs = group_var)
+print(emm)
+
+# Pairwise comparisons with Tukey adjustment
+pairs(emm, adjust = "tukey")
+```
+
+
+## Step 9: Summary of Results
+
+```{r}
+#| label: summary
+
+# Extract ANOVA results
+anova_summary <- summary(anova_model)[[1]]
+
+cat("=== ONE-WAY ANOVA RESULTS ===\n\n")
+
+cat("DESCRIPTIVES:\n")
+for (i in 1:nrow(descriptives)) {
+  cat(sprintf("  %s: M = %.2f, SD = %.2f, n = %d\n",
+              descriptives[[group_var]][i],
+              descriptives$mean[i],
+              descriptives$sd[i],
+              descriptives$n[i]))
+}
+
+cat("\nANOVA RESULTS:\n")
+cat(sprintf("  F(%d, %d) = %.2f, p = %.3f\n",
+            anova_summary$Df[1],
+            anova_summary$Df[2],
+            anova_summary$`F value`[1],
+            anova_summary$`Pr(>F)`[1]))
+cat(sprintf("  η² = %.3f\n", eta$Eta2[1]))
+
+cat("\nPOST-HOC (Tukey HSD):\n")
+tukey_df <- as.data.frame(tukey_result[[1]])
+for (i in 1:nrow(tukey_df)) {
+  cat(sprintf("  %s: diff = %.2f, p = %.3f\n",
+              rownames(tukey_df)[i],
+              tukey_df$diff[i],
+              tukey_df$`p adj`[i]))
+}
+```
+
+
+## Step 10: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A one-way ANOVA was conducted to compare [OUTCOME] across [NUMBER] groups ([LIST GROUPS]). There was a [significant/non-significant] effect of [GROUP VARIABLE] on [OUTCOME], *F*(XX, XX) = XX.XX, *p* = .XXX, η² = .XX.
+
+Post-hoc comparisons using Tukey's HSD indicated that [GROUP A] (*M* = XX.XX, *SD* = XX.XX) was significantly different from [GROUP B] (*M* = XX.XX, *SD* = XX.XX), *p* = .XXX. [Continue for other significant comparisons...]
+:::
+
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Variables renamed
+- [ ] Assumptions checked (normality, homogeneity)
+- [ ] ANOVA run
+- [ ] Effect size calculated
+- [ ] Post-hoc tests run (if ANOVA significant)
+- [ ] Results interpreted

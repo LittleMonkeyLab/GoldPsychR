@@ -1,0 +1,178 @@
+---
+title: "Part 2: One-Sample T-Test"
+subtitle: "Lab 2: T-Tests"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part2-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** by clicking the "Run Code" button
+2. **Edit the code** - try different values
+3. **Copy to RStudio** - practice the same code in your notebook
+:::
+
+### Load the Data
+
+First, load the test anxiety dataset:
+
+```{webr-r}
+library(readr)
+
+# Load the data
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Data loaded successfully!")
+cat("\nNumber of participants:", nrow(anxiety_data))
+```
+
+### Explore the Data
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# View first few rows
+head(anxiety_data)
+```
+
+### Check Pre-Test Scores
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Calculate mean and SD of pre-test scores
+mean(anxiety_data$anxiety_pre)
+sd(anxiety_data$anxiety_pre)
+```
+
+### One-Sample T-Test
+
+Compare the sample mean to the population mean of 50:
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# One-sample t-test: Is mean different from 50?
+t.test(anxiety_data$anxiety_pre, mu = 50)
+```
+
+::: {.callout-note}
+## Challenge
+Try changing `mu = 50` to `mu = 55`. What happens to the p-value?
+:::
+
+### Interpret the Results
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Run the test and save results
+result <- t.test(anxiety_data$anxiety_pre, mu = 50)
+
+# Extract key values
+cat("Sample mean:", round(mean(anxiety_data$anxiety_pre), 2))
+cat("\nPopulation mean (mu):", 50)
+cat("\nt-value:", round(result$statistic, 3))
+cat("\ndf:", result$parameter)
+cat("\np-value:", round(result$p.value, 4))
+cat("\n\nConclusion:", ifelse(result$p.value < 0.05, "Reject H0", "Fail to reject H0"))
+```
+
+### Visualise the Comparison
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Simple histogram
+hist(anxiety_data$anxiety_pre,
+     main = "Distribution of Pre-Test Anxiety Scores",
+     xlab = "Anxiety Score",
+     col = "lightblue",
+     border = "white")
+
+# Add population mean line
+abline(v = 50, col = "red", lwd = 2, lty = 2)
+
+# Add sample mean line
+abline(v = mean(anxiety_data$anxiety_pre), col = "blue", lwd = 2)
+
+legend("topright",
+       legend = c("Population mean (50)", "Sample mean"),
+       col = c("red", "blue"),
+       lwd = 2,
+       lty = c(2, 1))
+```
+
+---
+
+## Self-Assessment
+
+Check your understanding before moving on.
+
+::: {.webex-check .webex-box}
+
+**1. In a one-sample t-test, we compare our sample to:**
+
+`r mcq(c("Another sample", answer = "A known population value", "The sample median", "The previous sample"))`
+
+**2. The `mu` argument in `t.test()` specifies:**
+
+`r mcq(c("The sample mean", "The sample size", answer = "The hypothesised population mean", "The alpha level"))`
+
+**3. For 80 participants, the degrees of freedom in a one-sample t-test is `r fitb("79")`.**
+
+**4. True or False: A significant result means the sample is definitely from a different population.**
+
+`r torf(FALSE)`
+
+**5. If p = 0.03, at alpha = 0.05, we:**
+
+`r mcq(c("Fail to reject the null", "Need more data", answer = "Reject the null hypothesis", "Accept the null hypothesis"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 1](part1.qmd){.btn .btn-secondary}
+
+[Continue to Part 3: Independent Samples →](part3.qmd){.btn .btn-primary}
+:::

@@ -1,0 +1,129 @@
+---
+title: "Boil in the Bag Analysis Templates"
+subtitle: "Ready-made statistical analyses - just add your data"
+---
+
+## What is this?
+
+**Boil in the Bag** templates are ready-to-run statistical analysis workbooks. Each template:
+
+- Uses a simple dummy dataset with generic variable names
+- Walks through every step: descriptives → assumptions → analysis → interpretation
+- Produces all the numbers you need for APA reporting
+
+**To use:** Replace the dummy data with your own data, update the variable names, and run.
+
+
+## Available Templates
+
+### T-Tests
+
+| Template | Design | When to Use |
+|----------|--------|-------------|
+| [01 Independent t-test](01_independent_ttest.qmd) | 2 independent groups | Comparing two different groups of people |
+| [02 Paired t-test](02_paired_ttest.qmd) | 2 related measurements | Pre-post, matched pairs, within-subjects |
+
+### ANOVA
+
+| Template | Design | When to Use |
+|----------|--------|-------------|
+| [03 One-way ANOVA](03_oneway_anova.qmd) | 3+ independent groups | Comparing three or more groups |
+| [04 Factorial ANOVA](04_factorial_anova.qmd) | 2 between-subjects IVs | Two categorical IVs, testing interaction |
+| [05 Repeated Measures ANOVA](05_repeated_measures_anova.qmd) | 3+ timepoints (within) | Same people measured multiple times |
+| [06 Mixed ANOVA](06_mixed_anova.qmd) | 1 between + 1 within IV | Groups compared across timepoints |
+
+### Regression
+
+| Template | Design | When to Use |
+|----------|--------|-------------|
+| [07 Simple Regression](07_simple_regression.qmd) | 1 predictor | One IV predicting one DV |
+| [08 Multiple Regression (2 predictors)](08_multiple_regression_2pred.qmd) | 2 predictors | Two IVs predicting one DV |
+| [09 Multiple Regression (3 predictors)](09_multiple_regression_3pred.qmd) | 3 predictors | Three IVs predicting one DV |
+
+
+## Data Files
+
+All dummy datasets are in the `data/` folder:
+
+```
+boil_in_the_bag/
+├── data/
+│   ├── independent_ttest_data.csv
+│   ├── paired_ttest_data.csv
+│   ├── oneway_anova_data.csv
+│   ├── factorial_anova_data.csv
+│   ├── repeated_measures_data.csv
+│   ├── mixed_anova_data.csv
+│   ├── simple_regression_data.csv
+│   ├── multiple_regression_2pred_data.csv
+│   └── multiple_regression_3pred_data.csv
+```
+
+
+## How to Adapt for Your Data
+
+### Step 1: Identify Your Analysis Type
+
+Ask yourself:
+- How many groups/conditions? (2 → t-test, 3+ → ANOVA)
+- Same or different people? (same → paired/repeated, different → independent)
+- Predicting a continuous outcome from other variables? → Regression
+
+### Step 2: Prepare Your Data
+
+Format your data to match the template structure:
+- One row per participant (wide format for repeated measures)
+- Clear variable names
+- Categorical variables as text (A, B, C) or numbers
+
+### Step 3: Update the Code
+
+In each template, you'll need to change:
+1. The file path in `read_csv()`
+2. Variable names throughout (use find-and-replace)
+
+### Step 4: Run and Interpret
+
+Execute each chunk in order. The output gives you everything for APA reporting.
+
+
+## Generic Variable Structure
+
+All templates use this structure:
+
+| Variable | Description |
+|----------|-------------|
+| `id` | Participant identifier |
+| `age` | Age (continuous covariate example) |
+| `gender` | Gender (1, 2 coding) |
+| `group` / `factor_a` / `factor_b` | Categorical IV(s) |
+| `score` / `outcome` | Continuous DV |
+| `time1`, `time2`, `time3` | Repeated measures |
+| `predictor`, `predictor1`, `predictor2`, `predictor3` | Continuous IVs for regression |
+
+
+## Quick Decision Tree
+
+```
+What's your research design?
+│
+├── Comparing groups on a continuous outcome?
+│   ├── 2 groups → T-TEST
+│   │   ├── Different people → Independent t-test
+│   │   └── Same people → Paired t-test
+│   │
+│   └── 3+ groups → ANOVA
+│       ├── 1 IV, different people → One-way ANOVA
+│       ├── 2 IVs, different people → Factorial ANOVA
+│       ├── 1 IV, same people (3+ times) → Repeated Measures
+│       └── 1 between + 1 within IV → Mixed ANOVA
+│
+└── Predicting outcome from other variables?
+    └── REGRESSION
+        ├── 1 predictor → Simple Regression
+        ├── 2 predictors → Multiple Regression (2)
+        └── 3 predictors → Multiple Regression (3)
+```
+
+
+*Boil in the Bag templates created for PS52016A Research Methods and Statistics 2*

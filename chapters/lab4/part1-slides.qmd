@@ -1,0 +1,250 @@
+---
+title: "Part 1: Introduction to Correlation & Regression"
+subtitle: "Lab 4: Linear Models"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 4, Part 1"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: []
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+## How This Lab Works: Watch → Try → Do {.center background-color="#2C3E50"}
+
+Every part follows the same **3-step cycle**:
+
+:::::: columns
+::: {.column width="33%"}
+### 1. Watch
+
+**Instructor Demo**
+
+Follow along with slides and live code!
+:::
+
+::: {.column width="33%"}
+### 2. Try
+
+**Practice Here**
+
+Edit code directly in your browser.
+:::
+
+::: {.column width="33%"}
+### 3. Do
+
+**Your Notebook**
+
+Complete exercises in RStudio Server.
+:::
+::::::
+
+---
+
+## Today's Dataset {.center background-color="#27AE60"}
+
+We've collected **Student Wellbeing** data:
+
+-   **100 students** in a wellbeing study
+-   Variables: age, stress, sleep hours, exercise minutes
+-   **Outcome**: Wellbeing score (0-100)
+
+---
+
+## Today's Research Questions
+
+**Questions**:
+
+1. Is stress related to wellbeing?
+2. Does sleep predict wellbeing?
+3. Can we predict wellbeing from multiple factors?
+
+---
+
+## From Comparison to Relationship
+
+So far we've asked: **Do groups differ?**
+
+Now we ask: **Are variables related?**
+
+:::: columns
+::: {.column width="50%"}
+**T-tests/ANOVA**
+
+- Compare group means
+- Categorical IV → Continuous DV
+- "Is there a difference?"
+:::
+
+::: {.column width="50%"}
+**Correlation/Regression**
+
+- Examine relationships
+- Continuous IV → Continuous DV
+- "Is there an association?"
+:::
+::::
+
+---
+
+## Types of Relationships
+
+**Positive relationship**: As X increases, Y increases
+
+**Negative relationship**: As X increases, Y decreases
+
+**No relationship**: No consistent pattern
+
+---
+
+## Visualising Relationships {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+# Positive relationship
+x1 <- 1:20
+y1 <- x1 + rnorm(20, 0, 2)
+plot(x1, y1, main = "Positive Relationship",
+     xlab = "X", ylab = "Y", pch = 19, col = "blue")
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+set.seed(42)
+x1 <- 1:20
+y1 <- x1 + rnorm(20, 0, 2)
+plot(x1, y1, main = "Positive Relationship",
+     xlab = "X", ylab = "Y", pch = 19, col = "blue")
+```
+
+:::
+
+---
+
+## Correlation vs Regression
+
+| Aspect | Correlation | Regression |
+|--------|-------------|------------|
+| **Purpose** | Measure association | Predict outcomes |
+| **Statistic** | r (correlation) | β (slope) |
+| **Direction** | Symmetric | X predicts Y |
+| **Use case** | Describe relationships | Make predictions |
+
+---
+
+## The Correlation Coefficient (r)
+
+Pearson's r measures **linear** relationship strength:
+
+$$r = \frac{\sum(X - \bar{X})(Y - \bar{Y})}{\sqrt{\sum(X - \bar{X})^2 \sum(Y - \bar{Y})^2}}$$
+
+**Range**: -1 to +1
+
+-   **r = 1**: Perfect positive
+-   **r = 0**: No linear relationship
+-   **r = -1**: Perfect negative
+
+---
+
+## Interpreting r
+
+| |r| | Interpretation |
+|-----|----------------|
+| 0.00 - 0.10 | Negligible |
+| 0.10 - 0.30 | Small |
+| 0.30 - 0.50 | Medium |
+| 0.50 - 1.00 | Large |
+
+::: {.callout-note}
+These are Cohen's conventions - context matters!
+:::
+
+---
+
+## Linear Regression {.center background-color="#27AE60"}
+
+Regression finds the **best-fitting line**:
+
+$$Y = b_0 + b_1X + \epsilon$$
+
+-   **b₀**: Intercept (Y when X = 0)
+-   **b₁**: Slope (change in Y per unit X)
+-   **ε**: Error (residuals)
+
+---
+
+## What Regression Does
+
+1. Finds the line that **minimizes squared errors**
+2. Tells us **how much** Y changes with X
+3. Allows us to **predict** Y from X
+4. Tests if the relationship is **significant**
+
+---
+
+## Key Concepts
+
+| Term | Meaning |
+|------|---------|
+| **R²** | Proportion of variance explained |
+| **Slope (b₁)** | Change in Y per unit X |
+| **Intercept (b₀)** | Y when X = 0 |
+| **Residuals** | Prediction errors |
+
+---
+
+## Summary: Part 1 {.center background-color="#2C3E50"}
+
+Key concepts:
+
+-   **Correlation** measures association strength
+-   **r** ranges from -1 to +1
+-   **Regression** predicts Y from X
+-   The **slope** tells us how much Y changes with X
+-   **R²** tells us variance explained
+
+---
+
+## Now It's Your Turn! {.center background-color="#9B1B30"}
+
+Work through the **Try It Yourself** exercises.
+
+{{< countdown "10:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Tips
+
+-   Edit code and experiment with different values
+-   Complete the self-assessment before moving on
+-   Download the exercise notebook and set it up in RStudio
+:::

@@ -1,0 +1,145 @@
+---
+title: "Lab 2: T-Tests"
+subtitle: "Test Anxiety & Statistical Inference"
+format: html
+---
+
+## Overview
+
+In this lab, you'll learn to perform and interpret t-tests in R. Every part follows the same **3-step cycle**:
+
+1. **Watch** - Follow along with the instructor slides (embedded below)
+2. **Try** - Practice with interactive code cells on the activity page
+3. **Do** - Complete exercises in your downloaded notebook in RStudio Server
+
+Work through each part in order, and don't skip steps!
+
+## T-Test Adventure
+
+Build your intuition before diving into code! This interactive app lets you experiment with sample sizes, means, and standard deviations to see how they affect t-test results.
+
+<iframe src="https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/" width="100%" height="600px" frameborder="0" style="border: 1px solid #ccc; border-radius: 5px;"></iframe>
+
+## Lab Parts
+
+Work through each part in order:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/brain.svg){width=24} Part 1: Introduction to T-Tests
+- Hypothesis testing concepts
+- Types of t-tests
+- When to use each test
+
+[**Start Part 1**](part1.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=24} Part 2: One-Sample T-Test
+- Comparing to a known value
+- Test assumptions
+- Interpreting output
+
+[**Start Part 2**](part2.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/group.svg){width=24} Part 3: Independent Samples T-Test
+- Comparing two groups
+- Levene's test
+- Welch's correction
+
+[**Start Part 3**](part3.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/code.svg){width=24} Part 4: Paired Samples T-Test
+- Pre-post comparisons
+- Within-subjects design
+- Difference scores
+
+[**Start Part 4**](part4.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=24} Part 5: Effect Sizes & Reporting
+- Cohen's d calculation
+- APA-style results
+- Professional write-up
+
+[**Start Part 5**](part5.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=24} Extra Practice
+Apply your skills to a new dataset.
+
+[**Follow-On Exercise**](../../followon/lab2-followon.qmd){.btn .btn-secondary}
+:::
+
+::::
+
+---
+
+## ![](/assets/images/svg/target.svg){width=24} Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- Explain the logic of null hypothesis significance testing
+- Choose the appropriate t-test for different research designs
+- Conduct a one-sample t-test using `t.test()`
+- Conduct an independent samples t-test comparing two groups
+- Conduct a paired samples t-test for pre-post designs
+- Calculate and interpret Cohen's d effect sizes
+- Check assumptions for t-tests
+- Write APA-style results for t-tests
+
+---
+
+## The Data Story
+
+We've collected data from a Test Anxiety intervention study:
+
+- **80 university students** completed the Test Anxiety Inventory
+- Participants were assigned to either **Control** or **Intervention** groups
+- Anxiety was measured **before and after** the intervention
+- The population mean for this scale is known to be **50**
+
+**Our research questions**:
+1. Does our sample differ from the population norm?
+2. Do the groups differ at baseline?
+3. Did anxiety change from pre to post?
+
+::: {.callout-note}
+![](/assets/images/svg/brain.svg){width=20 style="float: left; margin-right: 10px;"}
+
+## Learn More About Test Anxiety
+
+Test anxiety affects academic performance and wellbeing. Understanding how to measure and reduce it is crucial for educational psychology.
+:::
+
+::: {.callout-tip}
+## Recommended Setup
+Keep this page open in one browser tab and RStudio Server in another. That's all you need!
+:::
+
+---
+
+## Need Help?
+
+::: {.callout-note}
+![](/assets/images/svg/help.svg){width=20 style="float: left; margin-right: 10px;"}
+
+- **During the lab**: Ask your instructor
+- **Reference**: Check the [R Toolbox](../../toolbox/index.qmd) for code examples
+- **Errors**: See the [Troubleshooting Guide](../../toolbox/troubleshooting.qmd)
+:::

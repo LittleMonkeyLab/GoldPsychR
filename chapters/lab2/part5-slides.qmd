@@ -1,0 +1,510 @@
+---
+title: "Part 5: Effect Sizes & Reporting"
+subtitle: "Lab 2: T-Tests"
+format:
+  revealjs:
+    slide-number: true
+    progress: true
+    hash: true
+    transition: fade
+    scrollable: true
+    width: 1280
+    height: 720
+    theme: default
+    logo: ../../assets/images/GoldLogo.png
+    footer: "GoldPsychR - Lab 2, Part 5"
+    embed-resources: false
+    code-line-numbers: false
+    highlight-style: github
+filters:
+  - webr
+  - countdown
+webr:
+  packages: ['readr']
+  show-startup-message: false
+css: |
+  pre code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+---
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Beyond p-values {.center background-color="#2C3E50"}
+
+**Effect Sizes Tell Us HOW BIG the Difference Is**
+
+---
+
+## Why Effect Sizes Matter
+
+A p-value tells us IF a difference exists, but not **how big** it is.
+
+**Effect sizes** tell us the **magnitude** of the difference.
+
+::: {.callout-important}
+## Key Insight
+A tiny effect can be "statistically significant" with a large sample!
+:::
+
+---
+
+## Consider Two Studies
+
+| Study | n | Mean Difference | p-value | Cohen's d |
+|-------|---|-----------------|---------|-----------|
+| A | 1000 | 1.5 points | p < .001 | 0.10 |
+| B | 30 | 8.0 points | p = .04 | 0.75 |
+
+Which is more meaningful practically?
+
+---
+
+## Cohen's d
+
+The most common effect size for t-tests:
+
+$$d = \frac{\text{Difference}}{\text{Standard Deviation}}$$
+
+**Interpretation** (Cohen's conventions):
+
+| d | Interpretation |
+|---|----------------|
+| 0.2 | Small |
+| 0.5 | Medium |
+| 0.8 | Large |
+
+---
+
+## Cohen's d for One-Sample Test {background-color="#f0f0f0"}
+
+$$d = \frac{\bar{x} - \mu_0}{s}$$
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+sample_mean <- mean(anxiety_data$anxiety_pre)
+sample_sd <- sd(anxiety_data$anxiety_pre)
+pop_mean <- 50
+
+d <- (sample_mean - pop_mean) / sample_sd
+d
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+sample_mean <- mean(anxiety_data$anxiety_pre)
+sample_sd <- sd(anxiety_data$anxiety_pre)
+pop_mean <- 50
+
+d <- (sample_mean - pop_mean) / sample_sd
+d
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+sample_mean <- mean(anxiety_data$anxiety_pre)
+sample_sd <- sd(anxiety_data$anxiety_pre)
+pop_mean <- 50
+
+d <- (sample_mean - pop_mean) / sample_sd
+size <- if(abs(d) < 0.2) "negligible" else if(abs(d) < 0.5) "small" else if(abs(d) < 0.8) "medium" else "large"
+
+cat("Cohen's d tells us the size of the effect in standard deviation units.\n\n")
+
+cat("Formula: d = (sample mean - population mean) / SD\n")
+cat("        d = (", round(sample_mean, 2), " - ", pop_mean, ") / ", round(sample_sd, 2), "\n", sep = "")
+cat("        d =", round(d, 3), "\n\n")
+
+cat("This means our sample is", round(abs(d), 2), "standard deviations",
+    ifelse(d > 0, "above", "below"), "\n")
+cat("the population mean. That's a", size, "effect by Cohen's conventions.\n\n")
+
+cat("Why does this matter? A p-value tells you IF there's an effect, but\n")
+cat("d tells you HOW BIG. With a large enough sample, even a tiny difference\n")
+cat("can be 'significant' - but is it meaningful? Effect sizes help you\n")
+cat("and your readers judge practical importance, not just statistical.")
+```
+
+:::
+
+---
+
+## Cohen's d for Independent Samples
+
+$$d = \frac{\bar{x}_1 - \bar{x}_2}{s_{pooled}}$$
+
+Uses **pooled standard deviation**:
+
+$$s_{pooled} = \sqrt{\frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2}}$$
+
+---
+
+## Calculating d for Independent Samples {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+m1 <- mean(control); m2 <- mean(intervention)
+n1 <- length(control); n2 <- length(intervention)
+
+pooled_sd <- sqrt(((n1-1)*var(control) + (n2-1)*var(intervention)) / (n1+n2-2))
+d <- (m1 - m2) / pooled_sd
+d
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+m1 <- mean(control); m2 <- mean(intervention)
+n1 <- length(control); n2 <- length(intervention)
+
+pooled_sd <- sqrt(((n1-1)*var(control) + (n2-1)*var(intervention)) / (n1+n2-2))
+d <- (m1 - m2) / pooled_sd
+d
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+m1 <- mean(control); m2 <- mean(intervention)
+n1 <- length(control); n2 <- length(intervention)
+
+pooled_sd <- sqrt(((n1-1)*var(control) + (n2-1)*var(intervention)) / (n1+n2-2))
+d <- (m1 - m2) / pooled_sd
+size <- if(abs(d) < 0.2) "negligible" else if(abs(d) < 0.5) "small" else if(abs(d) < 0.8) "medium" else "large"
+
+cat("For independent samples, we use the POOLED standard deviation.\n")
+cat("This combines variability from both groups into one estimate.\n\n")
+
+cat("Control:      M =", round(m1, 2), ", n =", n1, "\n")
+cat("Intervention: M =", round(m2, 2), ", n =", n2, "\n")
+cat("Pooled SD:    ", round(pooled_sd, 2), "\n\n")
+
+cat("Cohen's d = (", round(m1, 2), " - ", round(m2, 2), ") / ", round(pooled_sd, 2),
+    " = ", round(d, 3), "\n\n", sep = "")
+
+cat("This is a", size, "effect. The", ifelse(d > 0, "control", "intervention"),
+    "group scores\n")
+cat("about", round(abs(d), 2), "standard deviations",
+    ifelse(d > 0, "higher", "lower"), "than the other.\n\n")
+
+cat("In your results: '...with a", size, "effect size, d =", round(d, 2), ".'\n")
+cat("This gives readers a standardized measure they can compare across\n")
+cat("different studies, even if those studies used different scales.")
+```
+
+:::
+
+---
+
+## Cohen's d for Paired Samples {background-color="#f0f0f0"}
+
+$$d = \frac{\bar{d}}{s_d}$$
+
+Uses the standard deviation of the **difference scores**:
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+
+d <- mean(diff) / sd(diff)
+d
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+
+d <- mean(diff) / sd(diff)
+d
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+
+d <- mean(diff) / sd(diff)
+size <- if(abs(d) < 0.2) "negligible" else if(abs(d) < 0.5) "small" else if(abs(d) < 0.8) "medium" else "large"
+m_diff <- round(mean(diff), 2)
+sd_diff <- round(sd(diff), 2)
+
+cat("For paired samples, Cohen's d uses the SD of the DIFFERENCE scores,\n")
+cat("matching what the paired t-test does.\n\n")
+
+cat("Mean difference: ", m_diff, " (pre - post)\n", sep = "")
+cat("SD of differences:", sd_diff, "\n")
+cat("Cohen's d = ", m_diff, " / ", sd_diff, " = ", round(d, 3), "\n\n", sep = "")
+
+cat("This is a", size, "effect. Each person changed by an average of\n")
+cat(round(abs(d), 2), "standard deviations.\n\n")
+
+cat("Note: some researchers prefer 'dz' for paired designs, using the\n")
+cat("within-subjects variability. Others use 'dav' which averages the\n")
+cat("pre and post SDs. The version here (sometimes called 'drm') uses\n")
+cat("the SD of difference scores - always clarify which you're reporting!\n\n")
+
+cat("The formula you use affects the NUMBER you get, so be consistent\n")
+cat("and explicit in your methods section.")
+```
+
+:::
+
+---
+
+## APA Reporting Format {.center background-color="#27AE60"}
+
+T-test results should include:
+
+1. **Descriptive statistics** (M, SD, n)
+2. **Test statistic** (t)
+3. **Degrees of freedom** (df)
+4. **P-value** (p)
+5. **Effect size** (d)
+
+---
+
+## APA Example: One-Sample Test
+
+> A one-sample t-test revealed that students' pre-test anxiety scores (M = 52.45, SD = 10.23) were significantly higher than the population mean of 50, t(79) = 2.14, p = .035, d = 0.24, indicating a small effect.
+
+---
+
+## APA Example: Independent Samples
+
+> An independent samples t-test compared post-test anxiety between groups. The intervention group (M = 46.82, SD = 9.45, n = 40) showed significantly lower anxiety than the control group (M = 52.78, SD = 10.12, n = 40), t(78) = 2.71, p = .008, d = 0.61.
+
+---
+
+## APA Example: Paired Samples
+
+> A paired samples t-test revealed a significant decrease in anxiety from pre-test (M = 53.20, SD = 10.15) to post-test (M = 46.82, SD = 9.45) in the intervention group, t(39) = 4.23, p < .001, d = 0.89, indicating a large effect.
+
+---
+
+## Template for Your Write-Up
+
+```
+[Test type] revealed that [IV/comparison]
+[result]. [Group/Condition 1] (M = ___, SD = ___)
+showed [significantly/no significant]
+[difference/higher/lower] [DV] than/compared to
+[Group/Condition 2] (M = ___, SD = ___),
+t(___) = ___, p = ___, d = ___.
+```
+
+---
+
+## Reporting Non-Significant Results
+
+Don't say "no difference exists"! Say:
+
+> "The difference was not statistically significant, t(78) = 0.52, p = .60, d = 0.12, suggesting a negligible effect."
+
+The effect size helps interpret non-significant results.
+
+---
+
+## Common Mistakes to Avoid
+
+1. **Forgetting effect size** - Always report Cohen's d
+2. **Over-interpreting p-values** - p < .001 ≠ "huge effect"
+3. **Saying "proved"** - Statistics support, not prove
+4. **Ignoring assumptions** - Check and report them
+5. **Wrong df** - One-sample: n-1, Independent: n1+n2-2, Paired: n-1
+
+---
+
+## Full Example: Putting It Together {background-color="#f0f0f0"}
+
+::: {.panel-tabset}
+
+### {{< fa code >}} Interactive
+
+```{webr-r}
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+
+# Key statistics
+pre_m <- round(mean(intervention$anxiety_pre), 2)
+pre_sd <- round(sd(intervention$anxiety_pre), 2)
+post_m <- round(mean(intervention$anxiety_post), 2)
+post_sd <- round(sd(intervention$anxiety_post), 2)
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d <- round(mean(diff)/sd(diff), 2)
+
+cat("Pre: M =", pre_m, ", SD =", pre_sd, "\n")
+cat("Post: M =", post_m, ", SD =", post_sd, "\n")
+cat("t =", round(result$statistic, 2), "\n")
+cat("df =", result$parameter, "\n")
+cat("p =", round(result$p.value, 4), "\n")
+cat("d =", d)
+```
+
+### {{< fa file-code >}} Static
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+
+# Key statistics
+pre_m <- round(mean(intervention$anxiety_pre), 2)
+pre_sd <- round(sd(intervention$anxiety_pre), 2)
+post_m <- round(mean(intervention$anxiety_post), 2)
+post_sd <- round(sd(intervention$anxiety_post), 2)
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d <- round(mean(diff)/sd(diff), 2)
+
+cat("Pre: M =", pre_m, ", SD =", pre_sd, "\n")
+cat("Post: M =", post_m, ", SD =", post_sd, "\n")
+cat("t =", round(result$statistic, 2), "\n")
+cat("df =", result$parameter, "\n")
+cat("p =", round(result$p.value, 4), "\n")
+cat("d =", d)
+```
+
+### {{< fa lightbulb >}} Explained
+
+```{webr-r}
+#| autorun: true
+#| read-only: true
+#| warning: false
+#| message: false
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+
+pre_m <- round(mean(intervention$anxiety_pre), 2)
+pre_sd <- round(sd(intervention$anxiety_pre), 2)
+post_m <- round(mean(intervention$anxiety_post), 2)
+post_sd <- round(sd(intervention$anxiety_post), 2)
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d <- round(mean(diff)/sd(diff), 2)
+p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result$p.value, 3))
+size <- if(abs(d) < 0.2) "negligible" else if(abs(d) < 0.5) "small" else if(abs(d) < 0.8) "medium" else "large"
+
+cat("Here's everything you need for an APA results paragraph:\n\n")
+
+cat("Statistics: t(", result$parameter, ") = ", round(result$statistic, 2),
+    ", ", p_text, ", d = ", d, "\n\n", sep = "")
+
+cat("Now write it up:\n\n")
+
+cat("'A paired-samples t-test revealed a significant decrease in anxiety\n")
+cat("from pre-test (M = ", pre_m, ", SD = ", pre_sd, ") to post-test\n", sep = "")
+cat("(M = ", post_m, ", SD = ", post_sd, ") in the intervention group,\n", sep = "")
+cat("t(", result$parameter, ") = ", round(result$statistic, 2), ", ",
+    p_text, ", d = ", d, ", indicating a ", size, " effect.'\n\n", sep = "")
+
+cat("Notice the structure: descriptives first (M, SD), then the test\n")
+cat("statistic (t), degrees of freedom, p-value, and finally effect size.\n")
+cat("This gives readers everything they need to evaluate your finding.")
+```
+
+:::
+
+---
+
+## Summary: Effect Sizes & Reporting {.center background-color="#2C3E50"}
+
+Key points:
+
+-   **Cohen's d** measures effect magnitude
+-   Small = 0.2, Medium = 0.5, Large = 0.8
+-   **APA format**: descriptives, t, df, p, d
+-   Effect sizes help interpret both significant and non-significant results
+-   Always report **both** statistical significance AND effect size
+
+---
+
+## Lab Complete! {.center background-color="#27AE60"}
+
+Congratulations! You've learned:
+
+-   ✅ One-sample t-tests
+-   ✅ Independent samples t-tests
+-   ✅ Paired samples t-tests
+-   ✅ Cohen's d effect sizes
+-   ✅ APA-style reporting
+
+---
+
+## Now Complete Your Notebook! {.center background-color="#9B1B30"}
+
+{{< countdown "15:00" start_immediately="true" >}}
+
+::: {.callout-tip}
+## Final Tasks
+
+1. Complete Part 5 in your notebook
+2. Write APA results for each t-test
+3. Calculate all effect sizes
+4. Answer reflection questions
+5. **Render to HTML** and check your work!
+:::

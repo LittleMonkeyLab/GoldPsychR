@@ -1,0 +1,261 @@
+---
+title: "Boil in the Bag: Simple Linear Regression"
+subtitle: "One predictor, one outcome"
+format: html
+---
+
+## Overview
+
+**Use this template when:** You want to predict a continuous outcome from a single continuous predictor.
+
+**Example scenarios:**
+- Predicting exam score from study hours
+- Predicting wellbeing from social media use
+- Predicting anxiety from personality score
+
+
+## Step 1: Setup
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(effectsize)
+```
+
+
+## Step 2: Load Your Data
+
+```{r}
+#| label: load-data
+
+# CHANGE THIS: Replace with your data file
+data <- read_csv("data/simple_regression_data.csv")
+
+glimpse(data)
+```
+
+
+## Step 3: Define Your Variables
+
+```{r}
+#| label: define-variables
+
+# CHANGE THESE to your variable names
+predictor <- "predictor"   # Your IV (continuous)
+outcome <- "outcome"       # Your DV (continuous)
+```
+
+
+## Step 4: Descriptive Statistics
+
+```{r}
+#| label: descriptives
+
+data |>
+  summarise(
+    # Predictor
+    pred_mean = mean(.data[[predictor]], na.rm = TRUE),
+    pred_sd = sd(.data[[predictor]], na.rm = TRUE),
+    pred_min = min(.data[[predictor]], na.rm = TRUE),
+    pred_max = max(.data[[predictor]], na.rm = TRUE),
+    # Outcome
+    out_mean = mean(.data[[outcome]], na.rm = TRUE),
+    out_sd = sd(.data[[outcome]], na.rm = TRUE),
+    out_min = min(.data[[outcome]], na.rm = TRUE),
+    out_max = max(.data[[outcome]], na.rm = TRUE),
+    # Correlation
+    r = cor(.data[[predictor]], .data[[outcome]], use = "complete.obs")
+  )
+```
+
+### Visualise: Scatterplot
+
+```{r}
+#| label: scatterplot
+#| fig-cap: "Relationship between predictor and outcome"
+
+ggplot(data, aes(x = .data[[predictor]], y = .data[[outcome]])) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
+  labs(
+    x = "Predictor",
+    y = "Outcome",
+    title = "Simple Linear Regression"
+  ) +
+  theme_minimal()
+```
+
+
+## Step 5: Run the Regression
+
+```{r}
+#| label: regression
+
+model <- lm(as.formula(paste(outcome, "~", predictor)), data = data)
+
+summary(model)
+```
+
+
+## Step 6: Extract Key Statistics
+
+```{r}
+#| label: extract-stats
+
+model_summary <- summary(model)
+
+# Coefficients
+intercept <- coef(model)[1]
+slope <- coef(model)[2]
+
+# R-squared
+r_squared <- model_summary$r.squared
+adj_r_squared <- model_summary$adj.r.squared
+
+# F-test
+f_stat <- model_summary$fstatistic[1]
+df1 <- model_summary$fstatistic[2]
+df2 <- model_summary$fstatistic[3]
+f_p <- pf(f_stat, df1, df2, lower.tail = FALSE)
+
+# Coefficient test
+coef_table <- coef(model_summary)
+b <- coef_table[2, 1]
+se_b <- coef_table[2, 2]
+t_val <- coef_table[2, 3]
+t_p <- coef_table[2, 4]
+
+cat("Intercept (b0):", round(intercept, 3), "\n")
+cat("Slope (b1):", round(slope, 3), "\n")
+cat("R²:", round(r_squared, 3), "\n")
+cat("Adjusted R²:", round(adj_r_squared, 3), "\n")
+```
+
+
+## Step 7: Check Assumptions
+
+### 1. Linearity
+
+```{r}
+#| label: linearity
+#| fig-cap: "Residuals vs Fitted values"
+
+plot(model, which = 1)
+```
+
+**Look for:** Random scatter around zero. Patterns suggest non-linearity.
+
+### 2. Normality of Residuals
+
+```{r}
+#| label: normality
+#| fig-cap: "Q-Q plot of residuals"
+
+plot(model, which = 2)
+
+# Shapiro-Wilk test
+shapiro.test(residuals(model))
+```
+
+### 3. Homoscedasticity
+
+```{r}
+#| label: homoscedasticity
+#| fig-cap: "Scale-Location plot"
+
+plot(model, which = 3)
+```
+
+**Look for:** Horizontal red line, evenly spread points.
+
+### 4. Influential Cases
+
+```{r}
+#| label: influential
+#| fig-cap: "Cook's distance"
+
+plot(model, which = 4)
+
+# Cases with high Cook's D
+n <- nrow(data)
+influential <- which(cooks.distance(model) > 4/n)
+if(length(influential) > 0) {
+  cat("Potentially influential cases:", influential, "\n")
+} else {
+  cat("No highly influential cases detected\n")
+}
+```
+
+
+## Step 8: Confidence Intervals
+
+```{r}
+#| label: confidence-intervals
+
+confint(model)
+```
+
+
+## Step 9: Effect Size
+
+```{r}
+#| label: effect-size
+
+# f² from R²
+f_squared <- r_squared / (1 - r_squared)
+
+cat("R² =", round(r_squared, 3), "\n")
+cat("f² =", round(f_squared, 3), "\n")
+cat("\nInterpretation: f² = 0.02 (small), 0.15 (medium), 0.35 (large)\n")
+```
+
+
+## Step 10: Summary of Results
+
+```{r}
+#| label: summary
+
+cat("=== SIMPLE REGRESSION RESULTS ===\n\n")
+
+cat("MODEL:\n")
+cat(sprintf("  %s = %.2f + %.2f × %s\n", outcome, intercept, slope, predictor))
+
+cat("\nMODEL FIT:\n")
+cat(sprintf("  R² = %.3f (%.1f%% variance explained)\n", r_squared, r_squared * 100))
+cat(sprintf("  F(%d, %d) = %.2f, p = %.4f\n", df1, df2, f_stat, f_p))
+
+cat("\nPREDICTOR:\n")
+cat(sprintf("  %s: b = %.3f, SE = %.3f, t = %.2f, p = %.4f\n",
+            predictor, b, se_b, t_val, t_p))
+cat(sprintf("  95%% CI: [%.3f, %.3f]\n",
+            confint(model)[2, 1], confint(model)[2, 2]))
+
+cat("\nEFFECT SIZE:\n")
+cat(sprintf("  f² = %.3f\n", f_squared))
+```
+
+
+## Step 11: APA Write-Up Template
+
+::: {.callout-note}
+## APA Format
+
+A simple linear regression was conducted to predict [OUTCOME] from [PREDICTOR]. The model was [significant/non-significant], *F*(1, XX) = XX.XX, *p* = .XXX, explaining XX.X% of the variance in [OUTCOME] (*R*² = .XX).
+
+[PREDICTOR] was a [significant/non-significant] predictor of [OUTCOME], *b* = X.XX, *SE* = X.XX, *t*(XX) = X.XX, *p* = .XXX, 95% CI [X.XX, X.XX]. For each one-unit increase in [PREDICTOR], [OUTCOME] [increased/decreased] by X.XX units.
+:::
+
+
+## Checklist
+
+- [ ] Data loaded correctly
+- [ ] Variables defined
+- [ ] Scatterplot examined (linear relationship?)
+- [ ] Regression model run
+- [ ] Assumptions checked (linearity, normality, homoscedasticity)
+- [ ] Influential cases examined
+- [ ] Effect size calculated
+- [ ] Confidence intervals obtained
+- [ ] Results interpreted

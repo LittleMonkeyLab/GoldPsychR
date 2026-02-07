@@ -1,7 +1,6 @@
 ---
-title: "Lab 2: Comparing Groups"
-subtitle: "Interactive Practice with WebR"
-author: "Gordon Wright"
+title: "Lab 2: T-Tests - WebR Practice"
+subtitle: "Interactive Browser-Based Practice"
 format:
   html:
     toc: true
@@ -12,7 +11,7 @@ format:
 filters:
   - webr
 webr:
-  packages: ['dplyr', 'ggplot2']
+  packages: ['readr', 'dplyr', 'ggplot2']
   show-startup-message: false
 ---
 
@@ -24,92 +23,169 @@ library(webexercises)
 
 # Welcome
 
-This interactive chapter lets you practice t-tests and effect sizes directly in your browser.
+This interactive page lets you practice t-tests directly in your browser - no installation required!
 
 ::: {.callout-tip}
 ## How to Use This Page
 
-1. Read the explanations carefully
-2. Run the code cells by clicking the **Run** button
-3. Modify code and experiment
-4. Complete the self-check questions
+1. **Run the setup code first** - this loads the data
+2. **Work through the exercises** - edit code and click "Run Code"
+3. **Experiment freely** - you can't break anything!
+4. **Refer back to slides** - use this alongside the instructor demonstration
 :::
+
+## T-Test Adventure
+
+Before diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results.
+
+<iframe src="https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/" width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc; border-radius: 5px;"></iframe>
 
 ```{webr-r}
 #| context: setup
 #| autorun: true
 
-# Simulate experimental data
-set.seed(42)
-n <- 60
-
-experiment <- data.frame(
-  participant = 1:n,
-  condition = rep(c("control", "treatment"), each = n/2),
-  score = c(
-    rnorm(n/2, mean = 50, sd = 10),
-    rnorm(n/2, mean = 58, sd = 10)
-  )
-)
-
-# Pre-post data
-pre_post <- data.frame(
-  participant = 1:30,
-  pre = rnorm(30, mean = 45, sd = 8),
-  post = rnorm(30, mean = 52, sd = 8)
-)
+# Load the test anxiety data
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+cat("Data loaded: 80 participants, control vs intervention groups")
 ```
 
-# Independent Samples t-test
+---
+
+# Part 1: Exploring the Data
+
+## View the Data
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+head(anxiety_data)
+```
+
+## Check the Groups
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+table(anxiety_data$group)
+```
+
+::: {.callout-note}
+## Self-Check
+
+How many participants are in each group?
+
+`r mcq(c("20 each", answer = "40 each", "60 each", "80 each"))`
+:::
+
+---
+
+# Part 2: One-Sample T-Test
+
+## When to Use
+
+Use a **one-sample t-test** when:
+
+- You have **one sample** of data
+- You want to compare to a **known population value**
+- Example: Is our sample mean different from 50?
+
+## Sample Descriptives
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Pre-test Anxiety:\n")
+cat("Mean:", round(mean(anxiety_data$anxiety_pre), 2), "\n")
+cat("SD:", round(sd(anxiety_data$anxiety_pre), 2), "\n")
+cat("Population mean:", 50)
+```
+
+## Run the Test
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# One-sample t-test: Is mean different from 50?
+t.test(anxiety_data$anxiety_pre, mu = 50)
+```
+
+::: {.callout-note}
+## Self-Check
+
+What does `mu = 50` specify in the t.test function?
+
+`r mcq(c("The sample mean", "The sample size", answer = "The hypothesised population mean", "The alpha level"))`
+:::
+
+---
+
+# Part 3: Independent Samples T-Test
 
 ## When to Use
 
 Use an **independent samples t-test** when:
 
-- Comparing two **different** groups
+- Comparing **two different groups**
 - Each participant is in only one condition
 - The outcome variable is continuous
 
-## Running the Test
+## Group Descriptives
 
 ```{webr-r}
-#| autorun: true
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-# View the data
-head(experiment)
+control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
+
+cat("Control: M =", round(mean(control), 2), ", SD =", round(sd(control), 2), "\n")
+cat("Intervention: M =", round(mean(intervention), 2), ", SD =", round(sd(intervention), 2))
 ```
 
+## Compare Groups at Pre-Test
+
 ```{webr-r}
-# Run independent samples t-test
-t.test(score ~ condition, data = experiment)
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Independent samples t-test
+t.test(anxiety_pre ~ group, data = anxiety_data)
 ```
 
 ::: {.callout-note}
 ## Self-Check
 
-What does the formula `score ~ condition` mean?
+What does the formula `score ~ group` mean?
 
-`r mcq(c("Score equals condition", answer = "Score predicted by condition", "Score minus condition"))`
+`r mcq(c("Score equals group", answer = "Score predicted by group", "Score minus group"))`
 :::
 
-## Understanding the Output
+## Compare Groups at Post-Test
 
-Key values to report:
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-- **t-statistic**: How many standard errors the means differ
-- **df**: Degrees of freedom
-- **p-value**: Probability under the null hypothesis
-- **95% CI**: Confidence interval for the difference
+# Compare post-test scores
+t.test(anxiety_post ~ group, data = anxiety_data)
+```
 
-::: {.callout-note}
-## Self-Check
+---
 
-If p < .05, we conclude:
-
-`r mcq(c("No effect", answer = "Statistically significant difference", "Large effect size"))`
-:::
-
-# Paired Samples t-test
+# Part 4: Paired Samples T-Test
 
 ## When to Use
 
@@ -119,18 +195,15 @@ Use a **paired samples t-test** when:
 - Pre-post designs
 - Within-subjects comparisons
 
-## Running the Test
+## Overall Pre-Post Change
 
 ```{webr-r}
-#| autorun: true
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-# View pre-post data
-head(pre_post)
-```
-
-```{webr-r}
-# Paired t-test
-t.test(pre_post$pre, pre_post$post, paired = TRUE)
+# Paired t-test for all participants
+t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
 ```
 
 ::: {.callout-note}
@@ -141,7 +214,31 @@ What does `paired = TRUE` tell R?
 `r mcq(c("Use two separate groups", answer = "Same participants measured twice", "Double the sample size"))`
 :::
 
-# Effect Sizes
+## Intervention Group Only
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+```
+
+## Control Group Only
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+control <- anxiety_data[anxiety_data$group == "control", ]
+t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
+```
+
+---
+
+# Part 5: Effect Sizes
 
 ## Why Effect Sizes Matter
 
@@ -149,16 +246,26 @@ Statistical significance tells us IF there's an effect.
 
 Effect size tells us HOW BIG the effect is.
 
-## Cohen's d
+## Cohen's d for Independent Samples
 
 ```{webr-r}
-# Calculate Cohen's d manually
-control_mean <- mean(experiment$score[experiment$condition == "control"])
-treatment_mean <- mean(experiment$score[experiment$condition == "treatment"])
-pooled_sd <- sd(experiment$score)
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-cohens_d <- (treatment_mean - control_mean) / pooled_sd
-cohens_d
+# Post-test comparison
+control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+m1 <- mean(control)
+m2 <- mean(intervention)
+n1 <- length(control)
+n2 <- length(intervention)
+
+pooled_sd <- sqrt(((n1-1)*var(control) + (n2-1)*var(intervention)) / (n1+n2-2))
+d <- (m1 - m2) / pooled_sd
+
+cat("Cohen's d =", round(d, 3))
 ```
 
 ## Interpreting Cohen's d
@@ -177,70 +284,76 @@ A Cohen's d of 0.65 would be considered:
 `r mcq(c("Small", answer = "Medium", "Large"))`
 :::
 
-# Visualising Group Differences
-
-## Boxplot
+## Cohen's d for Paired Samples
 
 ```{webr-r}
-#| fig-width: 8
-#| fig-height: 5
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
 
-library(ggplot2)
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d <- mean(diff) / sd(diff)
 
-ggplot(experiment, aes(x = condition, y = score, fill = condition)) +
-  geom_boxplot(alpha = 0.7) +
-  theme_minimal() +
-  labs(title = "Scores by Condition",
-       x = "Condition", y = "Score")
+cat("Cohen's d =", round(d, 3))
 ```
 
-# APA Reporting
+---
 
-## Template
+# Visualisation
 
-> An independent samples t-test revealed a [significant/non-significant] difference between groups, *t*(df) = [t-value], *p* = [p-value], *d* = [effect size].
-
-## Example
+## Boxplot by Group
 
 ```{webr-r}
-# Get values for reporting
-result <- t.test(score ~ condition, data = experiment)
-cat("t =", round(result$statistic, 2), "\n")
-cat("df =", round(result$parameter, 0), "\n")
-cat("p =", round(result$p.value, 3), "\n")
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+boxplot(anxiety_post ~ group, data = anxiety_data,
+        main = "Post-Test Anxiety by Group",
+        xlab = "Group", ylab = "Anxiety Score",
+        col = c("lightcoral", "lightgreen"))
 ```
+
+---
 
 # Knowledge Check
 
 ::: {.webex-check .webex-box}
 
-**1. Which test compares the same participants at two time points?**
+**1. Which test compares a sample to a known population value?**
+
+`r mcq(c(answer = "One-sample t-test", "Independent samples t-test", "Paired samples t-test"))`
+
+**2. Which test compares the same participants at two time points?**
 
 `r mcq(c("Independent samples t-test", answer = "Paired samples t-test", "One-way ANOVA"))`
 
-**2. True or False: A significant p-value tells us the effect is large.**
+**3. True or False: A significant p-value tells us the effect is large.**
 
 `r torf(FALSE)`
 
-**3. What effect size measure is commonly used with t-tests?**
+**4. What effect size measure is commonly used with t-tests?**
 
 `r fitb("Cohen's d", ignore_case = TRUE)`
 
 :::
 
-# Summary
+---
 
-::: {.callout-tip}
-## Key Skills Practised
+# Quick Reference
 
-1. Running independent samples t-tests
-2. Running paired samples t-tests
-3. Calculating effect sizes
-4. Interpreting and reporting results
-:::
+| Slide Part | Key Function |
+|------------|--------------|
+| Part 2: One-Sample | `t.test(x, mu = value)` |
+| Part 3: Independent | `t.test(y ~ group, data = df)` |
+| Part 4: Paired | `t.test(x, y, paired = TRUE)` |
+| Part 5: Effect Size | `d = difference / pooled_sd` |
+
+---
 
 ## Next Steps
 
-1. Download the **exercise** (.qmd file)
-2. Complete the analysis in RStudio
+1. Return to the activity pages for more detailed practice
+2. Complete the **exercise notebook** in RStudio Server
 3. Try the **follow-on exercise** for extra practice

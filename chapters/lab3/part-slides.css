@@ -1,0 +1,8 @@
+/* Prevent narrow slides in WebR */
+.reveal .slides {
+  width: 100% !important;
+}
+
+.reveal .slides section {
+  width: 100% !important;
+}

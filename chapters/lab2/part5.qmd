@@ -1,0 +1,201 @@
+---
+title: "Part 5: Effect Sizes & Reporting"
+subtitle: "Lab 2: T-Tests"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part5-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to calculate effect sizes
+2. **Practice** writing APA-style results
+3. **Copy to RStudio** for your final write-up
+:::
+
+### Load the Data
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+cat("Data loaded! Ready to calculate effect sizes.")
+```
+
+### Cohen's d for One-Sample T-Test
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# One-sample: How far is our mean from 50?
+sample_mean <- mean(anxiety_data$anxiety_pre)
+sample_sd <- sd(anxiety_data$anxiety_pre)
+pop_mean <- 50
+
+# Cohen's d
+d_one_sample <- (sample_mean - pop_mean) / sample_sd
+
+cat("Sample mean:", round(sample_mean, 2), "\n")
+cat("Population mean:", pop_mean, "\n")
+cat("Sample SD:", round(sample_sd, 2), "\n")
+cat("\nCohen's d =", round(d_one_sample, 3))
+```
+
+### Cohen's d for Independent Samples T-Test
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Get group statistics
+control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
+intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
+
+# Means and pooled SD
+m1 <- mean(control)
+m2 <- mean(intervention)
+n1 <- length(control)
+n2 <- length(intervention)
+
+# Pooled SD
+pooled_sd <- sqrt(((n1-1)*var(control) + (n2-1)*var(intervention)) / (n1+n2-2))
+
+# Cohen's d
+d_independent <- (m1 - m2) / pooled_sd
+
+cat("Control mean:", round(m1, 2), "\n")
+cat("Intervention mean:", round(m2, 2), "\n")
+cat("Pooled SD:", round(pooled_sd, 2), "\n")
+cat("\nCohen's d =", round(d_independent, 3))
+```
+
+### Cohen's d for Paired Samples T-Test
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# For intervention group
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+
+# Mean difference and SD of differences
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+mean_diff <- mean(diff)
+sd_diff <- sd(diff)
+
+# Cohen's d (using SD of differences)
+d_paired <- mean_diff / sd_diff
+
+cat("Mean difference:", round(mean_diff, 2), "\n")
+cat("SD of differences:", round(sd_diff, 2), "\n")
+cat("\nCohen's d =", round(d_paired, 3))
+```
+
+### Interpreting Effect Sizes
+
+```{webr-r}
+# Cohen's conventions
+interpret_d <- function(d) {
+  d_abs <- abs(d)
+  if (d_abs < 0.2) return("negligible")
+  if (d_abs < 0.5) return("small")
+  if (d_abs < 0.8) return("medium")
+  return("large")
+}
+
+# Our effect sizes
+cat("One-sample d = 0.24:", interpret_d(0.24), "\n")
+cat("Independent d = 0.65:", interpret_d(0.65), "\n")
+cat("Paired d = 0.89:", interpret_d(0.89))
+```
+
+### Building an APA Results Statement
+
+```{webr-r}
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+
+# Run the t-test
+intervention <- anxiety_data[anxiety_data$group == "intervention", ]
+result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
+
+# Extract values
+t_val <- round(result$statistic, 2)
+df <- result$parameter
+p_val <- round(result$p.value, 3)
+
+# Effect size
+diff <- intervention$anxiety_pre - intervention$anxiety_post
+d <- round(mean(diff) / sd(diff), 2)
+
+cat("APA format:\n")
+cat(paste0("t(", df, ") = ", t_val, ", p = ", p_val, ", d = ", d))
+```
+
+---
+
+## Self-Assessment
+
+Check your understanding before moving on.
+
+::: {.webex-check .webex-box}
+
+**1. Cohen's d measures:**
+
+`r mcq(c("Statistical significance", answer = "Effect size (magnitude of difference)", "Sample size needed", "Probability of error"))`
+
+**2. A Cohen's d of 0.5 is considered:**
+
+`r mcq(c("Negligible", "Small", answer = "Medium", "Large"))`
+
+**3. The formula for Cohen's d is: difference divided by `r fitb("standard deviation", width = 18)`.**
+
+**4. True or False: A statistically significant result always has a large effect size.**
+
+`r torf(FALSE)`
+
+**5. In APA format, t-test results include:**
+
+`r mcq(c("Only the p-value", "t, df, and p", answer = "t, df, p, and effect size", "Mean and SD only"))`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 4](part4.qmd){.btn .btn-secondary}
+
+[Back to Lab 2 Overview →](../../labs/lab02.qmd){.btn .btn-primary}
+:::

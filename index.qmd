@@ -28,6 +28,9 @@ Each week follows the same learning pathway:
 | Week | Topic | Resources |
 |:----:|-------|-----------|
 | 1 | **Descriptive Statistics** | [Slides](slides/lab1-slides.qmd){target="_blank"} • [WebR](chapters/lab1-webr.qmd) • [Exercise](templates/lab1-exercise.qmd) • [Follow-On](followon/lab1-followon.qmd) |
+| 2 | **T-Tests** | [Slides](slides/lab2-slides.qmd){target="_blank"} • [WebR](chapters/lab2-webr.qmd) • [Exercise](templates/lab2-exercise.qmd) • [Follow-On](followon/lab2-followon.qmd) |
+| 3 | **ANOVA** | [Slides](slides/lab3-slides.qmd){target="_blank"} • [WebR](chapters/lab3-webr.qmd) • [Exercise](templates/lab3-exercise.qmd) • [Follow-On](followon/lab3-followon.qmd) |
+| 4 | **Correlation & Regression** | [Slides](slides/lab4-slides.qmd){target="_blank"} • [WebR](chapters/lab4-webr.qmd) • [Exercise](templates/lab4-exercise.qmd) • [Follow-On](followon/lab4-followon.qmd) |
 
 # Learning Pathway
 
