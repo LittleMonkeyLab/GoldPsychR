@@ -1765,7 +1765,7 @@
     "href": "chapters/lab2/index.html#t-test-adventure",
     "title": "Lab 2: T-Tests",
     "section": "T-Test Adventure",
-    "text": "T-Test Adventure\nBuild your intuition before diving into code! This interactive app lets you experiment with sample sizes, means, and standard deviations to see how they affect t-test results."
+    "text": "T-Test Adventure\n\n\n\n\n\n\nTipInteractive Learning Tool\n\n\n\nLaunch T-Test Adventure\nBuild your intuition before diving into code! This interactive Shiny app lets you experiment with sample sizes, means, and standard deviations to see how they affect t-test results in real-time.\nWhat happens when you increase the sample size? What if the groups have different variability? Play with the sliders and find out!"
   },
   {
     "objectID": "chapters/lab2/index.html#lab-parts",
@@ -4212,14 +4212,14 @@
     "href": "chapters/lab2-webr.html",
     "title": "Lab 2: T-Tests - WebR Practice",
     "section": "",
-    "text": "This interactive page lets you practice t-tests directly in your browser - no installation required!\n\n\n\n\n\n\nTipHow to Use This Page\n\n\n\n\nRun the setup code first - this loads the data\nWork through the exercises - edit code and click “Run Code”\nExperiment freely - you can’t break anything!\nRefer back to slides - use this alongside the instructor demonstration\n\n\n\n\n\nBefore diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results.\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "text": "This interactive page lets you practice t-tests directly in your browser - no installation required!\n\n\n\n\n\n\nTipHow to Use This Page\n\n\n\n\nRun the setup code first - this loads the data\nWork through the exercises - edit code and click “Run Code”\nExperiment freely - you can’t break anything!\nRefer back to slides - use this alongside the instructor demonstration\n\n\n\n\n\n\n\n\n\n\n\nTipInteractive Learning Tool\n\n\n\nLaunch T-Test Adventure\nBefore diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results in real-time.\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "chapters/lab2-webr.html#t-test-adventure",
     "href": "chapters/lab2-webr.html#t-test-adventure",
     "title": "Lab 2: T-Tests - WebR Practice",
     "section": "",
-    "text": "Before diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results.\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "text": "TipInteractive Learning Tool\n\n\n\nLaunch T-Test Adventure\nBefore diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results in real-time.\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "chapters/lab2-webr.html#view-the-data",
@@ -4429,7 +4429,7 @@
     "href": "chapters/lab2/part1-slides.html#explore-t-test-adventure",
     "title": "Part 1: Introduction to T-Tests",
     "section": "Explore: T-Test Adventure",
-    "text": "Explore: T-Test Adventure\nBuild intuition by experimenting with sample sizes, means, and variability:"
+    "text": "Explore: T-Test Adventure\nBefore diving into code, build your intuition about how t-tests work!\n\n\n\n\n\n\nInteractive Learning Tool\n\n\nT-Test Adventure - An interactive Shiny app where you can experiment with sample sizes, means, and variability to see how they affect t-test results.\nPlay with the sliders and watch the t-statistic and p-value change in real-time. This helps you understand why we get significant results (or not) before you learn the formulas."
   },
   {
     "objectID": "chapters/lab2/part1-slides.html#preview-one-sample-t-test",
