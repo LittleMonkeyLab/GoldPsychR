@@ -124,8 +124,7 @@ cor.test(wellbeing$stress, wellbeing$wellbeing)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- cor.test(wellbeing$stress, wellbeing$wellbeing)
@@ -150,7 +149,7 @@ cat("lower wellbeing from this data. Maybe low wellbeing causes stress,\n")
 cat("or a third variable (like sleep problems) affects both.\n\n")
 
 cat("APA format: 'There was a strong negative correlation between stress\n")
-cat("and wellbeing, r =", round(r, 2), ",", p_text, ".'")
+cat("and wellbeing, r = ", round(r, 2), ", ", p_text, ".'", sep = "")
 ```
 
 :::
@@ -230,8 +229,7 @@ cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
@@ -294,8 +292,7 @@ cor(vars)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 vars <- wellbeing[, c("stress", "sleep_hours", "exercise_mins", "wellbeing")]

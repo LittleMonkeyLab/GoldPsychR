@@ -16,9 +16,15 @@ Work through each part in order, and don't skip steps!
 
 ## T-Test Adventure
 
-Build your intuition before diving into code! This interactive app lets you experiment with sample sizes, means, and standard deviations to see how they affect t-test results.
+::: {.callout-tip}
+## Interactive Learning Tool
 
-<iframe src="https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/" width="100%" height="600px" frameborder="0" style="border: 1px solid #ccc; border-radius: 5px;"></iframe>
+**[Launch T-Test Adventure](https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/){.btn .btn-success target="_blank"}**
+
+Build your intuition before diving into code! This interactive Shiny app lets you experiment with sample sizes, means, and standard deviations to see how they affect t-test results in real-time.
+
+*What happens when you increase the sample size? What if the groups have different variability?* Play with the sliders and find out!
+:::
 
 ## Lab Parts
 

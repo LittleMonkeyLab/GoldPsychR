@@ -117,8 +117,7 @@ eta_sq
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- aov(recall ~ method, data = study_data)
@@ -219,8 +218,7 @@ partial_eta
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model2 <- aov(recall ~ method * time_of_day, data = study_data)
@@ -332,8 +330,7 @@ cat(paste0("F(", df1, ", ", df2, ") = ", f_val, ", p < .001, η² = ", eta))
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- aov(recall ~ method, data = study_data)

@@ -118,8 +118,7 @@ table(study_data$method, study_data$time_of_day)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 cell_table <- table(study_data$method, study_data$time_of_day)
@@ -182,8 +181,7 @@ summary(model2)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model2 <- aov(recall ~ method * time_of_day, data = study_data)

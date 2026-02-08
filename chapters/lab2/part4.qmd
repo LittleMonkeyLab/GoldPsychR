@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,10 +49,6 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Load the Data
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # View pre and post columns
 head(anxiety_data[, c("id", "group", "anxiety_pre", "anxiety_post")])
 ```
@@ -51,10 +56,6 @@ head(anxiety_data[, c("id", "group", "anxiety_pre", "anxiety_post")])
 ### Calculate Descriptives for Pre and Post
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 cat("Pre-test:\n")
 cat("  Mean:", round(mean(anxiety_data$anxiety_pre), 2), "\n")
 cat("  SD:", round(sd(anxiety_data$anxiety_pre), 2), "\n\n")
@@ -67,10 +68,6 @@ cat("  SD:", round(sd(anxiety_data$anxiety_post), 2))
 ### Paired Samples T-Test (All Participants)
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Paired t-test: pre vs post for everyone
 t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
 ```
@@ -83,10 +80,6 @@ t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
 ### Calculate Difference Scores
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Calculate difference (pre - post)
 anxiety_data$difference <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
 
@@ -98,10 +91,6 @@ cat("\nPositive = anxiety decreased (improvement)")
 ### Paired T-Test by Group: Control
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Filter to control group only
 control <- anxiety_data[anxiety_data$group == "control", ]
 
@@ -113,10 +102,6 @@ t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
 ### Paired T-Test by Group: Intervention
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Filter to intervention group only
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
 
@@ -128,10 +113,6 @@ t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
 ### Visualise Pre-Post Change
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Boxplot of pre and post scores
 boxplot(anxiety_data$anxiety_pre, anxiety_data$anxiety_post,
         names = c("Pre-Test", "Post-Test"),

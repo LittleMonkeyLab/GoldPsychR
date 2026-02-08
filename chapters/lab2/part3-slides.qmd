@@ -178,8 +178,7 @@ table(anxiety_data$group)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 n_ctrl <- sum(anxiety_data$group == "control")
@@ -243,8 +242,7 @@ sd(intervention)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
@@ -308,8 +306,7 @@ t.test(anxiety_pre ~ group, data = anxiety_data)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- t.test(anxiety_pre ~ group, data = anxiety_data)
@@ -393,8 +390,7 @@ student$parameter
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 welch <- t.test(anxiety_pre ~ group, data = anxiety_data)
@@ -462,8 +458,7 @@ var(intervention)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
@@ -555,8 +550,7 @@ t.test(anxiety_post ~ group, data = anxiety_data)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- t.test(anxiety_post ~ group, data = anxiety_data)

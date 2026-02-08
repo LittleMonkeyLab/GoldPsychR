@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,10 +49,6 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Load the Data
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Check the groups
 table(anxiety_data$group)
 ```
@@ -51,10 +56,6 @@ table(anxiety_data$group)
 ### Compare Group Means at Baseline
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Descriptives by group
 control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
 intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
@@ -75,10 +76,6 @@ cat("  n:", length(intervention))
 Compare the two groups using the formula syntax:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Independent samples t-test (Welch's)
 t.test(anxiety_pre ~ group, data = anxiety_data)
 ```
@@ -91,10 +88,6 @@ t.test(anxiety_pre ~ group, data = anxiety_data)
 ### Student's vs Welch's T-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Welch's t-test (default, doesn't assume equal variances)
 cat("=== Welch's t-test (default) ===\n")
 welch <- t.test(anxiety_pre ~ group, data = anxiety_data)
@@ -113,10 +106,6 @@ cat("p =", round(student$p.value, 4))
 ### Check Equal Variances
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Compare variances
 control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
 intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
@@ -129,10 +118,6 @@ cat("Ratio:", round(var(control)/var(intervention), 2))
 ### Visualise the Groups
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Boxplot comparing groups
 boxplot(anxiety_pre ~ group,
         data = anxiety_data,

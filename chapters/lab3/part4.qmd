@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,10 +49,6 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Explore the Factorial Design
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Count by method AND time
 table(study_data$method, study_data$time_of_day)
 ```
@@ -51,10 +56,6 @@ table(study_data$method, study_data$time_of_day)
 ### Descriptives by Both Factors
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Group means
 cat("=== Cell Means ===\n\n")
 for (m in unique(study_data$method)) {
@@ -68,10 +69,6 @@ for (m in unique(study_data$method)) {
 ### Run Two-Way ANOVA
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Two-way ANOVA with interaction
 model2 <- aov(recall ~ method * time_of_day, data = study_data)
 summary(model2)
@@ -87,10 +84,6 @@ summary(model2)
 ### Interaction Plot
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Calculate cell means
 cell_means <- tapply(study_data$recall,
                      list(study_data$method, study_data$time_of_day),

@@ -191,9 +191,15 @@ Large |t| values → More evidence against H₀
 
 ## Explore: T-Test Adventure {background-color="#f0f0f0"}
 
-Build intuition by experimenting with sample sizes, means, and variability:
+Before diving into code, build your intuition about how t-tests work!
 
-<iframe src="https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/" width="100%" height="550px" frameborder="0"></iframe>
+::: {.callout-tip}
+## Interactive Learning Tool
+
+**[T-Test Adventure](https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/){target="_blank"}** - An interactive Shiny app where you can experiment with sample sizes, means, and variability to see how they affect t-test results.
+
+Play with the sliders and watch the t-statistic and p-value change in real-time. This helps you understand *why* we get significant results (or not) before you learn the formulas.
+:::
 
 ---
 
@@ -234,8 +240,7 @@ t.test(scores, mu = 50)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 set.seed(42)
@@ -246,10 +251,10 @@ p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result
 cat("Your t-value of", round(result$statistic, 2), "tells us how many standard errors\n")
 cat("your sample mean sits from the test value of 50. With", result$parameter, "degrees\n")
 cat("of freedom (that's n - 1, so you had", result$parameter + 1, "observations), this\n")
-cat("gives us", p_text, ".\n\n")
+cat("gives us ", p_text, ".\n\n", sep = "")
 
 cat("In your results section, you'd write: 'A one-sample t-test revealed that\n")
-cat("scores (M =", round(mean(scores), 2), ") differed significantly from the\n")
+cat("scores (M = ", round(mean(scores), 2), ") differed significantly from the\n", sep = "")
 cat("population benchmark, t(", result$parameter, ") = ", round(result$statistic, 2),
     ", ", p_text, ".'\n\n", sep = "")
 

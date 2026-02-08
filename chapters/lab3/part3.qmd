@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,10 +49,6 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### First: Confirm ANOVA is Significant
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Fit the model
 model <- aov(recall ~ method, data = study_data)
 summary(model)
@@ -52,10 +57,6 @@ summary(model)
 ### Run Tukey's HSD
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 model <- aov(recall ~ method, data = study_data)
 
 # Tukey's Honestly Significant Difference
@@ -72,10 +73,6 @@ TukeyHSD(model)
 ### Visualise Tukey Results
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 model <- aov(recall ~ method, data = study_data)
 tukey_results <- TukeyHSD(model)
 
@@ -96,10 +93,6 @@ cat("- Lines entirely to one side of 0 indicate a real difference")
 ### Extract Specific Comparisons
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 model <- aov(recall ~ method, data = study_data)
 tukey <- TukeyHSD(model)
 

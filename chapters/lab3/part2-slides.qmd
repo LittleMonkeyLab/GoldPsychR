@@ -131,8 +131,7 @@ table(study_data$method)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 methods <- unique(study_data$method)
@@ -237,8 +236,7 @@ summary(model)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- aov(recall ~ method, data = study_data)
@@ -367,8 +365,7 @@ bartlett.test(recall ~ method, data = study_data)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- bartlett.test(recall ~ method, data = study_data)

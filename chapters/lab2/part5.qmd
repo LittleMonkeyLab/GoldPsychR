@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
+anxiety_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,20 +49,13 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Load the Data
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
+# Data is pre-loaded
 cat("Data loaded! Ready to calculate effect sizes.")
 ```
 
 ### Cohen's d for One-Sample T-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # One-sample: How far is our mean from 50?
 sample_mean <- mean(anxiety_data$anxiety_pre)
 sample_sd <- sd(anxiety_data$anxiety_pre)
@@ -71,10 +73,6 @@ cat("\nCohen's d =", round(d_one_sample, 3))
 ### Cohen's d for Independent Samples T-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Get group statistics
 control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
 intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
@@ -100,10 +98,6 @@ cat("\nCohen's d =", round(d_independent, 3))
 ### Cohen's d for Paired Samples T-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # For intervention group
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
 
@@ -141,10 +135,6 @@ cat("Paired d = 0.89:", interpret_d(0.89))
 ### Building an APA Results Statement
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Run the t-test
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
 result <- t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)

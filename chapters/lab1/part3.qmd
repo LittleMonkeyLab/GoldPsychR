@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,20 +49,13 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Load the Data First
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
+# Data is pre-loaded
 cat("Data loaded! Items G1, G3, G5, and G6 need reversing.")
 ```
 
 ### Look at Original Values
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
 # See the original G1 values
 head(data$G1, 10)
 ```
@@ -63,10 +65,6 @@ head(data$G1, 10)
 For a 1-5 scale: `reversed = 6 - original`
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
 # Reverse score G1
 data$rev_G1 <- 6 - data$G1
 
@@ -84,10 +82,6 @@ What would the formula be for a 1-7 scale? Try it!
 Original + reversed should always equal 6:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
 data$rev_G1 <- 6 - data$G1
 
 # Check: should all be 6
@@ -99,10 +93,6 @@ head(data$G1 + data$rev_G1)
 Now reverse G3, G5, and G6 as well:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
 # Reverse all four items that need it
 data$rev_G1 <- 6 - data$G1
 data$rev_G3 <- 6 - data$G3
@@ -118,10 +108,6 @@ head(data[, c("G3", "rev_G3")])
 Calculate the two Grit subscales using the **reversed** versions:
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
 data$rev_G1 <- 6 - data$G1
 data$rev_G3 <- 6 - data$G3
 data$rev_G5 <- 6 - data$G5

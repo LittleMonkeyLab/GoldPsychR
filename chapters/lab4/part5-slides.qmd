@@ -122,8 +122,7 @@ shapiro.test(residuals(model))
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)
@@ -226,8 +225,7 @@ print(round(s$coefficients, 3))
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins, data = wellbeing)

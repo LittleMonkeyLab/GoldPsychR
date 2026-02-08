@@ -9,6 +9,24 @@ webr:
   show-startup-message: false
 ---
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+library(dplyr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+data$Study_Year <- factor(data$Study_Year)
+```
 
 ## Watch the Demo
 
@@ -39,24 +57,6 @@ Click inside the slide area first, then use arrow keys to navigate.
 Run this to get all the numbers you need:
 
 ```{webr-r}
-library(readr)
-library(dplyr)
-
-# Load and prepare data
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
-# Reverse-score items
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-
-# Create subscales
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-data$Study_Year <- factor(data$Study_Year)
-
 # Overall statistics
 cat("=== OVERALL ===\n")
 cat("Consistency of Interest:\n")
@@ -86,18 +86,6 @@ print(summary_stats)
 ### Create a Formatted Table
 
 ```{webr-r}
-library(readr)
-library(dplyr)
-
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-data$Study_Year <- factor(data$Study_Year)
 
 summary_stats <- data |>
   group_by(Study_Year) |>

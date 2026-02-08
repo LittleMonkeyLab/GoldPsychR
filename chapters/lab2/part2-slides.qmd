@@ -170,8 +170,7 @@ length(anxiety_data$anxiety_pre)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 m <- round(mean(anxiety_data$anxiety_pre), 2)
@@ -188,7 +187,7 @@ cat("exactly what the t-test will tell us. The SD of", s, "gives us a sense\n")
 cat("of how spread out scores are - you'll need this for your results section.\n\n")
 
 cat("For APA reporting, you'd write: 'Pre-intervention anxiety scores\n")
-cat("(M =", m, ", SD =", s, ") were compared to the population mean of 50.'")
+cat("(M = ", m, ", SD = ", s, ") were compared to the population mean of 50.'", sep = "")
 ```
 
 :::
@@ -230,8 +229,7 @@ t.test(anxiety_data$anxiety_pre, mu = 50)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- t.test(anxiety_data$anxiety_pre, mu = 50)
@@ -243,7 +241,7 @@ cat("mean is from 50, measured in standard errors. Think of it as a signal-to-no
 cat("ratio: bigger t means clearer signal.\n\n")
 
 cat("With", result$parameter, "degrees of freedom (your sample size minus 1), this\n")
-cat("t-value gives us", p_text, ". ", sep = "")
+cat("t-value gives us ", p_text, ". ", sep = "")
 if(result$p.value < 0.05) {
   cat("Since p < .05, we reject the null\n")
   cat("hypothesis - the sample mean of", m, "is significantly different from 50.\n\n")
@@ -253,7 +251,7 @@ if(result$p.value < 0.05) {
 }
 
 cat("In your results section: 'A one-sample t-test revealed that pre-intervention\n")
-cat("anxiety scores (M =", m, ") differed significantly from the population\n")
+cat("anxiety scores (M = ", m, ") differed significantly from the population\n", sep = "")
 cat("benchmark, t(", result$parameter, ") = ", round(result$statistic, 2),
     ", ", p_text, ".'", sep = "")
 ```
@@ -345,8 +343,7 @@ shapiro.test(anxiety_data$anxiety_pre)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- shapiro.test(anxiety_data$anxiety_pre)
@@ -354,7 +351,7 @@ p_text <- if(result$p.value < 0.001) "p < .001" else paste0("p = ", round(result
 n <- length(anxiety_data$anxiety_pre)
 
 cat("The Shapiro-Wilk test checks whether your data are normally distributed.\n")
-cat("Here W =", round(result$statistic, 3), "with", p_text, ".\n\n")
+cat("Here W = ", round(result$statistic, 3), " with ", p_text, ".\n\n", sep = "")
 
 cat("This is one of those backwards tests: you WANT a non-significant p-value!\n")
 if(result$p.value > 0.05) {
@@ -423,8 +420,7 @@ t.test(anxiety_data$anxiety_pre, mu = 52)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- t.test(anxiety_data$anxiety_pre, mu = 52)
@@ -444,7 +440,7 @@ cat("Notice the t-value", ifelse(abs(result$statistic) < abs(result50$statistic)
 cat("the sample mean and test value is now", ifelse(abs(m - 52) < abs(m - 50), "smaller", "larger"),
     ". This is a key insight:\n")
 cat("the SAME data can give different conclusions depending on your comparison\n")
-cat("value. The p-value is now", p_text, ".\n\n")
+cat("value. The p-value is now ", p_text, ".\n\n", sep = "")
 
 cat("This matters for research design: your comparison value (50 vs 52) should\n")
 cat("come from theory or prior research, not picked after seeing your data!")

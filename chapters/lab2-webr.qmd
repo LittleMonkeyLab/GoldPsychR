@@ -36,9 +36,13 @@ This interactive page lets you practice t-tests directly in your browser - no in
 
 ## T-Test Adventure
 
-Before diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results.
+::: {.callout-tip}
+## Interactive Learning Tool
 
-<iframe src="https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/" width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc; border-radius: 5px;"></iframe>
+**[Launch T-Test Adventure](https://oybc0p-gordon-wright.shinyapps.io/ttest_adventure/){.btn .btn-success target="_blank"}**
+
+Before diving into the code, explore this interactive app to build intuition about how t-tests work. Adjust sample sizes, means, and standard deviations to see how they affect your results in real-time.
+:::
 
 ```{webr-r}
 #| context: setup
@@ -58,20 +62,12 @@ cat("Data loaded: 80 participants, control vs intervention groups")
 ## View the Data
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 head(anxiety_data)
 ```
 
 ## Check the Groups
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 table(anxiety_data$group)
 ```
 
@@ -98,10 +94,6 @@ Use a **one-sample t-test** when:
 ## Sample Descriptives
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 cat("Pre-test Anxiety:\n")
 cat("Mean:", round(mean(anxiety_data$anxiety_pre), 2), "\n")
 cat("SD:", round(sd(anxiety_data$anxiety_pre), 2), "\n")
@@ -111,10 +103,6 @@ cat("Population mean:", 50)
 ## Run the Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # One-sample t-test: Is mean different from 50?
 t.test(anxiety_data$anxiety_pre, mu = 50)
 ```
@@ -142,10 +130,6 @@ Use an **independent samples t-test** when:
 ## Group Descriptives
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 control <- anxiety_data$anxiety_pre[anxiety_data$group == "control"]
 intervention <- anxiety_data$anxiety_pre[anxiety_data$group == "intervention"]
 
@@ -156,10 +140,6 @@ cat("Intervention: M =", round(mean(intervention), 2), ", SD =", round(sd(interv
 ## Compare Groups at Pre-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Independent samples t-test
 t.test(anxiety_pre ~ group, data = anxiety_data)
 ```
@@ -175,10 +155,6 @@ What does the formula `score ~ group` mean?
 ## Compare Groups at Post-Test
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Compare post-test scores
 t.test(anxiety_post ~ group, data = anxiety_data)
 ```
@@ -198,10 +174,6 @@ Use a **paired samples t-test** when:
 ## Overall Pre-Post Change
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Paired t-test for all participants
 t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
 ```
@@ -217,10 +189,6 @@ What does `paired = TRUE` tell R?
 ## Intervention Group Only
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
 t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
 ```
@@ -228,10 +196,6 @@ t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
 ## Control Group Only
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 control <- anxiety_data[anxiety_data$group == "control", ]
 t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
 ```
@@ -249,10 +213,6 @@ Effect size tells us HOW BIG the effect is.
 ## Cohen's d for Independent Samples
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Post-test comparison
 control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
 intervention <- anxiety_data$anxiety_post[anxiety_data$group == "intervention"]
@@ -287,10 +247,6 @@ A Cohen's d of 0.65 would be considered:
 ## Cohen's d for Paired Samples
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
 diff <- intervention$anxiety_pre - intervention$anxiety_post
 d <- mean(diff) / sd(diff)
@@ -305,10 +261,6 @@ cat("Cohen's d =", round(d, 3))
 ## Boxplot by Group
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/test_anxiety_data.csv"
-anxiety_data <- read_csv(data_url, show_col_types = FALSE)
-
 boxplot(anxiety_post ~ group, data = anxiety_data,
         main = "Post-Test Anxiety by Group",
         xlab = "Group", ylab = "Anxiety Score",

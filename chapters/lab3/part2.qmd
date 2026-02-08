@@ -13,6 +13,15 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
+study_data <- read_csv(data_url, show_col_types = FALSE)
+```
+
 ## Watch the Demo
 
 Follow along with the slides below.
@@ -40,10 +49,7 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Load the Data
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
+# Data is pre-loaded
 cat("Data loaded successfully!")
 cat("\nNumber of participants:", nrow(study_data))
 ```
@@ -51,10 +57,6 @@ cat("\nNumber of participants:", nrow(study_data))
 ### Explore the Groups
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Count by study method
 table(study_data$method)
 ```
@@ -62,10 +64,6 @@ table(study_data$method)
 ### Descriptive Statistics by Group
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Calculate means and SDs for each method
 methods <- unique(study_data$method)
 for (m in methods) {
@@ -79,10 +77,6 @@ for (m in methods) {
 ### Run One-Way ANOVA
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 # Fit the ANOVA model
 model <- aov(recall ~ method, data = study_data)
 
@@ -101,10 +95,6 @@ Look for:
 ### Visualise the Groups
 
 ```{webr-r}
-library(readr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/study_techniques.csv"
-study_data <- read_csv(data_url, show_col_types = FALSE)
-
 boxplot(recall ~ method, data = study_data,
         main = "Recall Scores by Study Method",
         xlab = "Study Method",

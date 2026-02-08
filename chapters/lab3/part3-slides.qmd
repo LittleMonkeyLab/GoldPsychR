@@ -111,8 +111,7 @@ TukeyHSD(model)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- aov(recall ~ method, data = study_data)

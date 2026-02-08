@@ -13,6 +13,27 @@ webr:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
+data <- read_csv(data_url, show_col_types = FALSE)
+# Reverse-score items
+data$rev_G1 <- 6 - data$G1
+data$rev_G3 <- 6 - data$G3
+data$rev_G5 <- 6 - data$G5
+data$rev_G6 <- 6 - data$G6
+# Create subscales
+data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
+data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
+# Convert Study_Year to factor for plotting
+data$Study_Year <- factor(data$Study_Year)
+```
+
 In this part, you'll learn to calculate descriptive statistics by group and create visualizations with ggplot2.
 
 ## Watch the Demo
@@ -42,25 +63,7 @@ Click inside the slide area first, then use arrow keys to navigate.
 ### Setup: Load Everything
 
 ```{webr-r}
-# Load packages
-library(readr)
-library(dplyr)
-library(ggplot2)
-
-# Load and prepare data
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-
-# Reverse-score items (from Part 3)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-
-# Create subscales
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-
+# Data is pre-loaded with subscales already calculated
 cat("Ready! Data has", nrow(data), "rows with consistency and perseverance subscales.")
 ```
 
@@ -69,17 +72,6 @@ cat("Ready! Data has", nrow(data), "rows with consistency and perseverance subsc
 Calculate mean, SD, and n for Consistency of Interest:
 
 ```{webr-r}
-library(readr)
-library(dplyr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-
 # Overall statistics for Consistency
 cat("Consistency of Interest:\n")
 cat("Mean:", round(mean(data$consistency), 2), "\n")
@@ -92,17 +84,6 @@ cat("N:", length(data$consistency), "\n")
 Statistics by Study_Year:
 
 ```{webr-r}
-library(readr)
-library(dplyr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-
 data |>
   group_by(Study_Year) |>
   summarise(
@@ -124,20 +105,6 @@ Try calculating statistics grouped by `Gender` instead of `Study_Year`.
 Compare Consistency and Perseverance by Study Year:
 
 ```{webr-r}
-library(readr)
-library(dplyr)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-
-# Convert Study_Year to factor for better plotting
-data$Study_Year <- factor(data$Study_Year)
-
 data_summary <- data |>
   group_by(Study_Year) |>
   summarise(
@@ -157,18 +124,6 @@ data_summary
 Boxplot for Consistency of Interest by Study Year:
 
 ```{webr-r}
-library(readr)
-library(ggplot2)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-data$Study_Year <- factor(data$Study_Year)
-
 ggplot(data, aes(x = Study_Year, y = consistency)) +
   geom_boxplot()
 ```
@@ -178,18 +133,6 @@ ggplot(data, aes(x = Study_Year, y = consistency)) +
 Add colour to distinguish groups:
 
 ```{webr-r}
-library(readr)
-library(ggplot2)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-data$Study_Year <- factor(data$Study_Year)
-
 ggplot(data, aes(x = Study_Year, y = consistency, fill = Study_Year)) +
   geom_boxplot(alpha = 0.7)
 ```
@@ -197,18 +140,6 @@ ggplot(data, aes(x = Study_Year, y = consistency, fill = Study_Year)) +
 ### Publication-Ready Plot
 
 ```{webr-r}
-library(readr)
-library(ggplot2)
-data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/Y1_Week13_Lab1_grit_data.csv"
-data <- read_csv(data_url, show_col_types = FALSE)
-data$rev_G1 <- 6 - data$G1
-data$rev_G3 <- 6 - data$G3
-data$rev_G5 <- 6 - data$G5
-data$rev_G6 <- 6 - data$G6
-data$consistency <- data$rev_G1 + data$rev_G3 + data$rev_G5 + data$rev_G6
-data$perseverance <- data$G2 + data$G4 + data$G7 + data$G8
-data$Study_Year <- factor(data$Study_Year)
-
 ggplot(data, aes(x = Study_Year, y = consistency, fill = Study_Year)) +
   geom_boxplot(alpha = 0.7) +
   theme_minimal() +

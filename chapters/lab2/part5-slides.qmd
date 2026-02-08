@@ -121,8 +121,7 @@ d
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 sample_mean <- mean(anxiety_data$anxiety_pre)
@@ -203,8 +202,7 @@ d
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 control <- anxiety_data$anxiety_post[anxiety_data$group == "control"]
@@ -278,8 +276,7 @@ d
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
@@ -433,8 +430,7 @@ cat("d =", d)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]

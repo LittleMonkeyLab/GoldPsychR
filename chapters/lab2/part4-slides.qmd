@@ -198,8 +198,7 @@ sd(anxiety_data$anxiety_post)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 m_pre <- round(mean(anxiety_data$anxiety_pre), 2)
@@ -261,8 +260,7 @@ t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 result <- t.test(anxiety_data$anxiety_pre, anxiety_data$anxiety_post, paired = TRUE)
@@ -344,8 +342,7 @@ t.test(anxiety_data$diff, mu = 0)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post
@@ -409,8 +406,7 @@ t.test(control$anxiety_pre, control$anxiety_post, paired = TRUE)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 control <- anxiety_data[anxiety_data$group == "control", ]
@@ -473,8 +469,7 @@ t.test(intervention$anxiety_pre, intervention$anxiety_post, paired = TRUE)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 intervention <- anxiety_data[anxiety_data$group == "intervention", ]
@@ -582,8 +577,7 @@ shapiro.test(anxiety_data$diff)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 anxiety_data$diff <- anxiety_data$anxiety_pre - anxiety_data$anxiety_post

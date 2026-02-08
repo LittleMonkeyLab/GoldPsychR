@@ -119,8 +119,7 @@ summary(model)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- lm(wellbeing ~ stress, data = wellbeing)
@@ -229,8 +228,7 @@ predict(model, new_data)
 ### {{< fa lightbulb >}} Explained
 
 ```{webr-r}
-#| autorun: true
-#| read-only: true
+#| context: output
 #| warning: false
 #| message: false
 model <- lm(wellbeing ~ stress, data = wellbeing)
