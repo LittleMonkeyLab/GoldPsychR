@@ -157,11 +157,11 @@ cat(round((1 - eta_sq) * 100, 1), "% is individual differences and noise.")
 
 ## Interpreting Our Result
 
-η² ≈ 0.28 (28% of variance explained)
+η² ≈ 0.558 (55.8% of variance explained)
 
 ::: {.incremental}
--   This is a **large** effect by Cohen's standards
--   Study method explains ~28% of differences in recall
+-   This is a **super-large** effect by Cohen's standards
+-   Study method explains ~55.8% of differences in recall
 -   That's substantial for a psychological experiment!
 :::
 
@@ -265,7 +265,7 @@ Template:
 
 Example:
 
-> A one-way ANOVA revealed a significant effect of study method on recall performance, *F*(2, 117) = 22.45, *p* < .001, η² = .28.
+> A one-way ANOVA revealed a significant effect of study method on recall performance, *F*(2, 117) = 22.45, *p* < .001, η² = .558.
 
 ---
 
@@ -273,7 +273,7 @@ Example:
 
 Report each effect separately:
 
-> A 3 × 2 ANOVA examined the effects of study method and time of day on recall. There was a significant main effect of study method, *F*(2, 114) = 23.42, *p* < .001, η²_p = .29. The main effect of time was not significant, *F*(1, 114) = 3.27, *p* = .073. The interaction was not significant, *F*(2, 114) = 0.34, *p* = .714.
+> A 3 × 2 ANOVA examined the effects of study method and time of day on recall. There was a significant main effect of study method, *F*(2, 114) = 23.42, *p* < .001, η²_p = .56. The main effect of time was not significant, *F*(1, 114) = 3.27, *p* = .073. The interaction was not significant, *F*(2, 114) = 0.34, *p* = .714.
 
 ---
 
