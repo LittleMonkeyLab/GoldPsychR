@@ -1,12 +1,92 @@
 ---
 title: "Lab 4: Correlation & Regression"
+subtitle: "Student Wellbeing & Linear Models"
+format: html
 ---
 
 ## Overview
 
-This lab introduces correlation and linear regression in R.
+In this lab, you'll learn to explore relationships between continuous variables using correlation and regression. Every part follows the same **3-step cycle**:
 
-## Learning Objectives
+1. **Watch** - Follow along with the instructor slides (embedded below)
+2. **Try** - Practice with interactive code cells on the activity page
+3. **Do** - Complete exercises in your downloaded notebook in RStudio Server
+
+Work through each part in order, and don't skip steps!
+
+---
+
+## Lab Parts
+
+Work through each part in order:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/brain.svg){width=24} Part 1: Introduction
+- From comparison to relationship
+- Correlation vs regression
+- The correlation coefficient (r)
+
+[**Start Part 1**](part1-slides.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=24} Part 2: Correlation
+- Running `cor.test()`
+- Scatterplots with trend lines
+- Interpreting r and r²
+
+[**Start Part 2**](part2-slides.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/target.svg){width=24} Part 3: Simple Regression
+- Building `lm()` models
+- Slope and intercept
+- R² and significance
+
+[**Start Part 3**](part3-slides.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/group.svg){width=24} Part 4: Multiple Regression
+- Adding predictors
+- Adjusted R²
+- Interpreting F-statistic
+
+[**Start Part 4**](part4-slides.qmd){.btn .btn-primary}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=24} Part 5: Diagnostics & Reporting
+- Assumption checking
+- Diagnostic plots
+- APA-style write-up
+
+[**Start Part 5**](part5-slides.qmd){.btn .btn-primary}
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=24} Extra Practice
+Apply your skills to a new dataset.
+
+[**Follow-On Exercise**](../../followon/lab4-followon.qmd){.btn .btn-secondary}
+:::
+
+::::
+
+---
+
+## ![](/assets/images/svg/target.svg){width=24} Learning Objectives
 
 By the end of this lab, you will be able to:
 
@@ -17,10 +97,31 @@ By the end of this lab, you will be able to:
 - Check model assumptions
 - Report results in APA format
 
-## Parts
+---
 
-1. **Introduction** - Relationships between variables
-2. **Correlation** - Measuring associations
-3. **Simple Regression** - Predicting with one variable
-4. **Multiple Regression** - Adding more predictors
-5. **Diagnostics & Reporting** - Checking assumptions and APA format
+## The Data Story
+
+We've collected **Student Wellbeing** data:
+
+- **100 students** in a wellbeing study
+- Variables: stress, sleep hours, exercise minutes
+- **Outcome**: Wellbeing score (0-100)
+
+**Our research questions**:
+1. Is stress related to wellbeing?
+2. Does sleep predict wellbeing?
+3. Can we predict wellbeing from multiple factors?
+
+::: {.callout-tip}
+## Recommended Setup
+Keep this page open in one browser tab and RStudio Server in another. That's all you need!
+:::
+
+---
+
+## Need Help?
+
+::: {.callout-note}
+- **During the lab**: Ask your instructor
+- **Reference**: Check the [R Toolbox](../../toolbox/index.qmd) for code examples
+:::

@@ -585,7 +585,7 @@
     "href": "labs/lab04.html",
     "title": "Lab 4: Correlation & Regression",
     "section": "",
-    "text": "In this lab, you’ll learn to explore relationships between continuous variables using correlation and regression. We’ll build predictive models and check assumptions.\n\n\nBy the end of this lab, you will be able to:\n\nRun correlation analyses (Pearson’s r)\nCreate scatterplots with trend lines\nBuild simple linear regression models\nAdd multiple predictors\nInterpret R², coefficients, and p-values\nCheck model assumptions\nWrite APA-style results",
+    "text": "TipRecommended Workflow\n\n\n\nWork through the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.\n\n\n\n\nStart Lab 4\n\n\n\n\nIf you need to jump back to a specific part:\n\n\n\n\n\nFrom comparison to relationship\nCorrelation vs regression\nThe correlation coefficient (r)\n\n\n\n\n\n\nRunning cor.test()\nScatterplots with trend lines\nInterpreting r and r²\n\n\n\n\n\n\n\n\n\nBuilding lm() models\nSlope and intercept\nR² and significance\n\n\n\n\n\n\nAdding predictors\nAdjusted R²\nInterpreting F-statistic\n\n\n\n\n\n\n\n\n\nAssumption checking\nDiagnostic plots\nAPA-style write-up\n\n\n\n\n\nFollow-On Exercise - Apply skills to a new dataset",
     "crumbs": [
       "Home",
       "Lab 4: Correlation & Regression",
@@ -596,8 +596,8 @@
     "objectID": "labs/lab04.html#learning-objectives",
     "href": "labs/lab04.html#learning-objectives",
     "title": "Lab 4: Correlation & Regression",
-    "section": "",
-    "text": "By the end of this lab, you will be able to:\n\nRun correlation analyses (Pearson’s r)\nCreate scatterplots with trend lines\nBuild simple linear regression models\nAdd multiple predictors\nInterpret R², coefficients, and p-values\nCheck model assumptions\nWrite APA-style results",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\nBy the end of this lab, you will be able to:\n\nRun correlation analyses (Pearson’s r)\nCreate scatterplots with trend lines\nBuild simple linear regression models\nAdd multiple predictors\nInterpret R², coefficients, and p-values\nCheck model assumptions\nWrite APA-style results",
     "crumbs": [
       "Home",
       "Lab 4: Correlation & Regression",
@@ -1352,20 +1352,20 @@
     "href": "chapters/lab4/index.html",
     "title": "Lab 4: Correlation & Regression",
     "section": "",
-    "text": "This lab introduces correlation and linear regression in R."
+    "text": "In this lab, you’ll learn to explore relationships between continuous variables using correlation and regression. Every part follows the same 3-step cycle:\n\nWatch - Follow along with the instructor slides (embedded below)\nTry - Practice with interactive code cells on the activity page\nDo - Complete exercises in your downloaded notebook in RStudio Server\n\nWork through each part in order, and don’t skip steps!"
   },
   {
     "objectID": "chapters/lab4/index.html#overview",
     "href": "chapters/lab4/index.html#overview",
     "title": "Lab 4: Correlation & Regression",
     "section": "",
-    "text": "This lab introduces correlation and linear regression in R."
+    "text": "In this lab, you’ll learn to explore relationships between continuous variables using correlation and regression. Every part follows the same 3-step cycle:\n\nWatch - Follow along with the instructor slides (embedded below)\nTry - Practice with interactive code cells on the activity page\nDo - Complete exercises in your downloaded notebook in RStudio Server\n\nWork through each part in order, and don’t skip steps!"
   },
   {
     "objectID": "chapters/lab4/index.html#learning-objectives",
     "href": "chapters/lab4/index.html#learning-objectives",
     "title": "Lab 4: Correlation & Regression",
-    "section": "Learning Objectives",
+    "section": " Learning Objectives",
     "text": "Learning Objectives\nBy the end of this lab, you will be able to:\n\nCalculate and interpret correlation coefficients\nCreate scatterplots to visualise relationships\nBuild and interpret simple linear regression models\nExtend to multiple regression\nCheck model assumptions\nReport results in APA format"
   },
   {
@@ -7104,5 +7104,50 @@
     "title": "Troubleshooting",
     "section": "Getting Help",
     "text": "Getting Help\n?function_name\nhelp(package = \"tidyverse\")"
+  },
+  {
+    "objectID": "labs/lab04.html#start-the-interactive-lab",
+    "href": "labs/lab04.html#start-the-interactive-lab",
+    "title": "Lab 4: Correlation & Regression",
+    "section": "",
+    "text": "Start Lab 4",
+    "crumbs": [
+      "Home",
+      "Lab 4: Correlation & Regression",
+      "Lab Materials"
+    ]
+  },
+  {
+    "objectID": "labs/lab04.html#quick-navigation-to-parts",
+    "href": "labs/lab04.html#quick-navigation-to-parts",
+    "title": "Lab 4: Correlation & Regression",
+    "section": "",
+    "text": "If you need to jump back to a specific part:\n\n\n\n\n\nFrom comparison to relationship\nCorrelation vs regression\nThe correlation coefficient (r)\n\n\n\n\n\n\nRunning cor.test()\nScatterplots with trend lines\nInterpreting r and r²\n\n\n\n\n\n\n\n\n\nBuilding lm() models\nSlope and intercept\nR² and significance\n\n\n\n\n\n\nAdding predictors\nAdjusted R²\nInterpreting F-statistic\n\n\n\n\n\n\n\n\n\nAssumption checking\nDiagnostic plots\nAPA-style write-up\n\n\n\n\n\nFollow-On Exercise - Apply skills to a new dataset",
+    "crumbs": [
+      "Home",
+      "Lab 4: Correlation & Regression",
+      "Lab Materials"
+    ]
+  },
+  {
+    "objectID": "chapters/lab4/index.html#lab-parts",
+    "href": "chapters/lab4/index.html#lab-parts",
+    "title": "Lab 4: Correlation & Regression",
+    "section": "Lab Parts",
+    "text": "Lab Parts\nWork through each part in order:\n\n\n\n Part 1: Introduction\n\nFrom comparison to relationship\nCorrelation vs regression\nThe correlation coefficient (r)\n\nStart Part 1\n\n\n\n Part 2: Correlation\n\nRunning cor.test()\nScatterplots with trend lines\nInterpreting r and r²\n\nStart Part 2\n\n\n\n\n\n\n Part 3: Simple Regression\n\nBuilding lm() models\nSlope and intercept\nR² and significance\n\nStart Part 3\n\n\n\n Part 4: Multiple Regression\n\nAdding predictors\nAdjusted R²\nInterpreting F-statistic\n\nStart Part 4\n\n\n\n\n\n\n Part 5: Diagnostics & Reporting\n\nAssumption checking\nDiagnostic plots\nAPA-style write-up\n\nStart Part 5\n\n\n\n Extra Practice\nApply your skills to a new dataset.\nFollow-On Exercise"
+  },
+  {
+    "objectID": "chapters/lab4/index.html#the-data-story",
+    "href": "chapters/lab4/index.html#the-data-story",
+    "title": "Lab 4: Correlation & Regression",
+    "section": "The Data Story",
+    "text": "The Data Story\nWe’ve collected Student Wellbeing data:\n\n100 students in a wellbeing study\nVariables: stress, sleep hours, exercise minutes\nOutcome: Wellbeing score (0-100)\n\nOur research questions: 1. Is stress related to wellbeing? 2. Does sleep predict wellbeing? 3. Can we predict wellbeing from multiple factors?\n\n\n\n\n\n\nTipRecommended Setup\n\n\n\nKeep this page open in one browser tab and RStudio Server in another. That’s all you need!"
+  },
+  {
+    "objectID": "chapters/lab4/index.html#need-help",
+    "href": "chapters/lab4/index.html#need-help",
+    "title": "Lab 4: Correlation & Regression",
+    "section": "Need Help?",
+    "text": "Need Help?\n\n\n\n\n\n\nNote\n\n\n\n\nDuring the lab: Ask your instructor\nReference: Check the R Toolbox for code examples"
   }
 ]

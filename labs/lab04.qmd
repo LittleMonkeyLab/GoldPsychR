@@ -3,6 +3,78 @@ title: "Lab 4: Correlation & Regression"
 subtitle: "Linear Models"
 ---
 
+# Integrated Lab Experience
+
+::: {.callout-tip}
+## Recommended Workflow
+
+Work through the integrated lab experience below. You only need two browser tabs: this page and RStudio Server.
+:::
+
+## Start the Interactive Lab
+
+[**Start Lab 4**](../chapters/lab4/index.qmd){.btn .btn-success .btn-lg}
+
+---
+
+## Quick Navigation to Parts
+
+If you need to jump back to a specific part:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/brain.svg){width=20} [Part 1: Introduction](../chapters/lab4/part1-slides.qmd)
+- From comparison to relationship
+- Correlation vs regression
+- The correlation coefficient (r)
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/chart.svg){width=20} [Part 2: Correlation](../chapters/lab4/part2-slides.qmd)
+- Running `cor.test()`
+- Scatterplots with trend lines
+- Interpreting r and r²
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/target.svg){width=20} [Part 3: Simple Regression](../chapters/lab4/part3-slides.qmd)
+- Building `lm()` models
+- Slope and intercept
+- R² and significance
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/group.svg){width=20} [Part 4: Multiple Regression](../chapters/lab4/part4-slides.qmd)
+- Adding predictors
+- Adjusted R²
+- Interpreting F-statistic
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/document.svg){width=20} [Part 5: Diagnostics & Reporting](../chapters/lab4/part5-slides.qmd)
+- Assumption checking
+- Diagnostic plots
+- APA-style write-up
+:::
+
+::: {.column width="50%"}
+### ![](/assets/images/svg/rocket.svg){width=20} Extra Practice
+[Follow-On Exercise](../followon/lab4-followon.qmd) - Apply skills to a new dataset
+:::
+
+::::
+
+---
+
 # Overview
 
 In this lab, you'll learn to explore relationships between continuous variables using correlation and regression. We'll build predictive models and check assumptions.
@@ -18,30 +90,6 @@ By the end of this lab, you will be able to:
 - Interpret R², coefficients, and p-values
 - Check model assumptions
 - Write APA-style results
-
-# Lab Resources
-
-::: {.callout-tip}
-## Recommended Workflow
-
-Open each resource in a separate browser tab so you can switch between them easily.
-:::
-
-## Part 1: Instructor Demo
-
-[**Open Slides**](../slides/lab4-slides.qmd){.btn .btn-primary target="_blank"}
-
-## Part 2: Browser Practice
-
-[**Open WebR Practice**](../chapters/lab4-webr.qmd){.btn .btn-success}
-
-## Part 3: RStudio Exercise
-
-[**Download Exercise**](../templates/lab4-exercise.qmd){.btn .btn-warning}
-
-## Extra Practice
-
-[**Follow-On Exercise**](../followon/lab4-followon.qmd){.btn .btn-secondary}
 
 # Key Concepts
 
