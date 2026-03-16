@@ -28,7 +28,7 @@ Work through each part in order:
 - Correlation vs regression
 - The correlation coefficient (r)
 
-[**Start Part 1**](part1-slides.qmd){.btn .btn-primary}
+[**Start Part 1**](part1.qmd){.btn .btn-primary}
 :::
 
 ::: {.column width="50%"}
@@ -37,7 +37,7 @@ Work through each part in order:
 - Scatterplots with trend lines
 - Interpreting r and r²
 
-[**Start Part 2**](part2-slides.qmd){.btn .btn-primary}
+[**Start Part 2**](part2.qmd){.btn .btn-primary}
 :::
 
 ::::
@@ -50,7 +50,7 @@ Work through each part in order:
 - Slope and intercept
 - R² and significance
 
-[**Start Part 3**](part3-slides.qmd){.btn .btn-primary}
+[**Start Part 3**](part3.qmd){.btn .btn-primary}
 :::
 
 ::: {.column width="50%"}
@@ -59,7 +59,7 @@ Work through each part in order:
 - Adjusted R²
 - Interpreting F-statistic
 
-[**Start Part 4**](part4-slides.qmd){.btn .btn-primary}
+[**Start Part 4**](part4.qmd){.btn .btn-primary}
 :::
 
 ::::
@@ -72,7 +72,7 @@ Work through each part in order:
 - Diagnostic plots
 - APA-style write-up
 
-[**Start Part 5**](part5-slides.qmd){.btn .btn-primary}
+[**Start Part 5**](part5.qmd){.btn .btn-primary}
 :::
 
 ::: {.column width="50%"}

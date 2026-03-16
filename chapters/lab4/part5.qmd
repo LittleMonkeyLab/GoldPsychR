@@ -1,0 +1,157 @@
+---
+title: "Part 5: Diagnostics & Reporting"
+subtitle: "Lab 4: Linear Models"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part5-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the diagnostic plots** and check each one
+2. **Run the normality test** and interpret the result
+3. **Copy to RStudio** for your notebook exercises
+:::
+
+### Diagnostic Plots
+
+```{webr-r}
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins,
+            data = wellbeing)
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+::: {.callout-note}
+## What to Look For
+- **Residuals vs Fitted**: Random scatter — no pattern = linearity OK
+- **Normal Q-Q**: Points follow the diagonal line = normality OK
+- **Scale-Location**: Horizontal band = homoscedasticity OK
+- **Residuals vs Leverage**: No extreme outliers = no influential cases
+:::
+
+### Test Normality of Residuals
+
+```{webr-r}
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins,
+            data = wellbeing)
+result <- shapiro.test(residuals(model))
+
+cat("Shapiro-Wilk test of residuals:\n")
+cat("W =", round(result$statistic, 3), "\n")
+cat("p =", round(result$p.value, 3), "\n\n")
+cat("Interpretation:", ifelse(result$p.value > 0.05,
+    "Residuals do not significantly depart from normality (p > .05).",
+    "Residuals may not be normally distributed (p < .05)."))
+```
+
+### Generate APA Output
+
+```{webr-r}
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins,
+            data = wellbeing)
+s <- summary(model)
+
+f_p <- pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3],
+          lower.tail = FALSE)
+f_text <- if (f_p < 0.001) "p < .001" else paste0("p = ", round(f_p, 3))
+
+cat("=== APA REPORTING VALUES ===\n\n")
+cat("Overall model:\n")
+cat("  R² = ", round(s$r.squared, 2),
+    ", Adjusted R² = ", round(s$adj.r.squared, 2), "\n", sep = "")
+cat("  F(", s$fstatistic[2], ", ", s$fstatistic[3], ") = ",
+    round(s$fstatistic[1], 2), ", ", f_text, "\n\n", sep = "")
+
+cat("Individual predictors:\n")
+for (i in 2:4) {
+  name <- c("Stress", "Sleep", "Exercise")[i - 1]
+  b  <- round(s$coefficients[i, 1], 2)
+  se <- round(s$coefficients[i, 2], 2)
+  p  <- s$coefficients[i, 4]
+  p_text <- if (p < 0.001) "p < .001" else paste0("p = ", round(p, 3))
+  cat("  ", name, ": b = ", b, ", SE = ", se, ", ", p_text, "\n", sep = "")
+}
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. To produce the four standard diagnostic plots for a model, we use:**
+
+`r mcq(c("diagnostics(model)", answer = "plot(model)", "check(model)", "residuals(model)"))`
+
+**2. In the Normal Q-Q plot, we want the points to:**
+
+`r mcq(c("Form a horizontal line", answer = "Follow the diagonal reference line", "Cluster in the top-right corner", "Be evenly spread above and below zero"))`
+
+**3. The Shapiro-Wilk test assesses the normality of the model's:**
+
+`r mcq(c("Raw scores", "Predicted values", answer = "Residuals", "Coefficients"))`
+
+**4. In APA format, we report R² and the `r fitb("F", width = 3)`-statistic for overall model fit.**
+
+**5. True or False: Perfect normality of residuals is required for regression to be valid.**
+
+`r torf(FALSE)`
+
+:::
+
+---
+
+## Lab Complete!
+
+Well done — you've completed all five parts of Lab 4.
+
+::: {.callout-tip}
+## Final Tasks in Your Notebook
+
+1. Run diagnostic plots for your regression model
+2. Test normality of residuals with `shapiro.test()`
+3. Write an APA-style results paragraph
+4. Render to HTML and check everything looks right
+:::
+
+---
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 4](part4.qmd){.btn .btn-secondary}
+
+[Back to Lab 4 Overview](../../labs/lab04.qmd){.btn .btn-success}
+:::

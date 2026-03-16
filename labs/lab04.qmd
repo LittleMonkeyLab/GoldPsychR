@@ -24,14 +24,14 @@ If you need to jump back to a specific part:
 :::: {.columns}
 
 ::: {.column width="50%"}
-### ![](/assets/images/svg/brain.svg){width=20} [Part 1: Introduction](../chapters/lab4/part1-slides.qmd)
+### ![](/assets/images/svg/brain.svg){width=20} [Part 1: Introduction](../chapters/lab4/part1.qmd)
 - From comparison to relationship
 - Correlation vs regression
 - The correlation coefficient (r)
 :::
 
 ::: {.column width="50%"}
-### ![](/assets/images/svg/chart.svg){width=20} [Part 2: Correlation](../chapters/lab4/part2-slides.qmd)
+### ![](/assets/images/svg/chart.svg){width=20} [Part 2: Correlation](../chapters/lab4/part2.qmd)
 - Running `cor.test()`
 - Scatterplots with trend lines
 - Interpreting r and r²
@@ -42,14 +42,14 @@ If you need to jump back to a specific part:
 :::: {.columns}
 
 ::: {.column width="50%"}
-### ![](/assets/images/svg/target.svg){width=20} [Part 3: Simple Regression](../chapters/lab4/part3-slides.qmd)
+### ![](/assets/images/svg/target.svg){width=20} [Part 3: Simple Regression](../chapters/lab4/part3.qmd)
 - Building `lm()` models
 - Slope and intercept
 - R² and significance
 :::
 
 ::: {.column width="50%"}
-### ![](/assets/images/svg/group.svg){width=20} [Part 4: Multiple Regression](../chapters/lab4/part4-slides.qmd)
+### ![](/assets/images/svg/group.svg){width=20} [Part 4: Multiple Regression](../chapters/lab4/part4.qmd)
 - Adding predictors
 - Adjusted R²
 - Interpreting F-statistic
@@ -60,7 +60,7 @@ If you need to jump back to a specific part:
 :::: {.columns}
 
 ::: {.column width="50%"}
-### ![](/assets/images/svg/document.svg){width=20} [Part 5: Diagnostics & Reporting](../chapters/lab4/part5-slides.qmd)
+### ![](/assets/images/svg/document.svg){width=20} [Part 5: Diagnostics & Reporting](../chapters/lab4/part5.qmd)
 - Assumption checking
 - Diagnostic plots
 - APA-style write-up

@@ -1,0 +1,130 @@
+---
+title: "Part 2: Correlation Analysis"
+subtitle: "Lab 4: Linear Models"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part2-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to see correlation in action
+2. **Examine the output** carefully
+3. **Copy to RStudio** for your notebook exercises
+:::
+
+### Explore the Data
+
+```{webr-r}
+cat("Dataset loaded successfully!\n")
+cat("Rows:", nrow(wellbeing), "\n")
+cat("Variables:", paste(names(wellbeing), collapse = ", "))
+```
+
+### Run a Correlation Test
+
+```{webr-r}
+# Test: is stress related to wellbeing?
+cor.test(wellbeing$stress, wellbeing$wellbeing)
+```
+
+::: {.callout-note}
+## Key Output
+Look for:
+- **cor**: the correlation coefficient (r)
+- **p-value**: statistical significance
+- **95 percent confidence interval**: range of plausible r values
+:::
+
+### Visualise the Relationship
+
+```{webr-r}
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Stress vs Wellbeing",
+     xlab = "Stress Score", ylab = "Wellbeing Score",
+     pch = 19, col = "steelblue")
+abline(lm(wellbeing ~ stress, data = wellbeing), col = "red", lwd = 2)
+```
+
+### Try Another Pair
+
+```{webr-r}
+# Now try sleep and wellbeing
+cor.test(wellbeing$sleep_hours, wellbeing$wellbeing)
+```
+
+### Correlation Matrix
+
+```{webr-r}
+vars <- wellbeing[, c("stress", "sleep_hours", "exercise_mins", "wellbeing")]
+round(cor(vars), 2)
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. The R function for a correlation test is:**
+
+`r mcq(c("cor()", answer = "cor.test()", "corr()", "pearson()"))`
+
+**2. In `cor.test(x, y)`, the `cor` value in the output is:**
+
+`r mcq(c("The p-value", "The degrees of freedom", answer = "Pearson's r", "The confidence interval"))`
+
+**3. A correlation of r = -0.65 means:**
+
+`r mcq(c("As X increases, Y increases", answer = "As X increases, Y decreases", "No relationship", "A perfect relationship"))`
+
+**4. r² = 0.42 means that X explains `r fitb("42", width = 5)`% of variance in Y.**
+
+**5. True or False: The correlation matrix diagonal is always 1.00.**
+
+`r torf(TRUE)`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 1](part1.qmd){.btn .btn-secondary}
+
+[Continue to Part 3: Simple Regression →](part3.qmd){.btn .btn-primary}
+:::

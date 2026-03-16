@@ -1,0 +1,133 @@
+---
+title: "Part 4: Multiple Regression"
+subtitle: "Lab 4: Linear Models"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part4-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to see multiple regression in action
+2. **Compare R² values** across models to see the improvement
+3. **Copy to RStudio** for your notebook exercises
+:::
+
+### Run Multiple Regression
+
+```{webr-r}
+# Predict wellbeing from three variables
+model <- lm(wellbeing ~ stress + sleep_hours + exercise_mins,
+            data = wellbeing)
+summary(model)
+```
+
+::: {.callout-note}
+## Key Output
+Each coefficient shows the effect of that predictor **holding all others constant**.
+Check both Adjusted R² and the F-statistic for overall model fit.
+:::
+
+### Compare Models
+
+```{webr-r}
+model1 <- lm(wellbeing ~ stress, data = wellbeing)
+model2 <- lm(wellbeing ~ stress + sleep_hours, data = wellbeing)
+model3 <- lm(wellbeing ~ stress + sleep_hours + exercise_mins,
+             data = wellbeing)
+
+cat("Model 1 (stress only):      R² =", round(summary(model1)$r.squared, 3), "\n")
+cat("Model 2 (+ sleep):          R² =", round(summary(model2)$r.squared, 3), "\n")
+cat("Model 3 (+ exercise):       R² =", round(summary(model3)$r.squared, 3), "\n\n")
+cat("Adjusted R² for Model 3:   ", round(summary(model3)$adj.r.squared, 3))
+```
+
+### Standardised Coefficients
+
+```{webr-r}
+# Standardise variables to compare predictor importance
+wellbeing_z <- data.frame(
+  wellbeing = scale(wellbeing$wellbeing),
+  stress    = scale(wellbeing$stress),
+  sleep     = scale(wellbeing$sleep_hours),
+  exercise  = scale(wellbeing$exercise_mins)
+)
+
+model_std <- lm(wellbeing ~ stress + sleep + exercise, data = wellbeing_z)
+betas <- round(coef(model_std)[-1], 3)
+
+cat("Standardised coefficients (β):\n")
+cat("  Stress:   β =", betas["stress"], "\n")
+cat("  Sleep:    β =", betas["sleep"], "\n")
+cat("  Exercise: β =", betas["exercise"], "\n\n")
+cat("Larger |β| = stronger predictor (all in same SD units)")
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. To add multiple predictors in `lm()`, we use:**
+
+`r mcq(c("lm(y * x1 + x2)", answer = "lm(y ~ x1 + x2)", "lm(y, x1, x2)", "lm(y ~ x1, x2)"))`
+
+**2. In multiple regression, each coefficient shows the effect of X:**
+
+`r mcq(c("Ignoring all other predictors", answer = "Holding all other predictors constant", "Averaged across predictors", "Standardised across predictors"))`
+
+**3. Adjusted R² is preferred over R² when comparing models because it:**
+
+`r mcq(c("Is always larger", answer = "Penalises for adding extra predictors", "Only works with two predictors", "Equals the F-statistic"))`
+
+**4. To compare the importance of predictors with different units, we use `r fitb("standardised", width = 15)` coefficients.**
+
+**5. True or False: Adding more predictors always improves the model.**
+
+`r torf(FALSE)`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 3](part3.qmd){.btn .btn-secondary}
+
+[Continue to Part 5: Diagnostics & Reporting →](part5.qmd){.btn .btn-primary}
+:::

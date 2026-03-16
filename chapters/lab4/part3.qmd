@@ -1,0 +1,138 @@
+---
+title: "Part 3: Simple Linear Regression"
+subtitle: "Lab 4: Linear Models"
+format: html
+filters:
+  - webr
+webr:
+  packages: ['readr']
+  show-startup-message: false
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{webr-r}
+#| context: setup
+#| warning: false
+#| message: false
+library(readr)
+data_url <- "https://raw.githubusercontent.com/LittleMonkeyLab/datarepo/main/regression_data.csv"
+wellbeing <- read_csv(data_url, show_col_types = FALSE)
+```
+
+## Watch the Demo
+
+Follow along with the slides below.
+
+```{=html}
+<iframe src="part3-slides.html" width="100%" height="500px" style="border: 1px solid #ccc; border-radius: 8px;"></iframe>
+```
+
+::: {.callout-tip}
+## Tip
+Click inside the slide area first, then use arrow keys to navigate.
+:::
+
+---
+
+## Try It Yourself
+
+::: {.callout-tip}
+## How to Practice
+1. **Run the code** to build your first regression model
+2. **Read the output** carefully — each number tells you something
+3. **Copy to RStudio** for your notebook exercises
+:::
+
+### Fit a Simple Regression Model
+
+```{webr-r}
+# Predict wellbeing from stress
+model <- lm(wellbeing ~ stress, data = wellbeing)
+summary(model)
+```
+
+::: {.callout-note}
+## Key Output
+- **Coefficients**: Intercept (b₀) and slope for stress (b₁)
+- **R-squared**: Proportion of variance explained
+- **F-statistic**: Overall model significance
+:::
+
+### Extract the Equation
+
+```{webr-r}
+model <- lm(wellbeing ~ stress, data = wellbeing)
+b0 <- round(coef(model)[1], 2)
+b1 <- round(coef(model)[2], 2)
+
+cat("Regression equation:\n")
+cat("Wellbeing =", b0, "+", b1, "× Stress\n\n")
+cat("The slope of", b1, "means: for every 1-point increase in stress,\n")
+cat("wellbeing changes by", b1, "points.")
+```
+
+### Make Predictions
+
+```{webr-r}
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+# Predict for three stress values
+new_data <- data.frame(stress = c(10, 25, 40))
+predictions <- predict(model, new_data)
+
+for (i in 1:3) {
+  cat("Stress =", new_data$stress[i], "→ Predicted wellbeing =",
+      round(predictions[i], 1), "\n")
+}
+```
+
+### Visualise the Model
+
+```{webr-r}
+model <- lm(wellbeing ~ stress, data = wellbeing)
+
+plot(wellbeing$stress, wellbeing$wellbeing,
+     main = "Simple Regression: Wellbeing ~ Stress",
+     xlab = "Stress", ylab = "Wellbeing",
+     pch = 19, col = "steelblue")
+abline(model, col = "red", lwd = 2)
+```
+
+---
+
+## Self-Assessment
+
+::: {.webex-check .webex-box}
+
+**1. The R function for linear regression is:**
+
+`r mcq(c("reg()", "regression()", answer = "lm()", "glm()"))`
+
+**2. In `lm(wellbeing ~ stress)`, `stress` is the:**
+
+`r mcq(c("Outcome variable", answer = "Predictor variable", "Intercept", "Residual"))`
+
+**3. A slope of b = -1.5 means:**
+
+`r mcq(c("Y increases by 1.5 for each unit of X", answer = "Y decreases by 1.5 for each unit of X", "The intercept is -1.5", "R² = 1.5"))`
+
+**4. R-squared represents the proportion of `r fitb("variance", width = 10)` in Y explained by X.**
+
+**5. True or False: `predict()` can be used to estimate Y for new values of X.**
+
+`r torf(TRUE)`
+
+:::
+
+---
+
+## Next Steps
+
+::: {.d-flex .justify-content-between}
+[← Back to Part 2](part2.qmd){.btn .btn-secondary}
+
+[Continue to Part 4: Multiple Regression →](part4.qmd){.btn .btn-primary}
+:::
