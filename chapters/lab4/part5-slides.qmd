@@ -302,3 +302,40 @@ You've learned:
 3. Write APA results for correlation and regression
 4. **Render to HTML** and check your work!
 :::
+
+---
+
+## You Did It! {.center background-color="#1a1a2e" data-state="confetti"}
+
+::: {.r-fit-text}
+Congratulations
+:::
+
+Four weeks. Four skills. Real data science.
+
+**Descriptives → T-tests → ANOVA → Regression**
+
+You can now take a research question all the way from raw data to a published result.
+
+```{=html}
+<script>
+window.addEventListener('load', function() {
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js';
+  document.head.appendChild(s);
+  s.onload = function() {
+    if (typeof Reveal !== 'undefined') {
+      Reveal.on('slidechanged', function(e) {
+        if (e.currentSlide.dataset.state === 'confetti') {
+          confetti({ particleCount: 180, spread: 120, origin: { y: 0.5 } });
+          setTimeout(function() {
+            confetti({ particleCount: 80, angle: 60, spread: 60, origin: { x: 0, y: 0.6 } });
+            confetti({ particleCount: 80, angle: 120, spread: 60, origin: { x: 1, y: 0.6 } });
+          }, 600);
+        }
+      });
+    }
+  };
+});
+</script>
+```

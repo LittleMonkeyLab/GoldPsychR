@@ -1065,6 +1065,13 @@
     "text": "Now Complete Your Notebook!\n\n \n\n\n\n\n\n\nFinal Tasks\n\n\n\nRun diagnostic plots\nCheck all assumptions\nWrite APA results for correlation and regression\nRender to HTML and check your work!"
   },
   {
+    "objectID": "chapters/lab4/part5-slides.html#you-did-it",
+    "href": "chapters/lab4/part5-slides.html#you-did-it",
+    "title": "Part 5: Diagnostics & Reporting",
+    "section": "You Did It!",
+    "text": "You Did It!\n\nCongratulations\n\nFour weeks. Four skills. Real data science.\nDescriptives → T-tests → ANOVA → Regression\nYou can now take a research question all the way from raw data to a published result."
+  },
+  {
     "objectID": "chapters/lab4/part4-slides.html#multiple-regression",
     "href": "chapters/lab4/part4-slides.html#multiple-regression",
     "title": "Part 4: Multiple Regression",
@@ -5854,7 +5861,7 @@
     "href": "chapters/lab4/part5.html#lab-complete",
     "title": "Part 5: Diagnostics & Reporting",
     "section": "Lab Complete!",
-    "text": "Lab Complete!\nWell done — you’ve completed all five parts of Lab 4.\n\n\n\n\n\n\nTipFinal Tasks in Your Notebook\n\n\n\n\nRun diagnostic plots for your regression model\nTest normality of residuals with shapiro.test()\nWrite an APA-style results paragraph\nRender to HTML and check everything looks right\n\n\n\n\n\n← Back to Part 4\nBack to Lab 4 Overview"
+    "text": "Lab Complete!\nWell done — you’ve completed all five parts of Lab 4.\n\n\n\n\n\n\nTipFinal Tasks in Your Notebook\n\n\n\n\nRun diagnostic plots for your regression model\nTest normality of residuals with shapiro.test()\nWrite an APA-style results paragraph\nRender to HTML and check everything looks right\n\n\n\n\n\n  You Did It!\n  You have completed your first R journey.\n  \n    Week 1: Descriptive Statistics\n    Week 2: T-Tests\n    Week 3: ANOVA\n    Week 4: Regression\n  \n  You can now take a research question all the way from raw data to a published result.\n\n\n\n\n\n\n← Back to Part 4\nBack to Lab 4 Overview"
   },
   {
     "objectID": "index.html",
